@@ -3,7 +3,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/common/Header';
-import Footer from '@/components/common/Footer';
+import Footer from '@/components/common/Footer'; // Corrected import path
 
 export const metadata: Metadata = {
   title: 'TradeFlow',
