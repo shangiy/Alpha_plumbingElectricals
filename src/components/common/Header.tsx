@@ -78,7 +78,7 @@ const ProductsDropdown = () => {
 
 export default function Header() {
   const navLinks = [
-    { name: 'About Us', href: '#' },
+    { name: 'About Us', href: '/about' },
     { name: 'Team', href: '#' },
     { name: 'Sell with Us', href: '/seller/profile' },
     { name: 'Contact Us', href: '/contact' },
