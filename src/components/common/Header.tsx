@@ -7,6 +7,42 @@ import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Search, User, Menu } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+const AccountDropdown = ({ isMobile = false }: { isMobile?: boolean }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" size="icon">
+        <User className={isMobile ? "h-6 w-6" : "h-5 w-5"} />
+        <span className="sr-only">Profile</span>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end" side={isMobile ? "top" : "bottom"}>
+      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link href="/seller/profile">Profile</Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link href="#">My Orders</Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link href="#">Settings</Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link href="#">Log out</Link>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export default function Header() {
   const navLinks = [
@@ -57,10 +93,7 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 md:flex">
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Profile</span>
-            </Button>
+            <AccountDropdown />
           </div>
           
           <ShoppingCart />
@@ -73,7 +106,7 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <div className="flex flex-col gap-6 p-6">
+              <div className="flex h-full flex-col gap-6 p-6">
                 <Link href="/" className="flex items-center gap-2">
                    <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={28} height={28} />
                    <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
@@ -89,11 +122,8 @@ export default function Header() {
                     </Link>
                   ))}
                 </nav>
-                <div className="mt-auto flex items-center gap-4 border-t pt-4">
-                   <Button variant="ghost" size="icon">
-                    <User className="h-6 w-6" />
-                    <span className="sr-only">Profile</span>
-                  </Button>
+                <div className="mt-auto flex items-center justify-end gap-4 border-t pt-4">
+                   <AccountDropdown isMobile={true} />
                 </div>
               </div>
             </SheetContent>
