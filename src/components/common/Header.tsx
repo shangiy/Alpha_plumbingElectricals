@@ -19,7 +19,7 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="https://placehold.co/28x28.png" alt="TradeFlow Logo" width={28} height={28} data-ai-hint="logo" />
+            <Image src="/logo Alpha.png" alt="TradeFlow Logo" width={28} height={28} />
             <span className="text-xl font-bold font-headline text-primary">TradeFlow</span>
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
@@ -74,7 +74,7 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-6 p-6">
                 <Link href="/" className="flex items-center gap-2">
-                   <Image src="https://placehold.co/28x28.png" alt="TradeFlow Logo" width={28} height={28} data-ai-hint="logo" />
+                   <Image src="/logo Alpha.png" alt="TradeFlow Logo" width={28} height={28} />
                    <span className="text-xl font-bold font-headline text-primary">TradeFlow</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
