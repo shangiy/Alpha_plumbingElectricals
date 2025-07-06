@@ -31,9 +31,9 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section 
         className="relative h-[50vh] bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('https://placehold.co/1920x1080.png')" }}
+        style={{ backgroundImage: "url('/team.jpg')" }}
       >
-        <div data-ai-hint="office building" className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
           <div className="container px-4">
             <h1 className="text-4xl font-bold font-headline md:text-6xl">Innovating Everyday Living</h1>
@@ -50,12 +50,11 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
                 <Image
-                    src="https://placehold.co/800x600.png"
+                    src="/team.jpg"
                     alt="Alpha Team Working"
                     width={800}
                     height={600}
                     className="w-full h-full object-cover"
-                    data-ai-hint="team working"
                 />
             </div>
             <div className="space-y-4">
@@ -108,12 +107,11 @@ export default function AboutPage() {
             </div>
             <div className="aspect-video rounded-lg overflow-hidden shadow-lg md:order-first">
                  <Image
-                    src="https://placehold.co/800x600.png"
+                    src="/delivery teamVan.jpg"
                     alt="Delivery Van"
                     width={800}
                     height={600}
                     className="w-full h-full object-cover"
-                    data-ai-hint="delivery van"
                 />
             </div>
           </div>

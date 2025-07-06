@@ -16,6 +16,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+const productCategories = [
+    { name: 'Tanks Collection', href: '#', icon: '/kentank 2000l.png' },
+    { name: 'Plumbing Equipment', href: '#', icon: '/ppr pipes.png' },
+    { name: 'Lighting & Electrical', href: '#', icon: '/decor lighting design.png' },
+    { name: 'Home & Décor', href: '#', icon: '/square lights.png' },
+    { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
+];
+
 const AccountDropdown = ({ isMobile = false }: { isMobile?: boolean }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -45,14 +53,6 @@ const AccountDropdown = ({ isMobile = false }: { isMobile?: boolean }) => (
 );
 
 const ProductsDropdown = () => {
-    const productCategories = [
-        { name: 'Tanks Collection', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'water tank' },
-        { name: 'Plumbing Equipment', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'pipes plumbing' },
-        { name: 'Lighting & Electrical', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'light bulb' },
-        { name: 'Home & Décor', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'home decor' },
-        { name: 'Roofing & Construction', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'roof construction' },
-    ];
-    
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -65,7 +65,7 @@ const ProductsDropdown = () => {
                  {productCategories.map((category) => (
                      <DropdownMenuItem key={category.name} asChild>
                          <Link href={category.href} className="flex items-center gap-3 py-2">
-                            <Image src={category.icon} alt="" width={24} height={24} data-ai-hint={category.hint} />
+                            <Image src={category.icon} alt={category.name} width={24} height={24} />
                             <span>{category.name}</span>
                          </Link>
                      </DropdownMenuItem>
@@ -82,14 +82,6 @@ export default function Header() {
     { name: 'Team', href: '#' },
     { name: 'Sell with Us', href: '/seller/profile' },
     { name: 'Contact Us', href: '/contact' },
-  ];
-
-  const productCategories = [
-    { name: 'Tanks Collection', href: '#' },
-    { name: 'Plumbing Equipment', href: '#' },
-    { name: 'Lighting & Electrical', href: '#' },
-    { name: 'Home & Décor', href: '#' },
-    { name: 'Roofing & Construction', href: '#' },
   ];
 
   return (
@@ -156,13 +148,14 @@ export default function Header() {
                 <nav className="flex flex-col gap-4">
                   <DropdownMenuSeparator />
                   <h3 className="px-2 text-sm font-semibold text-muted-foreground">Products</h3>
-                  {productCategories.map((link) => (
+                  {productCategories.map((category) => (
                     <Link
-                      key={link.name}
-                      href={link.href}
-                      className="text-lg font-medium text-foreground hover:text-primary"
+                      key={category.name}
+                      href={category.href}
+                      className="flex items-center gap-3 py-2 text-lg font-medium text-foreground hover:text-primary"
                     >
-                      {link.name}
+                      <Image src={category.icon} alt={category.name} width={24} height={24} />
+                      <span>{category.name}</span>
                     </Link>
                   ))}
                   <DropdownMenuSeparator />
