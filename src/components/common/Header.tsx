@@ -79,8 +79,8 @@ const ProductsDropdown = () => {
 export default function Header() {
   const navLinks = [
     { name: 'About Us', href: '/about' },
-    { name: 'Team', href: '#' },
     { name: 'Contact Us', href: '/contact' },
+    { name: 'Team', href: '/team' },
   ];
 
   return (
@@ -88,12 +88,11 @@ export default function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={40} height={40} />
+            <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={50} height={50} />
             <span className="hidden text-xl font-bold font-headline text-primary md:block">Alpha Electricals & Plumbing Ltd</span>
             <span className="text-lg font-bold font-headline text-primary md:hidden">Alpha Electricals</span>
           </Link>
           <nav className="hidden items-center gap-4 md:flex">
-             <ProductsDropdown />
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -103,6 +102,7 @@ export default function Header() {
                 {link.name}
               </Link>
             ))}
+            <ProductsDropdown />
           </nav>
         </div>
 
@@ -141,7 +141,7 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex h-full flex-col gap-6 p-6">
                 <Link href="/" className="flex items-center gap-2">
-                   <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={40} height={40} />
+                   <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={50} height={50} />
                    <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
                 </Link>
                 <nav className="flex flex-col gap-4">

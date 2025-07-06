@@ -15,7 +15,8 @@ export default function Footer() {
     {
       title: 'Company',
       links: [
-        { name: 'About Us', href: '#' },
+        { name: 'About Us', href: '/about' },
+        { name: 'Team', href: '/team' },
         { name: 'Careers', href: '#' },
         { name: 'Press', href: '#' },
       ],
@@ -23,7 +24,7 @@ export default function Footer() {
     {
       title: 'Support',
       links: [
-        { name: 'Contact Us', href: '#' },
+        { name: 'Contact Us', href: '/contact' },
         { name: 'FAQ', href: '#' },
         { name: 'Shipping & Returns', href: '#' },
       ],
@@ -44,7 +45,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={40} height={40} />
+              <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={50} height={50} />
               <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
