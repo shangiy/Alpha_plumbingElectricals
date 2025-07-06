@@ -7,8 +7,8 @@ import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 
 export const metadata: Metadata = {
-  title: 'TradeFlow',
-  description: 'A global e-commerce platform.',
+  title: 'Alpha Electricals & Plumbing Ltd',
+  description: 'Your partner for electrical and plumbing supplies.',
 };
 
 const poppins = Poppins({

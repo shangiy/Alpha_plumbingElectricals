@@ -44,10 +44,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <Image src="/logo Alpha.png" alt="TradeFlow Logo" width={28} height={28} />
-              <span className="text-xl font-bold font-headline text-primary">TradeFlow</span>
+              <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={28} height={28} />
+              <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
             </Link>
-            <p className="text-sm text-muted-foreground">Your global e-commerce partner.</p>
+            <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
                 <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-foreground">
@@ -80,7 +80,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} TradeFlow, Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} Alpha Electricals & Plumbing Ltd. All rights reserved.
         </div>
       </div>
     </footer>

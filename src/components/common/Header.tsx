@@ -10,7 +10,7 @@ import { Search, ShoppingCart, User, Menu } from 'lucide-react';
 export default function Header() {
   const navLinks = [
     { name: 'Categories', href: '#' },
-    { name: 'Sell on TradeFlow', href: '/seller/profile' },
+    { name: 'Sell with Us', href: '/seller/profile' },
     { name: 'Contact Us', href: '#' },
   ];
 
@@ -19,8 +19,8 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo Alpha.png" alt="TradeFlow Logo" width={28} height={28} />
-            <span className="text-xl font-bold font-headline text-primary">TradeFlow</span>
+            <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={28} height={28} />
+            <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => (
@@ -74,8 +74,8 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-6 p-6">
                 <Link href="/" className="flex items-center gap-2">
-                   <Image src="/logo Alpha.png" alt="TradeFlow Logo" width={28} height={28} />
-                   <span className="text-xl font-bold font-headline text-primary">TradeFlow</span>
+                   <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={28} height={28} />
+                   <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
