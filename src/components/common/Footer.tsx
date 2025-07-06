@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Globe } from 'lucide-react';
 
 export default function Footer() {
   const socialLinks = [
@@ -44,7 +44,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <Globe className="h-7 w-7 text-primary" />
+              <Image src="https://placehold.co/28x28.png" alt="TradeFlow Logo" width={28} height={28} data-ai-hint="logo" />
               <span className="text-xl font-bold font-headline text-primary">TradeFlow</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your global e-commerce partner.</p>
