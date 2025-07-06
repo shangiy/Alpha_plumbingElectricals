@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Search, User, Menu } from 'lucide-react';
+import { Search, User, Menu, ChevronDown } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -44,11 +44,52 @@ const AccountDropdown = ({ isMobile = false }: { isMobile?: boolean }) => (
   </DropdownMenu>
 );
 
+const ProductsDropdown = () => {
+    const productCategories = [
+        { name: 'Tanks Collection', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'water tank' },
+        { name: 'Plumbing Equipment', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'pipes plumbing' },
+        { name: 'Lighting & Electrical', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'light bulb' },
+        { name: 'Home & Décor', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'home decor' },
+        { name: 'Roofing & Construction', href: '#', icon: 'https://placehold.co/24x24.png', hint: 'roof construction' },
+    ];
+    
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+                    Products
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+                 {productCategories.map((category) => (
+                     <DropdownMenuItem key={category.name} asChild>
+                         <Link href={category.href} className="flex items-center gap-3 py-2">
+                            <Image src={category.icon} alt="" width={24} height={24} data-ai-hint={category.hint} />
+                            <span>{category.name}</span>
+                         </Link>
+                     </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+};
+
+
 export default function Header() {
   const navLinks = [
-    { name: 'Categories', href: '#' },
+    { name: 'About Us', href: '#' },
+    { name: 'Team', href: '#' },
     { name: 'Sell with Us', href: '/seller/profile' },
     { name: 'Contact Us', href: '/contact' },
+  ];
+
+  const productCategories = [
+    { name: 'Tanks Collection', href: '#' },
+    { name: 'Plumbing Equipment', href: '#' },
+    { name: 'Lighting & Electrical', href: '#' },
+    { name: 'Home & Décor', href: '#' },
+    { name: 'Roofing & Construction', href: '#' },
   ];
 
   return (
@@ -60,7 +101,8 @@ export default function Header() {
             <span className="hidden text-xl font-bold font-headline text-primary md:block">Alpha Electricals & Plumbing Ltd</span>
             <span className="text-lg font-bold font-headline text-primary md:hidden">Alpha Electricals</span>
           </Link>
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav className="hidden items-center gap-4 md:flex">
+             <ProductsDropdown />
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -112,6 +154,18 @@ export default function Header() {
                    <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
+                  <DropdownMenuSeparator />
+                  <h3 className="px-2 text-sm font-semibold text-muted-foreground">Products</h3>
+                  {productCategories.map((link) => (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      className="text-lg font-medium text-foreground hover:text-primary"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                  <DropdownMenuSeparator />
                   {navLinks.map((link) => (
                     <Link
                       key={link.name}
