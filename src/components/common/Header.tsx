@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Search, ShoppingCart, User, Menu } from 'lucide-react';
+import { Search, User, Menu } from 'lucide-react';
+import ShoppingCart from './ShoppingCart';
 
 export default function Header() {
   const navLinks = [
@@ -20,7 +21,8 @@ export default function Header() {
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={28} height={28} />
-            <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
+            <span className="hidden text-xl font-bold font-headline text-primary md:block">Alpha Electricals & Plumbing Ltd</span>
+            <span className="text-lg font-bold font-headline text-primary md:hidden">Alpha Electricals</span>
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => (
@@ -53,17 +55,16 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 md:flex">
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
               <span className="sr-only">Profile</span>
             </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Cart</span>
-            </Button>
           </div>
+          
+          <ShoppingCart />
+          
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -88,14 +89,10 @@ export default function Header() {
                     </Link>
                   ))}
                 </nav>
-                <div className="mt-auto flex items-center gap-4">
-                  <Button variant="ghost" size="icon">
+                <div className="mt-auto flex items-center gap-4 border-t pt-4">
+                   <Button variant="ghost" size="icon">
                     <User className="h-6 w-6" />
                     <span className="sr-only">Profile</span>
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <ShoppingCart className="h-6 w-6" />
-                    <span className="sr-only">Cart</span>
                   </Button>
                 </div>
               </div>
