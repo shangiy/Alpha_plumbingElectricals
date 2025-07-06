@@ -48,7 +48,7 @@ export default function Header() {
   const navLinks = [
     { name: 'Categories', href: '#' },
     { name: 'Sell with Us', href: '/seller/profile' },
-    { name: 'Contact Us', href: '#' },
+    { name: 'Contact Us', href: '/contact' },
   ];
 
   return (
@@ -116,7 +116,7 @@ export default function Header() {
                     <Link
                       key={link.name}
                       href={link.href}
-                      className="text-lg font-medium text-foreground transition-colors hover:text-primary"
+                      className="text-lg font-medium text-foreground hover:text-primary"
                     >
                       {link.name}
                     </Link>
