@@ -3,6 +3,7 @@ import ProductCard from '@/components/products/ProductCard';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
+import DeliveryServices from '@/components/common/DeliveryServices';
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
@@ -59,6 +60,9 @@ export default async function Home() {
           </div>
         )}
       </section>
+      
+      <DeliveryServices />
+
     </div>
   );
 }
