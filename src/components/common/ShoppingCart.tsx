@@ -2,13 +2,14 @@
 
 import { useCart } from '@/context/CartProvider';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose, SheetFooter } from '@/components/ui/sheet';
 import { ShoppingCart as ShoppingCartIcon, Plus, Minus, X } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
-export default function ShoppingCart() {
+export default function ShoppingCart({ triggerClassName }: { triggerClassName?: string }) {
   const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart, cartTotal, totalItems } = useCart();
 
   const formatPrice = (price: number) => {
@@ -21,7 +22,7 @@ export default function ShoppingCart() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className={cn("relative", triggerClassName)}>
           <ShoppingCartIcon className="h-5 w-5" />
           <span className="sr-only">Cart</span>
           {totalItems > 0 && (
