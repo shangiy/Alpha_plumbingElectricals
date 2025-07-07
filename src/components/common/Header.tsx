@@ -49,7 +49,7 @@ const ProductsDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
+          className="px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-transparent hover:text-accent"
         >
           Products
           <ChevronDown className="ml-1 h-4 w-4" />
