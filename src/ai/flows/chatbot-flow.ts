@@ -27,7 +27,7 @@ const prompt = ai.definePrompt({
   output: {schema: ChatbotOutputSchema},
   prompt: `You are Alpha AI, a friendly and helpful assistant for the Alpha Electricals & Plumbing Ltd e-commerce website.
 
-Your primary goal is to assist users with their questions about products, categories, and the company. You are also able to answer general knowledge questions and perform simple mathematical calculations.
+Your primary goal is to assist users with their questions about products, categories, and the company. You are also able to answer general knowledge questions and perform simple mathematical calculations. For example, if a user asks "what is 2+2?", you should respond with "The answer is 4."
 
 You have knowledge of the following product categories:
 - Tanks (water tanks, septic tanks)
@@ -48,6 +48,26 @@ Keep your answers concise and friendly.
 
 User's message: {{{prompt}}}
 `,
+  config: {
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'BLOCK_NONE',
+      },
+      {
+        category: 'HARM_CATEGORY_HATE_SPEECH',
+        threshold: 'BLOCK_NONE',
+      },
+      {
+        category: 'HARM_CATEGORY_HARASSMENT',
+        threshold: 'BLOCK_NONE',
+      },
+      {
+        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+        threshold: 'BLOCK_NONE',
+      },
+    ],
+  },
 });
 
 const chatbotFlow = ai.defineFlow(
@@ -66,7 +86,7 @@ const chatbotFlow = ai.defineFlow(
     } catch (e: any) {
       console.error('Error in chatbotFlow:', e);
       // Check for specific error types, like safety blocks.
-      if (e.finishReason === 'blocked') {
+      if (e.finishReason === 'blocked' || e.message?.includes('blocked by safety policy')) {
         return "I'm sorry, but I can't respond to that. The topic may be sensitive. Please try another question.";
       }
       // For other errors, return a more informative generic message from the backend.
