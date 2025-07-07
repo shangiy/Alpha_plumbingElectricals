@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Sheet,
@@ -26,6 +26,7 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { AnimatedPlaceholder } from './AnimatedPlaceholder';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -65,7 +66,9 @@ export default function Header() {
     }
     
     const handleScroll = () => {
+      // Opaque header appears sooner
       setIsHeaderOpaque(window.scrollY > 50);
+      // Docked search appears later
       setIsSearchDocked(window.scrollY > 400); 
     };
 
@@ -86,7 +89,7 @@ export default function Header() {
     "sticky top-0 z-50 w-full transition-colors duration-300",
     isHeaderOpaque 
       ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60" 
-      : "bg-transparent"
+      : "bg-transparent border-b border-transparent"
   );
 
   const navAndIconClasses = cn(
@@ -257,6 +260,7 @@ export default function Header() {
                         <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
                         </>
@@ -283,7 +287,7 @@ export default function Header() {
                         <span className="sr-only">Toggle menu</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
+                <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0 flex flex-col">
                     <SheetHeader className="p-4 border-b">
                         <SheetTitle>
                             <SheetClose asChild>
@@ -294,7 +298,7 @@ export default function Header() {
                             </SheetClose>
                         </SheetTitle>
                     </SheetHeader>
-                    <div className="flex h-full flex-col">
+                    <ScrollArea className="flex-1">
                         <nav className="flex flex-col gap-2 p-4">
                           <h3 className="px-2 text-sm font-semibold text-muted-foreground">Products</h3>
                           {productCategories.map((category) => (
@@ -306,26 +310,35 @@ export default function Header() {
                             </SheetClose>
                           ))}
                           <DropdownMenuSeparator />
-                          <h3 className="px-2 text-sm font-semibold text-muted-foreground">Menu</h3>
+                          <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">Menu</h3>
                           {[ ...navLinks, { name: 'Team', href: '/team' }].map((link) => (
                             <SheetClose asChild key={link.name}>
                               <Link href={link.href} className="rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">{link.name}</Link>
                             </SheetClose>
                           ))}
-                        </nav>
-                        <div className="mt-auto flex flex-col gap-2 border-t p-4">
-                        {user ? (
+                          {user && (
                             <>
-                            <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"><User className="h-5 w-5" />My Account</Link></SheetClose>
-                            <Button variant="outline" onClick={() => setUser(null)}>Log Out</Button>
+                              <DropdownMenuSeparator />
+                              <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">My Account</h3>
+                              <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Profile</Link></SheetClose>
+                              <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Orders</Link></SheetClose>
+                              <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Wishlist</Link></SheetClose>
+                              <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Settings</Link></SheetClose>
                             </>
-                        ) : (
-                            <div className="space-y-2">
-                            <Button className="w-full" onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</Button>
-                            <Button variant="outline" className="w-full" asChild><Link href="/seller/profile">Create Account</Link></Button>
-                            </div>
-                        )}
+                          )}
+                        </nav>
+                    </ScrollArea>
+                    <div className="flex flex-col gap-2 border-t p-4 mt-auto">
+                    {user ? (
+                        <Button variant="outline" className="w-full" onClick={() => setUser(null)}>Log Out</Button>
+                    ) : (
+                        <div className="space-y-2">
+                        <Button className="w-full" onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</Button>
+                        <SheetClose asChild>
+                          <Link href="/seller/profile" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>Create Account</Link>
+                        </SheetClose>
                         </div>
+                    )}
                     </div>
                 </SheetContent>
             </Sheet>
