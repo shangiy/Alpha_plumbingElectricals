@@ -25,6 +25,7 @@ import {
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { AnimatedPlaceholder } from './AnimatedPlaceholder';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -38,23 +39,34 @@ const productCategories = [
   { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
 ];
 
+const frequentSearches = [
+    { name: 'Water Tanks', href: '/tanks' },
+    { name: 'LED Lights', href: '/decor' },
+    { name: 'PPR Pipes', href: '/plumbing' },
+    { name: 'Solar Heaters', href: '/plumbing' },
+];
+
+
 export default function Header() {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(!isHomePage);
+  const [isSearchDocked, setIsSearchDocked] = useState(false);
   const [isProductsMenuOpen, setProductsMenuOpen] = useState(false);
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
     if (!isHomePage) {
       setIsHeaderOpaque(true);
+      setIsSearchDocked(true);
       return;
     }
     
     const handleScroll = () => {
       setIsHeaderOpaque(window.scrollY > 50);
+      setIsSearchDocked(window.scrollY > 400); 
     };
 
     handleScroll();
@@ -174,7 +186,7 @@ export default function Header() {
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
         {/* Left: Logo and Name */}
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex flex-shrink-0 items-center gap-3">
           <Image
             src="/logo Alpha.png"
             alt="Alpha Electricals & Plumbing Ltd Logo"
@@ -185,47 +197,79 @@ export default function Header() {
            <span className={cn("hidden sm:inline-block font-bold text-xl", navAndIconClasses)}>Alpha Electricals</span>
         </Link>
         
-        {/* Right: Actions (Desktop) */}
-        <div className="hidden lg:flex items-center gap-1">
-            <SearchBar />
-            <ProductsDropdown />
-            {navLinks.map((link) => (
-                <Link
-                    key={link.name}
-                    href={link.href}
-                    className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, "hover:text-red-500")}
-                >
-                    {link.name}
-                </Link>
-            ))}
-            <ShoppingCart />
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses, "hover:text-red-500")}>
-                    <User className="h-5 w-5" />
-                    <span className="text-sm font-semibold">{user ? user.username : 'Sign In'}</span>
-                </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                {user ? (
-                    <>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
-                    <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
-                    <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
-                    </>
-                ) : (
-                    <>
-                    <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
-                    </>
-                )}
-                </DropdownMenuContent>
-            </DropdownMenu>
+        {/* Center/Right: Actions (Desktop) */}
+        <div className="hidden lg:flex flex-1 items-center justify-end">
+            <div className="flex-1 flex justify-center items-center relative h-12">
+                {/* Nav Links */}
+                 <div
+                    className={cn(
+                        'flex items-center gap-1 transition-opacity duration-300 ease-in-out',
+                        (isSearchDocked || !isHomePage) && 'opacity-0 pointer-events-none'
+                    )}
+                 >
+                    <ProductsDropdown />
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, "hover:text-red-500")}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </div>
+                
+                {/* Docked Search Bar */}
+                 <div className={cn(
+                    "absolute inset-x-0 mx-auto w-full max-w-lg transition-all duration-500 ease-in-out",
+                    (isSearchDocked || !isHomePage) ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+                )}>
+                    <form className="w-full bg-input rounded-full p-1 flex items-center shadow-inner relative h-12">
+                        <div className="flex-grow h-6 ml-4">
+                            <AnimatedPlaceholder placeholders={frequentSearches.map(s => s.name)} />
+                        </div>
+                        <Input
+                            type="search"
+                            className="absolute inset-0 w-full h-full bg-transparent border-none focus-visible:ring-0 text-base text-foreground placeholder:text-transparent px-6 z-10"
+                        />
+                        <Button type="submit" size="icon" className="rounded-full bg-primary hover:bg-primary/90 z-20 h-10 w-10">
+                            <Search className="h-5 w-5" />
+                        </Button>
+                    </form>
+                </div>
+            </div>
+
+            {/* Far Right Icons */}
+            <div className="flex items-center gap-1 ml-4">
+                <ShoppingCart />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses, "hover:text-red-500")}>
+                        <User className="h-5 w-5" />
+                        <span className="text-sm font-semibold">{user ? user.username : 'Sign In'}</span>
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                    {user ? (
+                        <>
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                        </>
+                    ) : (
+                        <>
+                        <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                        </>
+                    )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
         </div>
 
         {/* Right: Actions (Mobile) */}
@@ -242,10 +286,12 @@ export default function Header() {
                 <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
                     <SheetHeader className="p-4 border-b">
                         <SheetTitle>
-                            <Link href="/" className="flex items-center gap-2">
-                                <Image src="/logo Alpha.png" alt="Logo" width={60} height={60}/>
-                                <span className="text-lg font-bold font-headline text-primary">Alpha Electricals</span>
-                            </Link>
+                            <SheetClose asChild>
+                                <Link href="/" className="flex items-center gap-2">
+                                    <Image src="/logo Alpha.png" alt="Logo" width={60} height={60}/>
+                                    <span className="text-lg font-bold font-headline text-primary">Alpha Electricals</span>
+                                </Link>
+                            </SheetClose>
                         </SheetTitle>
                     </SheetHeader>
                     <div className="flex h-full flex-col">
