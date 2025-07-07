@@ -25,7 +25,7 @@ export default function CategoryCarousel() {
   const duplicatedCategories = [...categories, ...categories];
 
   return (
-    <section className="py-12 bg-secondary">
+    <section id="categories" className="py-12 bg-secondary">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold font-headline mb-8 text-center">Browse by Category</h2>
         

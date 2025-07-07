@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Sheet,
   SheetContent,
@@ -12,7 +11,7 @@ import {
   SheetClose,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Search, User, Menu, ChevronDown } from 'lucide-react';
+import { User, Menu, ChevronDown, Search } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -25,7 +24,6 @@ import {
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { AnimatedPlaceholder } from './AnimatedPlaceholder';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const productCategories = [
@@ -40,36 +38,23 @@ const productCategories = [
   { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
 ];
 
-const frequentSearches = [
-    { name: 'Water Tanks', href: '/tanks' },
-    { name: 'LED Lights', href: '/decor' },
-    { name: 'PPR Pipes', href: '/plumbing' },
-    { name: 'Solar Heaters', href: '/plumbing' },
-];
-
-
 export default function Header() {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(!isHomePage);
-  const [isSearchDocked, setIsSearchDocked] = useState(false);
   const [isProductsMenuOpen, setProductsMenuOpen] = useState(false);
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
     if (!isHomePage) {
       setIsHeaderOpaque(true);
-      setIsSearchDocked(true);
       return;
     }
     
     const handleScroll = () => {
-      // Opaque header appears sooner
       setIsHeaderOpaque(window.scrollY > 50);
-      // Docked search appears later, when hero search is off-screen
-      setIsSearchDocked(window.scrollY > 400); 
     };
 
     handleScroll();
@@ -93,7 +78,7 @@ export default function Header() {
   );
 
   const navAndIconClasses = cn(
-    "transition-colors",
+    "transition-colors font-semibold",
     !isHeaderOpaque && isHomePage ? "text-white" : "text-foreground"
   );
   
@@ -114,7 +99,7 @@ export default function Header() {
      <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
             <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm font-semibold", navAndIconClasses, "hover:text-red-500")}>
+                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm", navAndIconClasses, "hover:text-red-500")}>
                     Products
                     <ChevronDown className="h-4 w-4" />
                 </Link>
@@ -138,54 +123,6 @@ export default function Header() {
      </div>
   );
 
-  // This SearchBar is only for mobile view, as desktop has the hero/docked search
-  const SearchBar = ({ isMobile = false }) => {
-    const [isSearchOpen, setSearchOpen] = useState(false);
-    const searchContainerRef = useRef<HTMLFormElement>(null);
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
-                setSearchOpen(false);
-            }
-        }
-        if (isSearchOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isSearchOpen]);
-    
-    if (isSearchOpen) {
-        return (
-            <form ref={searchContainerRef} className="relative flex items-center">
-                <Input
-                    type="search"
-                    placeholder="Search..."
-                    className={cn("rounded-full pl-4 pr-10 transition-all duration-300", isMobile ? "w-48" : "w-64")}
-                    autoFocus
-                />
-                <Button
-                    type="submit"
-                    size="icon"
-                    variant="ghost"
-                    className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full text-muted-foreground"
-                >
-                    <Search className="h-4 w-4" />
-                </Button>
-            </form>
-        );
-    }
-    
-    return (
-        <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)} onClick={() => setSearchOpen(true)}>
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search</span>
-        </Button>
-    )
-  }
-
   return (
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
@@ -202,46 +139,19 @@ export default function Header() {
         </Link>
         
         {/* Center/Right: Actions (Desktop) */}
-        <div className="hidden lg:flex flex-1 items-center justify-end">
-            <div className="flex-1 flex justify-center items-center relative h-12 overflow-hidden">
-                {/* Nav Links - will animate out */}
-                 <div
-                    className={cn(
-                        'flex items-center gap-1 transition-all duration-500 ease-in-out',
-                        (isSearchDocked || !isHomePage) && 'opacity-0 -translate-y-4 pointer-events-none'
-                    )}
-                 >
-                    <ProductsDropdown />
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, "hover:text-red-500")}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                </div>
-                
-                {/* Docked Search Bar - will animate in */}
-                 <div className={cn(
-                    "absolute inset-x-0 mx-auto w-full max-w-lg transition-all duration-500 ease-in-out",
-                    (isSearchDocked || !isHomePage) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
-                )}>
-                    <form className="w-full bg-input rounded-full p-1 flex items-center shadow-inner relative h-12">
-                        <div className="flex-grow h-6 ml-4">
-                            <AnimatedPlaceholder placeholders={frequentSearches.map(s => s.name)} />
-                        </div>
-                        <Input
-                            type="search"
-                            className="absolute inset-0 w-full h-full bg-transparent border-none focus-visible:ring-0 text-base text-foreground placeholder:text-transparent px-6 z-10"
-                        />
-                        <Button type="submit" size="icon" className="rounded-full bg-primary hover:bg-primary/90 z-20 h-10 w-10">
-                            <Search className="h-5 w-5" />
-                        </Button>
-                    </form>
-                </div>
-            </div>
+        <div className="hidden lg:flex items-center justify-end gap-2">
+            <nav className='flex items-center gap-2'>
+                <ProductsDropdown />
+                {navLinks.map((link) => (
+                    <Link
+                        key={link.name}
+                        href={link.href}
+                        className={cn("px-4 py-2 text-sm", navAndIconClasses, "hover:text-red-500")}
+                    >
+                        {link.name}
+                    </Link>
+                ))}
+            </nav>
 
             {/* Far Right Icons */}
             <div className="flex items-center gap-1 ml-4">
@@ -250,7 +160,7 @@ export default function Header() {
                     <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses, "hover:text-red-500")}>
                         <User className="h-5 w-5" />
-                        <span className="text-sm font-semibold">{user ? user.username : 'Sign In'}</span>
+                        <span className="text-sm">{user ? user.username : 'Sign In'}</span>
                     </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -279,7 +189,6 @@ export default function Header() {
 
         {/* Right: Actions (Mobile) */}
         <div className="flex lg:hidden items-center gap-1">
-            <SearchBar isMobile={true} />
             <ShoppingCart />
             <Sheet>
                 <SheetTrigger asChild>
