@@ -5,6 +5,7 @@ import ConnectWithUs from '@/components/common/ConnectWithUs';
 import HomepageAbout from '@/components/common/HomepageAbout';
 import ImpactSection from '@/components/common/ImpactSection';
 import Hero from '@/components/common/Hero';
+import CategoryCarousel from '@/components/common/CategoryCarousel';
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
@@ -12,6 +13,7 @@ export default async function Home() {
   return (
     <div>
       <Hero />
+      <CategoryCarousel />
       <div className="container mx-auto px-4 py-16">
         <section>
           <h2 className="text-3xl font-bold font-headline mb-8 text-center">Featured Products</h2>

@@ -24,3 +24,10 @@ export interface HomePageCategory {
   name: string;
   image: string;
 }
+
+export interface CarouselCategory {
+  id: string;
+  name: string;
+  image: string;
+  href: string;
+}

@@ -1,4 +1,4 @@
-import type { Product, Category, HomePageCategory } from './types';
+import type { Product, Category, HomePageCategory, CarouselCategory } from './types';
 
 const homePageCategories: HomePageCategory[] = [
     { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
@@ -8,6 +8,19 @@ const homePageCategories: HomePageCategory[] = [
     { id: 'roofing-2', name: 'Roofing & Fencing', image: '/roof 2.png' },
     { id: 'home-decor-3', name: 'Home & Decor', image: '/floor tiles.png' },
     { id: 'lighting-2', name: 'Lighting & Electrical', image: '/artistic lights.png' }
+];
+
+const carouselCategories: CarouselCategory[] = [
+  { id: 'lighting-1', name: 'Lighting & Electrical', image: '/aesthetic Light.png', href: '#' },
+  { id: 'plumbing-1', name: 'Plumbing Equipment', image: '/ppr joints.png', href: '/plumbing' },
+  { id: 'tanks-1', name: 'Tanks', image: '/kentank 2000l.png', href: '/tanks' },
+  { id: 'decor-1', name: 'Home & Decor', image: '/birds lights.png', href: '/decor' },
+  { id: 'roofing-1', name: 'Roofing & Fencing', image: '/roof 2.png', href: '#' },
+  { id: 'lighting-2', name: 'Lighting & Electrical', image: '/Electric cable per roll.jpg', href: '#' },
+  { id: 'decor-2', name: 'Home & Decor', image: '/crystall chanderlier.png', href: '/decor' },
+  { id: 'roofing-2', name: 'Roofing & Fencing', image: '/roof 3.png', href: '#' },
+  { id: 'decor-3', name: 'Home & Decor', image: '/MDF & chipboard.png', href: '/decor' },
+  { id: 'lighting-3', name: 'Lighting & Electrical', image: '/classic chandelier.png', href: '#' },
 ];
 
 const featuredProducts: Product[] = [
@@ -579,6 +592,11 @@ const categories: Category[] = [
 export async function getHomePageCategories(): Promise<HomePageCategory[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return homePageCategories;
+}
+
+export async function getCarouselCategories(): Promise<CarouselCategory[]> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return carouselCategories;
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
