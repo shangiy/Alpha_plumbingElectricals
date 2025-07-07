@@ -14,11 +14,11 @@ export default function Hero() {
   return (
     <section className="relative h-[60vh] md:h-[70vh] w-full flex items-center justify-center text-white">
       <Image
-        src="https://placehold.co/1920x800.png"
-        alt="Workers in a modern office"
+        src="/background.jpg"
+        alt="Hero background image"
         fill
         className="object-cover -z-10"
-        data-ai-hint="business office team"
+        data-ai-hint="store background"
         priority
       />
       <div className="absolute inset-0 bg-black/60 -z-10" />
