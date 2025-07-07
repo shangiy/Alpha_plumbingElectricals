@@ -9,7 +9,7 @@ interface CounterProps {
   duration?: number;
 }
 
-function Counter({ target, duration = 6000 }: CounterProps) {
+function Counter({ target, duration = 5000 }: CounterProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLHeadingElement>(null);
 
@@ -61,7 +61,7 @@ const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: nu
       {icon}
     </div>
     {/* Content with its own background and padding */}
-    <div className="flex h-full flex-col items-center justify-center rounded-[6px] bg-black/20 p-8 backdrop-blur-sm">
+    <div className="flex h-full flex-col items-center justify-center rounded-[6px] bg-black/20 p-8">
       <div className="mt-4 flex flex-col items-center justify-center flex-grow">
         <Counter target={target} duration={5000} />
         <p className="mt-2 text-sm uppercase tracking-wider text-white/80">{label}</p>
@@ -81,10 +81,10 @@ export default function ImpactSection() {
   return (
     <section 
         className="relative w-full py-20 bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: "url('https://placehold.co/1920x1080.png')" }}
-        data-ai-hint="dark abstract background"
+        style={{ backgroundImage: "url('/delivery teamVan.jpg')" }}
+        data-ai-hint="delivery van background"
     >
-        <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gray-900/70"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold font-headline text-white">Our Impact</h2>
             <p className="mt-2 text-lg text-white/80">Join our movements</p>
