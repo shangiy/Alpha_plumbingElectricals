@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Search, User, Menu, ChevronDown } from 'lucide-react';
+import { Search, User, Menu, ChevronDown, Heart } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -59,7 +59,7 @@ const ProductsDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+                <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-tesla-red">
                     Products
                     <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
@@ -100,7 +100,7 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-tesla-red"
               >
                 {link.name}
               </Link>
