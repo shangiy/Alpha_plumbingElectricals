@@ -29,7 +29,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -43,82 +45,116 @@ const productCategories = [
   { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
 ];
 
-const ProductsDropdown = () => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-transparent hover:text-accent"
-        >
-          Products
-          <ChevronDown className="ml-1 h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        {productCategories.map((category) => (
-          <DropdownMenuItem key={category.name} asChild>
-            <Link href={category.href} className="flex items-center gap-3 py-2">
-              <Image
-                src={category.icon}
-                alt={category.name}
-                width={24}
-                height={24}
-              />
-              <span>{category.name}</span>
-            </Link>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
-
 export default function Header() {
   const [user, setUser] = useState<{ username: string } | null>(null);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+  const [isScrolled, setIsScrolled] = useState(!isHomePage);
+
+  useEffect(() => {
+    if (!isHomePage) {
+      setIsScrolled(true);
+      return;
+    }
+    
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    handleScroll(); // Set initial state
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isHomePage]);
   
   const navLinks = [
     { name: 'About Us', href: '/about' },
     { name: 'Team', href: '/team' },
     { name: 'Contact Us', href: '/contact' },
   ];
+  
+  const headerClasses = cn(
+    "sticky top-0 z-50 w-full transition-colors duration-300",
+    isScrolled 
+      ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60" 
+      : "bg-transparent"
+  );
+
+  const iconButtonClasses = cn(
+    "text-foreground",
+    !isScrolled && isHomePage && "text-white hover:bg-white/20 hover:text-white"
+  );
+  
+  const navLinkClasses = cn(
+    "px-3 py-2 text-sm font-medium transition-colors hover:text-accent",
+    !isScrolled && isHomePage ? "text-white hover:text-white/80" : "text-muted-foreground"
+  );
+
+  const ProductsDropdown = () => {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className={cn("hover:bg-transparent", navLinkClasses)}
+          >
+            Products
+            <ChevronDown className="ml-1 h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-56">
+          {productCategories.map((category) => (
+            <DropdownMenuItem key={category.name} asChild>
+              <Link href={category.href} className="flex items-center gap-3 py-2">
+                <Image
+                  src={category.icon}
+                  alt={category.name}
+                  width={24}
+                  height={24}
+                />
+                <span>{category.name}</span>
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        {/* Left Group: Logo & Name */}
         <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-3">
-                <Image
-                src="/logo Alpha.png"
-                alt="Alpha Electricals & Plumbing Ltd Logo"
-                width={90}
-                height={90}
-                className="h-auto"
-                />
-            </Link>
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/logo Alpha.png"
+              alt="Alpha Electricals & Plumbing Ltd Logo"
+              width={90}
+              height={90}
+              className="h-auto"
+            />
+          </Link>
         </div>
 
-        {/* Center Group: Nav (Desktop) */}
         <nav className="hidden items-center gap-2 lg:flex">
           <ProductsDropdown />
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
+              className={navLinkClasses}
             >
               {link.name}
             </Link>
           ))}
         </nav>
 
-        {/* Right Group: Icons & Actions */}
         <div className="flex items-center gap-2">
-           {/* Search Dialog (for all screen sizes) */}
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
+              <Button variant="ghost" size="icon" className={cn("rounded-full", iconButtonClasses)}>
                 <Search className="h-5 w-5" />
                 <span className="sr-only">Search</span>
               </Button>
@@ -150,7 +186,7 @@ export default function Header() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:w-auto md:px-3 md:gap-2 rounded-full">
+              <Button variant="ghost" size="icon" className={cn("md:w-auto md:px-3 md:gap-2 rounded-full", iconButtonClasses)}>
                 <User className="h-5 w-5" />
                 <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
               </Button>
@@ -188,29 +224,28 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden rounded-full">
+              <Button variant="ghost" size="icon" className={cn("lg:hidden rounded-full", iconButtonClasses)}>
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
-              <SheetHeader className="p-4">
-                 <SheetTitle className="sr-only">Menu</SheetTitle>
-                 <Link href="/" className="mb-4 flex items-center gap-2">
-                    <Image
-                        src="/logo Alpha.png"
-                        alt="Logo"
-                        width={90}
-                        height={90}
-                    />
-                    <span className="text-lg font-bold font-headline text-primary">
-                        Alpha Electricals
-                    </span>
-                 </Link>
-              </SheetHeader>
+                <SheetHeader className="p-4">
+                    <SheetTitle className="sr-only">Menu</SheetTitle>
+                    <Link href="/" className="mb-4 flex items-center gap-2">
+                        <Image
+                            src="/logo Alpha.png"
+                            alt="Logo"
+                            width={90}
+                            height={90}
+                        />
+                        <span className="text-lg font-bold font-headline text-primary">
+                            Alpha Electricals
+                        </span>
+                    </Link>
+                </SheetHeader>
               <div className="flex h-full flex-col">
                 <nav className="flex flex-col gap-2 p-4">
                   <h3 className="px-2 text-sm font-semibold text-muted-foreground">
