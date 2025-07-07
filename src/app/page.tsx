@@ -5,6 +5,7 @@ import ConnectWithUs from '@/components/common/ConnectWithUs';
 import HomepageAbout from '@/components/common/HomepageAbout';
 import Hero from '@/components/common/Hero';
 import CategoryCarousel from '@/components/common/CategoryCarousel';
+import ImpactSection from '@/components/common/ImpactSection';
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
@@ -34,6 +35,7 @@ export default async function Home() {
       <DeliveryServices />
       <ConnectWithUs />
       <HomepageAbout />
+      <ImpactSection />
 
     </div>
   );

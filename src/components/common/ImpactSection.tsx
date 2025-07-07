@@ -63,7 +63,7 @@ const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: nu
     {/* Content with its own background and padding */}
     <div className="flex h-full flex-col items-center justify-center rounded-[6px] bg-black/20 p-8 backdrop-blur-sm">
       <div className="mt-4 flex flex-col items-center justify-center flex-grow">
-        <Counter target={target} />
+        <Counter target={target} duration={5000} />
         <p className="mt-2 text-sm uppercase tracking-wider text-white/80">{label}</p>
       </div>
     </div>
