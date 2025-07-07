@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Rating } from '@/components/ui/rating';
 import ProductRecommendations from '@/components/products/ProductRecommendations';
-import ContactSellerForm from '@/components/products/ContactSellerForm';
+import BuyNowButton from '@/components/products/ContactSellerForm';
 import { ShieldCheck } from 'lucide-react';
 import AddToCartButton from '@/components/products/AddToCartButton';
 
@@ -78,7 +78,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <AddToCartButton product={product} />
-                <ContactSellerForm sellerName={product.seller.name} />
+                <BuyNowButton product={product} />
             </div>
           </div>
         </div>

@@ -10,10 +10,11 @@ export interface CartItem extends Product {
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, showToast?: boolean) => void;
   removeFromCart: (productId: string) => void;
   increaseQuantity: (productId: string) => void;
   decreaseQuantity: (productId: string) => void;
+  clearCart: () => void;
   cartTotal: number;
   totalItems: number;
 }
@@ -32,7 +33,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, showToast = true) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -43,15 +44,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
-    toast({
-        title: "Added to cart!",
-        description: `${product.name} has been added to your cart.`,
-    });
+    
+    if (showToast) {
+        toast({
+            title: "Added to cart!",
+            description: `${product.name} has been added to your cart.`,
+        });
+    }
   };
 
   const removeFromCart = (productId: string) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
   };
+  
+  const clearCart = () => {
+      setCartItems([]);
+  }
 
   const increaseQuantity = (productId: string) => {
     setCartItems(prevItems =>
@@ -80,6 +88,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     removeFromCart,
     increaseQuantity,
     decreaseQuantity,
+    clearCart,
     cartTotal,
     totalItems,
   };
