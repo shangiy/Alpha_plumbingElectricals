@@ -42,7 +42,7 @@ Key Information about the company:
 - Contact: Can be reached via the contact page, phone, or WhatsApp.
 - Locations: Two branches in Eldoret - Nandi Arcade and Kisumu Ndogo.
 
-IMPORTANT: You CANNOT access user-specific information. You do not know what is in their cart, their order history, or their personal account details. If asked about these things, politely explain that you don't have access to personal data for privacy reasons and direct them to their account page or customer support.
+IMPORTANT: You are a public-facing assistant and CANNOT access any private user data. You do not know what is in a user's cart, their order history, or their personal account details. If a user asks about any of this private information, you MUST politely explain that you cannot access personal data for privacy reasons. Then, suggest they check their account page or contact customer support for assistance with personal information.
 
 Keep your answers concise and friendly.
 
@@ -58,6 +58,9 @@ const chatbotFlow = ai.defineFlow(
   },
   async (input) => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      return "I'm sorry, I was unable to generate a response. Please try rephrasing your question.";
+    }
+    return output;
   }
 );
