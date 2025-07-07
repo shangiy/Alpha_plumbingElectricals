@@ -1,6 +1,6 @@
 'use client';
 
-import { Users, Database, Award, LayoutGrid } from 'lucide-react';
+import { Users, Database, Award } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 // Counter component for animating numbers
@@ -72,7 +72,7 @@ const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: nu
 
 export default function ImpactSection() {
   const impactStats = [
-    { icon: <LayoutGrid className="h-10 w-10 text-green-400" />, target: 11500, label: "Daily Average Reach" },
+    { icon: <span className="text-4xl">🌍</span>, target: 11500, label: "Daily Average Reach" },
     { icon: <Database className="h-10 w-10 text-green-400" />, target: 142865, label: "Subscribers" },
     { icon: <Users className="h-10 w-10 text-green-400" />, target: 28255, label: "Benefitted Customers" },
     { icon: <Award className="h-10 w-10 text-green-400" />, target: 23, label: "Awards" },
