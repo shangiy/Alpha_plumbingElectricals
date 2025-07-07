@@ -125,8 +125,9 @@ export default function Header() {
 
   return (
     <header className={headerClasses}>
-      <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        <div className="flex items-center gap-3">
+      <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
+        {/* Left: Logo */}
+        <div className="flex flex-none items-center gap-3">
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logo Alpha.png"
@@ -138,23 +139,40 @@ export default function Header() {
           </Link>
         </div>
 
-        <nav className="hidden items-center gap-2 lg:flex">
-          <ProductsDropdown />
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={navLinkClasses}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+        {/* Center: Search Bar or Nav (Desktop) */}
+        <div className="hidden lg:flex flex-1 justify-center px-8">
+            <nav className={cn("flex items-center gap-2", isScrolled && isHomePage ? "hidden" : "flex")}>
+                <ProductsDropdown />
+                {navLinks.map((link) => (
+                    <Link
+                    key={link.name}
+                    href={link.href}
+                    className={navLinkClasses}
+                    >
+                    {link.name}
+                    </Link>
+                ))}
+            </nav>
+            <div className={cn("w-full max-w-lg", isScrolled && isHomePage ? 'block' : 'hidden')}>
+              <form className="w-full bg-white rounded-full p-1 flex items-center border shadow-sm">
+                  <Input
+                  type="search"
+                  placeholder="Search for products..."
+                  className="h-8 flex-grow bg-transparent border-none focus-visible:ring-0 text-sm pl-4"
+                  />
+                  <Button type="submit" size="icon" className="rounded-full bg-accent hover:bg-accent/90 h-8 w-8">
+                      <Search className="h-4 w-4" />
+                      <span className="sr-only">Search</span>
+                  </Button>
+              </form>
+            </div>
+        </div>
 
-        <div className="flex items-center gap-2">
+        {/* Right: Actions */}
+        <div className="flex flex-none items-center justify-end gap-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn("rounded-full", iconButtonClasses)}>
+              <Button variant="ghost" size="icon" className={cn("rounded-full lg:hidden", iconButtonClasses)}>
                 <Search className="h-5 w-5" />
                 <span className="sr-only">Search</span>
               </Button>
@@ -232,19 +250,20 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
-                <SheetHeader className="p-4">
-                    <SheetTitle className="sr-only">Menu</SheetTitle>
-                    <Link href="/" className="mb-4 flex items-center gap-2">
-                        <Image
-                            src="/logo Alpha.png"
-                            alt="Logo"
-                            width={90}
-                            height={90}
-                        />
-                        <span className="text-lg font-bold font-headline text-primary">
-                            Alpha Electricals
-                        </span>
-                    </Link>
+                <SheetHeader className="p-4 border-b">
+                    <SheetTitle>
+                        <Link href="/" className="flex items-center gap-2">
+                            <Image
+                                src="/logo Alpha.png"
+                                alt="Logo"
+                                width={60}
+                                height={60}
+                            />
+                            <span className="text-lg font-bold font-headline text-primary">
+                                Alpha Electricals
+                            </span>
+                        </Link>
+                    </SheetTitle>
                 </SheetHeader>
               <div className="flex h-full flex-col">
                 <nav className="flex flex-col gap-2 p-4">
