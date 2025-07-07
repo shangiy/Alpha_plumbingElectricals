@@ -55,14 +55,18 @@ function Counter({ target, duration = 6000 }: CounterProps) {
 
 // Individual stat box component
 const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: number, label: string }) => (
-  <div className="relative flex flex-col items-center justify-center text-center p-8 text-white h-full border-2 border-green-400/50 rounded-lg bg-black/20 backdrop-blur-sm">
-      <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-gray-900/70 px-2">
-          {icon}
+  <div className="relative h-full text-center text-white border-2 border-green-400/50 rounded-lg">
+    {/* Icon with background matching the section overlay to "erase" the border */}
+    <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-gray-900/70 px-2">
+      {icon}
+    </div>
+    {/* Content with its own background and padding */}
+    <div className="flex h-full flex-col items-center justify-center rounded-[6px] bg-black/20 p-8 backdrop-blur-sm">
+      <div className="mt-4 flex flex-col items-center justify-center flex-grow">
+        <Counter target={target} />
+        <p className="mt-2 text-sm uppercase tracking-wider text-white/80">{label}</p>
       </div>
-      <div className="mt-4 flex flex-col justify-center items-center flex-grow">
-          <Counter target={target} />
-          <p className="mt-2 text-sm uppercase tracking-wider text-white/80">{label}</p>
-      </div>
+    </div>
   </div>
 );
 
