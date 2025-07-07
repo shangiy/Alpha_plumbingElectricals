@@ -523,6 +523,32 @@ const decorProducts: Product[] = [
   },
 ];
 
+const plumbingProducts: Product[] = [
+    { id: 'plumbing-pipe', name: 'Plumbing Pipe', price: 2000.00, images: ['/ppr pipes.png'], description: 'High-quality plumbing pipes.', longDescription: 'Durable and reliable plumbing pipes suitable for a variety of residential and commercial applications. Available in multiple sizes.', category: 'plumbing', rating: 4.8, reviews: 80, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'ppr-elbows', name: 'PPR elbows', price: 100.00, images: ['/pipe elbows.png'], description: 'Durable PPR elbows for pipe fitting.', longDescription: 'High-quality PPR elbows for changing pipe direction. Designed for a secure, leak-proof fit.', category: 'plumbing', rating: 4.9, reviews: 150, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'tee-ppr-connector', name: 'Tee PPR connector', price: 50.00, images: ['/Tee PPR connector.png'], description: 'A reliable Tee PPR connector.', longDescription: 'A T-shaped connector for joining three pipes. Made from high-grade PPR for durability and heat resistance.', category: 'plumbing', rating: 4.9, reviews: 200, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'plumbing-valve', name: 'Plumbing Valve', price: 1500.00, images: ['/ppr pipe fittings.png'], description: 'A robust valve for plumbing systems.', longDescription: 'A durable plumbing valve to control water flow. Features easy operation and a long service life.', category: 'plumbing', rating: 4.7, reviews: 95, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'ppr-pipe-roll', name: 'PPR pipe roll', price: 8000.00, images: ['/100m PPR roll.png'], description: 'A 100m roll of PPR pipe.', longDescription: 'A 100-meter roll of flexible and durable PPR pipe, suitable for large-scale plumbing installations.', category: 'plumbing', rating: 4.8, reviews: 60, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'hdpe-pipe', name: 'HDPE 100M PIPE PN6 50mm', price: 12000.00, images: ['/HDPE 100M PIPE.jpg'], description: '100m of 50mm HDPE pipe.', longDescription: 'High-density polyethylene pipe, 100 meters long and 50mm in diameter, suitable for high-pressure applications.', category: 'plumbing', rating: 4.9, reviews: 40, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'pvc-waste-pipes', name: 'PVC Waste Pipes 6 Inches', price: 3500.00, images: ['/PVC Waste Pipes 6 In .jpg'], description: '6-inch PVC pipes for waste management.', longDescription: 'Durable 6-inch PVC pipes designed for waste and drainage systems. Resistant to chemicals and corrosion.', category: 'plumbing', rating: 4.6, reviews: 70, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'danco-hosepipe', name: 'Danco Hosepipe', price: 2000.00, images: ['/Danco Hosepipe.jpg'], description: 'A flexible and durable Danco hosepipe.', longDescription: 'A high-quality hosepipe from Danco, perfect for gardening and other outdoor uses. Kink-resistant and built to last.', category: 'plumbing', rating: 4.5, reviews: 85, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'pillar-water-tap', name: 'Pillar Water tap', price: 1500.00, images: ['/Pillar taps.jpg'], description: 'A classic pillar water tap.', longDescription: 'A classic and elegant pillar tap with a chrome finish. Easy to install and use, suitable for any bathroom or kitchen.', category: 'plumbing', rating: 4.7, reviews: 110, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'sensor-taps', name: 'Sensor taps with On Off touchpad', price: 8000.00, images: ['/Sensor taps with On Off touchpad.Jpg'], description: 'Modern sensor taps with a touchpad.', longDescription: 'A touchless sensor tap for improved hygiene. Features a convenient on/off touchpad for manual operation.', category: 'plumbing', rating: 4.9, reviews: 55, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'bathroom-accessory', name: 'Bathroom wall decor and accessory', price: 560.00, images: ['/Bathroom wall decor and accessory.jpg'], description: 'Stylish bathroom wall accessory.', longDescription: 'A stylish and functional accessory for your bathroom wall, perfect for holding towels or other items.', category: 'plumbing', rating: 4.4, reviews: 130, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'plumbing-soap-dish', name: 'soap dish', price: 500.00, images: ['/soap dish.png'], description: 'A simple and elegant soap dish.', longDescription: 'A clean and minimalist soap dish that keeps your soap dry and your sink area tidy.', category: 'plumbing', rating: 4.5, reviews: 180, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'standing-sink', name: 'standing Sink', price: 5800.00, images: ['/standing Sink.png'], description: 'A modern freestanding sink.', longDescription: 'A stylish freestanding sink that makes a statement in any bathroom. Made from high-quality ceramic.', category: 'plumbing', rating: 4.7, reviews: 65, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'square-sink', name: 'Square sink', price: 6500.00, images: ['/Square sink.jpg'], description: 'A geometric square sink.', longDescription: 'A modern sink with a sharp, geometric design. Perfect for contemporary bathrooms.', category: 'plumbing', rating: 4.8, reviews: 75, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'grey-sink', name: 'grey sink', price: 4500.00, images: ['/grey sink.png'], description: 'A stylish sink in a grey finish.', longDescription: 'A chic and modern sink in a trendy grey finish. We also offer installation services for an additional fee.', category: 'plumbing', rating: 4.6, reviews: 90, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'plumbing-square-toilet', name: 'square toilet', price: 29000.00, images: ['/square toilet.jpg'], description: 'A modern, geometric square toilet.', longDescription: 'This toilet features a bold, geometric square design for a distinctly modern bathroom. Includes a soft-close seat and efficient dual-flush system.', category: 'plumbing', rating: 4.9, reviews: 45, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'plumbing-oval-toilet', name: 'oval toilet', price: 29000.00, images: ['/oval toilet.jpg'], description: 'A classic and comfortable oval toilet.', longDescription: 'A classic oval toilet that combines timeless design with modern water-saving technology.', category: 'plumbing', rating: 4.8, reviews: 50, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'plumbing-pink-toilet', name: 'PinkOval Frencia toilet', price: 29000.00, images: ['/PinkOval Frencia toilet.jpg'], description: 'A unique pink oval frencia toilet.', longDescription: 'Add a splash of color and unique style to your bathroom with this pink oval frencia toilet.', category: 'plumbing', rating: 4.7, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'toilet-designs', name: 'toilet designs', price: 2500.00, images: ['/toilet designs.jpg'], description: 'Decorative toilet seat designs.', longDescription: 'A variety of decorative toilet seat designs to add a personal touch to your bathroom.', category: 'plumbing', rating: 4.5, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'black-shower-head', name: 'Black round shower head', price: 7500.00, images: ['/Black round shower head.jpg'], description: 'A sleek black round shower head.', longDescription: 'A modern, oversized round shower head in a matte black finish for a luxurious shower experience.', category: 'plumbing', rating: 4.9, reviews: 88, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'black-n-type-tap', name: 'Black n-type WaterTap', price: 6500.00, images: ['/Black n-type tap.jpg'], description: 'An elegant black n-type water tap.', longDescription: 'An elegant water tap with a unique N-type design and a stylish matte black finish.', category: 'plumbing', rating: 4.8, reviews: 92, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'black-elegant-tap', name: 'Black elegant watertap', price: 2500.00, images: ['/Black elegant watertap.jpg'], description: 'A stylish and elegant black water tap.', longDescription: 'A sleek and minimalist water tap in matte black, perfect for modern kitchens and bathrooms.', category: 'plumbing', rating: 4.7, reviews: 115, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'double-sink', name: 'Double sink with tap', price: 11000.00, images: ['/Double sink with tap.jpg'], description: 'A practical double sink with a tap.', longDescription: 'A spacious and practical double sink for your kitchen, complete with a modern tap. Made from durable stainless steel.', category: 'plumbing', rating: 4.8, reviews: 105, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+    { id: 'ppr-male-adaptor', name: 'PPR MALE ADAPTOR 50MM (half inch)', price: 280.00, images: ['/PPR MALE ADAPTOR 50MM (half inche).jpg'], description: 'A 50mm (half inch) PPR male adaptor.', longDescription: 'A high-quality 50mm (half inch) PPR male adaptor for connecting pipes to threaded fittings.', category: 'plumbing', rating: 5.0, reviews: 300, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+];
 
 const legacyProducts: Product[] = [
   {
@@ -539,7 +565,7 @@ const legacyProducts: Product[] = [
   },
 ];
 
-const allProducts = [...featuredProducts, ...tankProducts, ...decorProducts, ...legacyProducts];
+const allProducts = [...featuredProducts, ...tankProducts, ...decorProducts, ...plumbingProducts, ...legacyProducts];
 
 const categories: Category[] = [
   { id: 'lighting-electrical', name: 'Lighting & Electrical' },
@@ -583,4 +609,9 @@ export async function getTankProducts(): Promise<Product[]> {
 export async function getDecorProducts(): Promise<Product[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return allProducts.filter(p => p.category === 'decor');
+}
+
+export async function getPlumbingProducts(): Promise<Product[]> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return allProducts.filter(p => p.category === 'plumbing');
 }

@@ -64,12 +64,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </CardTitle>
         </Link>
-        <p className="mb-2 text-sm text-muted-foreground">{product.description}</p>
+        <p className="mb-2 text-sm text-muted-foreground h-10 overflow-hidden">{product.description}</p>
         <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={16}/>
       </CardContent>
-      <CardFooter className="flex items-center justify-between p-4 pt-0">
-        <p className="text-lg font-bold text-foreground">{formatPrice(product.price)}</p>
-        <Button size="sm" onClick={() => addToCart(product)}>Add to Cart</Button>
+       <CardFooter className="flex-col items-stretch gap-2 p-4 pt-0">
+        <p className="text-lg font-bold text-foreground text-center mb-2">{formatPrice(product.price)}</p>
+        <div className="flex w-full gap-2">
+            <Button size="sm" variant="outline" className="flex-1" asChild>
+                <Link href={`/products/${product.id}`}>View More</Link>
+            </Button>
+            <Button size="sm" className="flex-1" onClick={() => addToCart(product)}>Add to Cart</Button>
+        </div>
       </CardFooter>
     </Card>
   );

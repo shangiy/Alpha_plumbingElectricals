@@ -33,7 +33,7 @@ import { useState } from 'react';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
-  { name: 'Plumbing Equipment', href: '#', icon: '/ppr pipes.png' },
+  { name: 'Plumbing Equipment', href: '/plumbing', icon: '/ppr pipes.png' },
   {
     name: 'Lighting & Electrical',
     href: '#',
