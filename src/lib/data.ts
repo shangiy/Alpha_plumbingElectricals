@@ -109,6 +109,105 @@ const featuredProducts: Product[] = [
   },
 ];
 
+const tankProducts: Product[] = [
+  {
+    id: 'kentank-2000l',
+    name: 'Kentank 2000L',
+    price: 15000.00,
+    images: ['/kentank 2000l.png'],
+    description: 'A durable 2000L Kentank water tank.',
+    longDescription: 'A durable 2000L Kentank water tank, ideal for domestic water storage. Made from high-quality food-grade material.',
+    category: 'tanks',
+    rating: 4.7,
+    reviews: 45,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'kentank-3000l',
+    name: 'Kentank 3000L',
+    price: 10000.00,
+    images: ['/kentanks 3000L.png'],
+    description: 'A large 3000L Kentank water tank.',
+    longDescription: 'A large 3000L Kentank water tank, perfect for residential or commercial use. UV-stabilized for long life.',
+    category: 'tanks',
+    rating: 4.8,
+    reviews: 30,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'cuboid-tank',
+    name: 'Water Tank',
+    price: 6500.00,
+    images: ['/cuboidTank.PNG'],
+    description: 'A space-saving cuboid water tank.',
+    longDescription: 'A space-saving cuboid water tank, designed for areas with limited space. Easy to install and maintain.',
+    category: 'tanks',
+    rating: 4.5,
+    reviews: 20,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'septic-tank',
+    name: 'Septic Tank',
+    price: 20000.00,
+    images: ['/septic Tank.png'],
+    description: 'A reliable and robust septic tank.',
+    longDescription: 'A reliable and robust septic tank for effective wastewater management. Built to last with high-strength materials.',
+    category: 'tanks',
+    rating: 4.9,
+    reviews: 55,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'plastic-reservoir-tank',
+    name: 'Reservoir Tank',
+    price: 5000.00,
+    images: ['/plastic-tank.png'],
+    description: 'A versatile plastic reservoir tank.',
+    longDescription: 'A versatile plastic reservoir tank for various water storage needs. Lightweight and corrosion-resistant.',
+    category: 'tanks',
+    rating: 4.4,
+    reviews: 15,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'top-tank-1500l',
+    name: 'Top Tank 1500L',
+    price: 4500.00,
+    images: ['/top tank 1500L.png'],
+    description: 'A compact 1500L Top Tank.',
+    longDescription: 'A compact 1500L Top Tank, suitable for smaller households. Made with durable, high-quality plastic.',
+    category: 'tanks',
+    rating: 4.6,
+    reviews: 28,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'top-tank-2000l',
+    name: 'Tank 2000L',
+    price: 5000.00,
+    images: ['/top tank.png'],
+    description: 'A standard 2000L Top Tank.',
+    longDescription: 'A standard 2000L Top Tank offering great value and reliability for your water storage requirements.',
+    category: 'tanks',
+    rating: 4.7,
+    reviews: 35,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'rainwater-tank',
+    name: 'Rainwater Harvesting Tank',
+    price: 8000.00,
+    images: ['/rainwater-tank.png'],
+    description: 'Tank designed for rainwater harvesting.',
+    longDescription: 'An eco-friendly solution for water conservation. This tank is specifically designed for efficient rainwater harvesting.',
+    category: 'tanks',
+    rating: 4.8,
+    reviews: 40,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+];
+
 
 const legacyProducts: Product[] = [
   {
@@ -125,13 +224,14 @@ const legacyProducts: Product[] = [
   },
 ];
 
-const allProducts = [...featuredProducts, ...legacyProducts];
+const allProducts = [...featuredProducts, ...tankProducts, ...legacyProducts];
 
 const categories: Category[] = [
   { id: 'lighting-electrical', name: 'Lighting & Electrical' },
   { id: 'plumbing', name: 'Plumbing' },
   { id: 'decor', name: 'Home & Decor' },
   { id: 'roofing', name: 'Roofing & Fencing' },
+  { id: 'tanks', name: 'Tanks' },
   { id: 'electronics', name: 'Electronics' },
 ];
 
@@ -158,4 +258,9 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 export async function getCategories(): Promise<Category[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return categories;
+}
+
+export async function getTankProducts(): Promise<Product[]> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return tankProducts;
 }

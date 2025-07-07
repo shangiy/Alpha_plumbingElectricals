@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Search, User, Menu, ChevronDown } from 'lucide-react';
+import { Search, User, Menu, ChevronDown, ShoppingCart as ShoppingCartIcon, Heart } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -31,7 +31,7 @@ import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 const productCategories = [
-  { name: 'Tanks Collection', href: '#', icon: '/kentank 2000l.png' },
+  { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
   { name: 'Plumbing Equipment', href: '#', icon: '/ppr pipes.png' },
   {
     name: 'Lighting & Electrical',
@@ -75,49 +75,33 @@ const ProductsDropdown = () => {
 
 export default function Header() {
   const [user, setUser] = useState<{ username: string } | null>(null);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-  const searchContainerRef = useRef<HTMLDivElement>(null);
-
+  
   const navLinks = [
     { name: 'About Us', href: '/about' },
     { name: 'Team', href: '/team' },
     { name: 'Contact Us', href: '/contact' },
   ];
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current.contains(event.target as Node)
-      ) {
-        setIsSearchExpanded(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [searchContainerRef]);
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
         {/* Left Group: Logo & Name */}
-        <div className="flex flex-1 items-center gap-4">
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/logo Alpha.png"
-              alt="Alpha Electricals & Plumbing Ltd Logo"
-              width={90}
-              height={90}
-            />
+        <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
+                <Image
+                src="/logo Alpha.png"
+                alt="Alpha Electricals & Plumbing Ltd Logo"
+                width={90}
+                height={90}
+                className="h-auto"
+                />
+            </Link>
             <span className="hidden text-xl font-bold font-headline text-primary md:block">
-              Alpha Electricals
+                Alpha Electricals
             </span>
-          </Link>
         </div>
 
-        {/* Center Group: Nav */}
+        {/* Center Group: Nav (Desktop) */}
         <nav className="hidden items-center gap-2 lg:flex">
           <ProductsDropdown />
           {navLinks.map((link) => (
@@ -131,74 +115,44 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Right Group: Search, Icons */}
-        <div className="flex items-center gap-1 md:gap-2">
-          {/* Desktop Search Bar */}
-          <div
-            ref={searchContainerRef}
-            className="hidden relative items-center md:flex"
-          >
-            <form>
-              <Input
-                type="search"
-                placeholder="Search..."
-                className={cn(
-                  'h-10 rounded-full pl-5 pr-10 transition-all duration-300 ease-in-out',
-                  isSearchExpanded ? 'w-48' : 'w-0 p-0 border-transparent'
-                )}
-              />
-            </form>
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              className="rounded-full"
-              onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-            >
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </Button>
-          </div>
-          
-          {/* Mobile Search */}
-          <div className="md:hidden">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Search className="h-5 w-5" />
-                  <span className="sr-only">Search</span>
+        {/* Right Group: Icons & Actions */}
+        <div className="flex items-center gap-2">
+           {/* Search Dialog (for all screen sizes) */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Search Products</DialogTitle>
+              </DialogHeader>
+              <form className="relative mt-4">
+                <Input
+                  type="search"
+                  placeholder="Search..."
+                  className="w-full rounded-full pl-10"
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  variant="ghost"
+                  className="absolute left-1 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full text-muted-foreground"
+                >
+                  <Search className="h-4 w-4" />
+                  <span className="sr-only">Submit Search</span>
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-sm">
-                <DialogHeader>
-                  <DialogTitle>Search Products</DialogTitle>
-                </DialogHeader>
-                <form className="relative mt-4">
-                  <Input
-                    type="search"
-                    placeholder="Search..."
-                    className="w-full rounded-full pl-10"
-                  />
-                  <Button
-                    type="submit"
-                    size="icon"
-                    variant="ghost"
-                    className="absolute left-1 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full text-muted-foreground"
-                  >
-                    <Search className="h-4 w-4" />
-                    <span className="sr-only">Submit Search</span>
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-          </div>
-
+              </form>
+            </DialogContent>
+          </Dialog>
 
           <ShoppingCart />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:w-auto md:px-3 md:gap-2">
+              <Button variant="ghost" size="icon" className="md:w-auto md:px-3 md:gap-2 rounded-full">
                 <User className="h-5 w-5" />
                 <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
               </Button>
@@ -239,7 +193,7 @@ export default function Header() {
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden rounded-full">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
