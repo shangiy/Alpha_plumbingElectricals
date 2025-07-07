@@ -49,8 +49,8 @@ export default function ScrollToTopButton() {
       <button
         onClick={scrollToTop}
         className={cn(
-          // Base styling for the button
-          'relative flex h-14 w-14 items-center justify-center rounded-full border bg-background text-accent shadow-lg transition-all duration-300 hover:bg-muted',
+          // Base styling for the button - removed border
+          'relative flex h-14 w-14 items-center justify-center rounded-full bg-background text-accent shadow-lg transition-all duration-300 hover:bg-muted',
           // Visibility based on scroll position
           isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
@@ -63,7 +63,7 @@ export default function ScrollToTopButton() {
           viewBox={`0 0 ${size} ${size}`}
           className="absolute inset-0 transform -rotate-90"
         >
-          {/* Faint track circle */}
+          {/* Faint track circle which now acts as the border */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -73,7 +73,7 @@ export default function ScrollToTopButton() {
             fill="transparent"
             strokeOpacity={0.25}
           />
-          {/* Green progress circle */}
+          {/* Accent progress circle */}
           <circle
             cx={size / 2}
             cy={size / 2}
