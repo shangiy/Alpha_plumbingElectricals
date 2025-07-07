@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  const size = 56;
-  const strokeWidth = 4;
+  const size = 56; // Button size in pixels
+  const strokeWidth = 3; // Progress ring thickness
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (scrollProgress / 100) * circumference;
@@ -32,6 +31,7 @@ export default function ScrollToTopButton() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     
+    // Initial check in case the page loads scrolled down
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -46,22 +46,24 @@ export default function ScrollToTopButton() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Button
+      <button
         onClick={scrollToTop}
-        size="icon"
         className={cn(
-          'relative h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg transition-opacity duration-300 hover:bg-primary/90',
+          // Base styling for the button
+          'relative flex h-14 w-14 items-center justify-center rounded-full border bg-background text-accent shadow-lg transition-all duration-300 hover:bg-muted',
+          // Visibility based on scroll position
           isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         aria-label="Scroll to top"
       >
-        <ArrowUp className="h-6 w-6" />
+        <ArrowUp className="relative z-10 h-6 w-6" />
         <svg
           width={size}
           height={size}
           viewBox={`0 0 ${size} ${size}`}
-          className="absolute inset-0"
+          className="absolute inset-0 transform -rotate-90"
         >
+          {/* Faint track circle */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -69,8 +71,9 @@ export default function ScrollToTopButton() {
             stroke="hsl(var(--border))"
             strokeWidth={strokeWidth}
             fill="transparent"
-            strokeOpacity={0.3}
+            strokeOpacity={0.25}
           />
+          {/* Green progress circle */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -80,11 +83,11 @@ export default function ScrollToTopButton() {
             fill="transparent"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            className="transform -rotate-90 origin-center transition-[stroke-dashoffset] duration-100 ease-linear"
+            className="transition-[stroke-dashoffset] duration-100 ease-linear"
             strokeLinecap="round"
           />
         </svg>
-      </Button>
+      </button>
     </div>
   );
 }
