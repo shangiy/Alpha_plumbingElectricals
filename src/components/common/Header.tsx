@@ -228,8 +228,8 @@ export default function Header() {
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
-            {/* Left: Mobile Menu */}
-            <div>
+            {/* Left side: Menu, Account, Cart */}
+            <div className="flex items-center gap-1">
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
@@ -292,10 +292,12 @@ export default function Header() {
                         </div>
                     </SheetContent>
                 </Sheet>
+                <MobileUserAccountDropdown />
+                <ShoppingCart triggerClassName={navAndIconClasses} />
             </div>
-            
-            {/* Center: Mobile Logo */}
-            <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+
+            {/* Right side: Logo */}
+            <Link href="/">
                 <Image
                     src="/logo Alpha.png"
                     alt="Alpha Electricals & Plumbing Ltd Logo"
@@ -304,12 +306,6 @@ export default function Header() {
                     className="h-auto"
                 />
             </Link>
-
-            {/* Right: Mobile Actions */}
-             <div className="flex items-center gap-1">
-                <MobileUserAccountDropdown />
-                <ShoppingCart triggerClassName={navAndIconClasses} />
-            </div>
         </div>
 
       </div>
