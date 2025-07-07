@@ -49,7 +49,6 @@ export default function Header() {
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   const [showDockedSearch, setShowDockedSearch] = useState(false);
-  const heroSearchRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     if (!isHomePage) {
@@ -61,15 +60,8 @@ export default function Header() {
     const handleScroll = () => {
         const scrollY = window.scrollY;
         setIsHeaderOpaque(scrollY > 50);
-
-        const heroSearchEl = heroSearchRef.current;
-        if (heroSearchEl) {
-            // Show docked search when the hero search is scrolled past
-            setShowDockedSearch(scrollY > heroSearchEl.offsetTop + heroSearchEl.offsetHeight);
-        } else {
-            // Fallback for when ref is not ready
-            setShowDockedSearch(scrollY > 400); 
-        }
+        // Show docked search when user has scrolled past the hero section
+        setShowDockedSearch(scrollY > 450);
     };
 
     handleScroll();
@@ -201,7 +193,6 @@ export default function Header() {
   );
 
   return (
-    <>
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
         {/* Desktop Header */}
@@ -331,7 +322,5 @@ export default function Header() {
 
       </div>
     </header>
-    <div ref={heroSearchRef}></div>
-    </>
   );
 }
