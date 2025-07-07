@@ -22,14 +22,14 @@ export default function Hero() {
         priority
       />
       <div className="absolute inset-0 bg-black/60 -z-10" />
-      <div className="container mx-auto px-4 text-center">
+      <div className="container mx-auto px-4 text-left">
         <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
           Welcome to Alpha Electricals & Plumbing Ltd
         </h1>
-        <p className="text-lg md:text-xl max-w-3xl mx-auto mb-8">
+        <p className="text-lg md:text-xl max-w-3xl mb-8">
           Your trusted source for Tanks, Lighting, Plumbing & More
         </p>
-        <form className="w-full max-w-2xl mx-auto bg-white rounded-full p-2 flex items-center shadow-lg">
+        <form className="w-full max-w-2xl bg-white rounded-full p-2 flex items-center shadow-lg">
           <Input
             type="search"
             placeholder="Search for products..."
@@ -40,7 +40,7 @@ export default function Hero() {
             Search
           </Button>
         </form>
-        <div className="mt-6 flex items-center justify-center gap-2 md:gap-4 flex-wrap">
+        <div className="mt-6 flex items-center justify-start gap-2 md:gap-4 flex-wrap">
           <span className="text-sm font-medium">Frequently searched:</span>
           {frequentSearches.map((item) => (
             <Link
