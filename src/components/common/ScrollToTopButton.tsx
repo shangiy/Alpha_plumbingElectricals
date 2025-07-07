@@ -50,7 +50,7 @@ export default function ScrollToTopButton() {
         onClick={scrollToTop}
         size="icon"
         className={cn(
-          'relative h-14 w-14 rounded-full bg-card/80 text-primary shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-card',
+          'relative h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg transition-opacity duration-300 hover:bg-primary/90',
           isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         aria-label="Scroll to top"
@@ -69,6 +69,7 @@ export default function ScrollToTopButton() {
             stroke="hsl(var(--border))"
             strokeWidth={strokeWidth}
             fill="transparent"
+            strokeOpacity={0.3}
           />
           <circle
             cx={size / 2}
