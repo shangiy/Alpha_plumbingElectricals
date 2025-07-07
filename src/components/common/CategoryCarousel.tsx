@@ -6,13 +6,6 @@ import Image from 'next/image';
 import { getCarouselCategories } from '@/lib/data';
 import type { CarouselCategory } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Skeleton } from '../ui/skeleton';
 
 export default function CategoryCarousel() {
@@ -28,52 +21,53 @@ export default function CategoryCarousel() {
     fetchCategories();
   }, []);
 
+  // Duplicate categories for a seamless looping effect
+  const duplicatedCategories = [...categories, ...categories];
+
   return (
     <section className="py-12 bg-secondary">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold font-headline mb-8 text-center">Browse by Category</h2>
-        <Carousel
-          opts={{
-            align: 'start',
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent>
-            {loading
-              ? Array.from({ length: 5 }).map((_, index) => (
-                  <CarouselItem key={index} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/5">
-                    <div className="p-1">
-                      <Skeleton className="aspect-[4/5] w-full rounded-lg" />
-                    </div>
-                  </CarouselItem>
-                ))
-              : categories.map((category) => (
-                  <CarouselItem key={category.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/5">
-                    <div className="p-1">
-                      <Link href={category.href} passHref>
-                        <Card className="overflow-hidden transition-shadow hover:shadow-lg group">
-                          <CardContent className="flex aspect-[4/5] flex-col items-center justify-center p-4 text-center">
-                            <div className="relative w-32 h-32 mb-4">
-                                <Image
-                                src={category.image}
-                                alt={category.name}
-                                fill
-                                className="object-contain transition-transform duration-300 group-hover:scale-105"
-                                data-ai-hint="product category"
-                                />
-                            </div>
-                            <h3 className="text-base font-semibold text-foreground">{category.name}</h3>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    </div>
-                  </CarouselItem>
-                ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex" />
-          <CarouselNext className="hidden sm:flex" />
-        </Carousel>
+        
+        {loading ? (
+          <div className="flex space-x-4 overflow-hidden">
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="w-[20%] flex-shrink-0 p-1">
+                <Skeleton className="aspect-square w-full rounded-lg" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div
+            className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]"
+          >
+            <div className="flex items-center justify-center md:justify-start animate-scroll hover:[animation-play-state:paused]">
+              {duplicatedCategories.map((category, index) => (
+                <div key={`${category.id}-${index}`} className="flex-shrink-0 w-64 p-3">
+                  <Link href={category.href} passHref>
+                    <Card className="h-80 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 group">
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={category.image}
+                          alt={category.name}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          data-ai-hint="product category"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <CardContent className="absolute bottom-0 w-full p-4 text-left">
+                          <h3 className="text-lg font-semibold text-white">
+                            {category.name}
+                          </h3>
+                        </CardContent>
+                      </div>
+                    </Card>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
