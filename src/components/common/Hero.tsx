@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import HeroSearch from './HeroSearch';
 
 export default function Hero() {
   const frequentSearches = [
@@ -28,9 +28,7 @@ export default function Hero() {
           Your trusted source for Tanks, Lighting, Plumbing & More
         </p>
         
-        <Button size="lg" asChild>
-            <Link href="/#categories">Browse Products</Link>
-        </Button>
+        <HeroSearch />
 
         <div className="mt-6 flex items-center justify-center gap-2 md:gap-4 flex-wrap">
           <span className="text-sm font-medium">Frequently searched:</span>
