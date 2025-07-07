@@ -1,12 +1,12 @@
 import { getProductById } from '@/lib/data';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Rating } from '@/components/ui/rating';
 import ProductRecommendations from '@/components/products/ProductRecommendations';
 import ContactSellerForm from '@/components/products/ContactSellerForm';
-import { ShoppingCart, MessageSquare, Star, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
+import AddToCartButton from '@/components/products/AddToCartButton';
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   const product = await getProductById(params.id);
@@ -77,9 +77,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             </Card>
 
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" className="flex-1">
-                    <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
-                </Button>
+                <AddToCartButton product={product} />
                 <ContactSellerForm sellerName={product.seller.name} />
             </div>
           </div>

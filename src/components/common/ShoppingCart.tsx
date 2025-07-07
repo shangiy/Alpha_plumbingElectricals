@@ -1,64 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useCart } from '@/context/CartProvider';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter, SheetTrigger } from '@/components/ui/sheet';
 import { ShoppingCart as ShoppingCartIcon, Plus, Minus, X } from 'lucide-react';
 import Image from 'next/image';
-import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
-
-const initialCartItems: CartItem[] = [
-  {
-    id: '1',
-    name: 'Advanced Drone',
-    price: 799.99,
-    image: 'https://placehold.co/100x100',
-    quantity: 1,
-  },
-  {
-    id: '3',
-    name: "Men's All-Weather Jacket",
-    price: 129.99,
-    image: 'https://placehold.co/100x100',
-    quantity: 2,
-  },
-];
-
 export default function ShoppingCart() {
-  const [items, setItems] = useState<CartItem[]>(initialCartItems);
-
-  const handleIncreaseQuantity = (id: string) => {
-    setItems(items.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
-  };
-
-  const handleDecreaseQuantity = (id: string) => {
-    setItems(items.map(item => item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item));
-  };
-
-  const handleRemoveItem = (id: string) => {
-    setItems(items.filter(item => item.id !== id));
-  };
-
-  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart, cartTotal, totalItems } = useCart();
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-KE', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'KES',
     }).format(price);
   };
-
-  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <Sheet>
@@ -77,15 +35,15 @@ export default function ShoppingCart() {
         <SheetHeader className="px-6">
           <SheetTitle>Shopping Cart ({totalItems})</SheetTitle>
         </SheetHeader>
-        {items.length > 0 ? (
+        {cartItems.length > 0 ? (
           <>
             <ScrollArea className="flex-1 px-6">
               <div className="flex flex-col gap-4 py-4">
-                {items.map((item) => (
+                {cartItems.map((item) => (
                   <div key={item.id} className="flex items-start gap-4">
                     <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
                        <Image
-                          src={item.image}
+                          src={item.images[0]}
                           alt={item.name}
                           fill
                           className="object-cover"
@@ -97,15 +55,15 @@ export default function ShoppingCart() {
                       <p className="mt-1 text-sm text-muted-foreground">{formatPrice(item.price)}</p>
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => handleDecreaseQuantity(item.id)}>
+                          <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => decreaseQuantity(item.id)}>
                             <Minus className="h-3 w-3" />
                           </Button>
                           <span className="w-4 text-center">{item.quantity}</span>
-                           <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => handleIncreaseQuantity(item.id)}>
+                           <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => increaseQuantity(item.id)}>
                             <Plus className="h-3 w-3" />
                           </Button>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleRemoveItem(item.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeFromCart(item.id)}>
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
@@ -119,7 +77,7 @@ export default function ShoppingCart() {
                    <div className="w-full space-y-4">
                         <div className="flex justify-between text-lg font-semibold">
                             <span>Subtotal</span>
-                            <span>{formatPrice(subtotal)}</span>
+                            <span>{formatPrice(cartTotal)}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">Shipping and taxes will be calculated at checkout.</p>
                         <Button asChild className="w-full" size="lg">

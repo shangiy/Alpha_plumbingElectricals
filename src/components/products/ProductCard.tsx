@@ -1,15 +1,19 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Rating } from '@/components/ui/rating';
+import { useCart } from '@/context/CartProvider';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+  
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-KE', {
       style: 'currency',
@@ -46,7 +50,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </CardContent>
       <CardFooter className="flex items-center justify-between p-4 pt-0">
         <p className="text-lg font-bold text-foreground">{formatPrice(product.price)}</p>
-        <Button size="sm">Add to Cart</Button>
+        <Button size="sm" onClick={() => addToCart(product)}>Add to Cart</Button>
       </CardFooter>
     </Card>
   );
