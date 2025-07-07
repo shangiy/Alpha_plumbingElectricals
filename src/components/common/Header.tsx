@@ -32,6 +32,7 @@ import {
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { AnimatedPlaceholder } from './AnimatedPlaceholder';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -45,11 +46,18 @@ const productCategories = [
   { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
 ];
 
+const frequentSearches = [
+    'Water Tanks',
+    'LED Lights',
+    'PPR Pipes',
+    'Solar Heaters',
+];
+
 export default function Header() {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
-  const [isScrolled, setIsScrolled] = useState(!isHomePage);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     if (!isHomePage) {
@@ -61,7 +69,7 @@ export default function Header() {
       setIsScrolled(window.scrollY > 50);
     };
 
-    handleScroll(); // Set initial state
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
@@ -79,17 +87,20 @@ export default function Header() {
     "sticky top-0 z-50 w-full transition-colors duration-300",
     isScrolled 
       ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60" 
-      : "bg-transparent"
+      : isHomePage ? "bg-transparent" : "bg-background border-b"
   );
 
-  const iconButtonClasses = cn(
-    "text-foreground",
-    !isScrolled && isHomePage && "text-white hover:bg-white/20 hover:text-white"
+  const navAndIconClasses = cn(
+    "transition-colors",
+    !isScrolled && isHomePage ? "text-white" : "text-muted-foreground"
   );
   
-  const navLinkClasses = cn(
-    "px-3 py-2 text-sm font-medium transition-colors hover:text-accent",
-    !isScrolled && isHomePage ? "text-white hover:text-white/80" : "text-muted-foreground"
+  const navLinkHoverClasses = cn(
+    !isScrolled && isHomePage ? "hover:text-white/80" : "hover:text-primary"
+  );
+
+  const iconButtonHoverClasses = cn(
+    !isScrolled && isHomePage ? "hover:bg-white/20 hover:text-white" : "hover:bg-accent hover:text-accent-foreground"
   );
 
   const ProductsDropdown = () => {
@@ -98,7 +109,7 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className={cn("hover:bg-transparent", navLinkClasses)}
+            className={cn("px-3 py-2 text-sm font-medium", navAndIconClasses, navLinkHoverClasses)}
           >
             Products
             <ChevronDown className="ml-1 h-4 w-4" />
@@ -139,40 +150,47 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Center: Search Bar or Nav (Desktop) */}
-        <div className="hidden lg:flex flex-1 justify-center px-8">
-            <nav className={cn("flex items-center gap-2", isScrolled && isHomePage ? "hidden" : "flex")}>
-                <ProductsDropdown />
-                {navLinks.map((link) => (
-                    <Link
-                    key={link.name}
-                    href={link.href}
-                    className={navLinkClasses}
-                    >
-                    {link.name}
-                    </Link>
-                ))}
-            </nav>
-            <div className={cn("w-full max-w-lg", isScrolled && isHomePage ? 'block' : 'hidden')}>
-              <form className="w-full bg-white rounded-full p-1 flex items-center border shadow-sm">
+        {/* Center: Search Bar and Nav (Desktop) */}
+        <div className={cn(
+            "hidden lg:flex flex-1 items-center gap-6",
+            isScrolled || !isHomePage ? 'justify-between' : 'justify-end'
+        )}>
+            {/* Search Bar (appears on scroll or on non-home pages) */}
+            <div className={cn("w-full max-w-lg transition-opacity duration-300", isScrolled || !isHomePage ? 'opacity-100' : 'opacity-0 pointer-events-none')}>
+              <form className="w-full bg-white rounded-full p-1 flex items-center border shadow-sm relative">
+                  <div className="flex-grow h-6 ml-3">
+                    <AnimatedPlaceholder placeholders={frequentSearches} />
+                  </div>
                   <Input
-                  type="search"
-                  placeholder="Search for products..."
-                  className="h-8 flex-grow bg-transparent border-none focus-visible:ring-0 text-sm pl-4"
+                    type="search"
+                    className="absolute inset-0 w-full h-full bg-transparent border-none focus-visible:ring-0 text-base text-gray-800 placeholder:text-transparent px-4 z-10"
                   />
-                  <Button type="submit" size="icon" className="rounded-full bg-accent hover:bg-accent/90 h-8 w-8">
+                  <Button type="submit" size="icon" className="rounded-full bg-accent hover:bg-accent/90 h-8 w-8 z-20">
                       <Search className="h-4 w-4" />
                       <span className="sr-only">Search</span>
                   </Button>
               </form>
             </div>
+            {/* Navigation Links */}
+            <nav className="flex items-center gap-2">
+                <ProductsDropdown />
+                {navLinks.map((link) => (
+                    <Link
+                    key={link.name}
+                    href={link.href}
+                    className={cn("px-3 py-2 text-sm font-medium", navAndIconClasses, navLinkHoverClasses)}
+                    >
+                    {link.name}
+                    </Link>
+                ))}
+            </nav>
         </div>
 
         {/* Right: Actions */}
         <div className="flex flex-none items-center justify-end gap-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn("rounded-full lg:hidden", iconButtonClasses)}>
+              <Button variant="ghost" size="icon" className={cn("rounded-full lg:hidden", navAndIconClasses, iconButtonHoverClasses)}>
                 <Search className="h-5 w-5" />
                 <span className="sr-only">Search</span>
               </Button>
@@ -204,7 +222,7 @@ export default function Header() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn("md:w-auto md:px-3 md:gap-2 rounded-full", iconButtonClasses)}>
+              <Button variant="ghost" size="icon" className={cn("md:w-auto md:px-3 md:gap-2 rounded-full", navAndIconClasses, iconButtonHoverClasses)}>
                 <User className="h-5 w-5" />
                 <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
               </Button>
@@ -244,7 +262,7 @@ export default function Header() {
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn("lg:hidden rounded-full", iconButtonClasses)}>
+              <Button variant="ghost" size="icon" className={cn("lg:hidden rounded-full", navAndIconClasses, iconButtonHoverClasses)}>
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
