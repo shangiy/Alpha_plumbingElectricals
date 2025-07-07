@@ -18,3 +18,9 @@ export interface Category {
   id: string;
   name: string;
 }
+
+export interface HomePageCategory {
+  id: string;
+  name: string;
+  image: string;
+}

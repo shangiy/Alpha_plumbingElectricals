@@ -1,14 +1,116 @@
-import type { Product, Category } from './types';
+import type { Product, Category, HomePageCategory } from './types';
 
-const categories: Category[] = [
-  { id: 'electronics', name: 'Electronics' },
-  { id: 'apparel', name: 'Apparel' },
-  { id: 'home-goods', name: 'Home Goods' },
-  { id: 'books', name: 'Books' },
-  { id: 'industrial', name: 'Industrial' },
+const homePageCategories: HomePageCategory[] = [
+    { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
+    { id: 'roofing', name: 'Roofing & Fencing', image: '/roof 2.png' },
+    { id: 'lighting-electrical', name: 'Lighting & Electrical', image: '/electric cable.png' },
+    { id: 'home-decor-2', name: 'Home & Decor', image: '/decor lighting design.png' },
+    { id: 'roofing-2', name: 'Roofing & Fencing', image: '/roof 2.png' },
+    { id: 'home-decor-3', name: 'Home & Decor', image: '/floor tiles.png' },
+    { id: 'lighting-2', name: 'Lighting & Electrical', image: '/artistic lights.png' }
 ];
 
-const products: Product[] = [
+const featuredProducts: Product[] = [
+  {
+    id: 'ample-light',
+    name: 'Ample Light',
+    price: 2500.00,
+    images: ['/Ample Light.png'],
+    description: 'A beautiful and bright ample light.',
+    longDescription: 'A beautiful and bright ample light, perfect for any room in your house.',
+    category: 'lighting-electrical',
+    rating: 4.5,
+    reviews: 10,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'oval-toilet',
+    name: 'Oval Toilet',
+    price: 7500.00,
+    images: ['/Oval Toilet.png'],
+    description: 'A modern and efficient oval toilet.',
+    longDescription: 'A modern and efficient oval toilet that saves water and adds a touch of class to your bathroom.',
+    category: 'plumbing',
+    rating: 4.8,
+    reviews: 25,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'sink-cabinet',
+    name: 'Whole complete sink and cabinet',
+    price: 7000.00,
+    images: ['/Whole complete sink and cabinet.png'],
+    description: 'A complete sink and cabinet set.',
+    longDescription: 'A complete sink and cabinet set, ready to install. Provides ample storage and a sleek look.',
+    category: 'plumbing',
+    rating: 4.7,
+    reviews: 18,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'solar-heater',
+    name: 'Solar Heater non-pressurized',
+    price: 12000.00,
+    images: ['/Solar Heater non-pressurized.png'],
+    description: 'An energy-efficient solar water heater.',
+    longDescription: 'An energy-efficient non-pressurized solar water heater, perfect for reducing your electricity bills.',
+    category: 'plumbing',
+    rating: 4.9,
+    reviews: 32,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'artistic-lights',
+    name: 'Artistic Lights',
+    price: 3300.00,
+    images: ['/Artistic Lights.png'],
+    description: 'Unique and stylish artistic lights.',
+    longDescription: 'A collection of unique and stylish artistic lights to make a statement in any room.',
+    category: 'lighting-electrical',
+    rating: 4.6,
+    reviews: 15,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'electric-cable',
+    name: 'Electric cable',
+    price: 3000.00,
+    images: ['/electric cable.png'],
+    description: 'High-quality electric wiring cable.',
+    longDescription: 'High-quality and durable electric wiring cable, available in various gauges for your needs.',
+    category: 'lighting-electrical',
+    rating: 4.9,
+    reviews: 50,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'wall-bracket',
+    name: 'Warm light wall bracket',
+    price: 1900.00,
+    images: ['/Warm light wall bracket.png'],
+    description: 'An elegant warm light wall bracket.',
+    longDescription: 'An elegant warm light wall bracket that provides a cozy and inviting ambiance.',
+    category: 'lighting-electrical',
+    rating: 4.5,
+    reviews: 22,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+  {
+    id: 'ppr-fittings',
+    name: 'PPR Pipe Fittings',
+    price: 30.00,
+    images: ['/PPR Pipe Fittings.png'],
+    description: 'A set of durable PPR pipe fittings.',
+    longDescription: 'A complete set of durable PPR pipe fittings for all your plumbing projects.',
+    category: 'plumbing',
+    rating: 5.0,
+    reviews: 110,
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+  },
+];
+
+
+const legacyProducts: Product[] = [
   {
     id: '1',
     name: 'Advanced Drone',
@@ -21,106 +123,39 @@ const products: Product[] = [
     reviews: 125,
     seller: { name: 'TechFly Inc.', id: 'seller-1' },
   },
-  {
-    id: '2',
-    name: 'Smartwatch Pro',
-    description: 'Feature-packed smartwatch with health tracking and GPS.',
-    longDescription: 'Stay connected and monitor your health with the Smartwatch Pro. It boasts a vibrant AMOLED display, comprehensive health tracking (heart rate, SpO2, sleep), built-in GPS, and up to 14 days of battery life. Syncs with both iOS and Android devices.',
-    price: 249.99,
-    images: ['https://placehold.co/600x600', 'https://placehold.co/600x600'],
-    category: 'electronics',
-    rating: 4.6,
-    reviews: 340,
-    seller: { name: 'GadgetHouse', id: 'seller-2' },
-  },
-  {
-    id: '3',
-    name: 'Men\'s All-Weather Jacket',
-    description: 'Waterproof and breathable jacket for all seasons.',
-    longDescription: 'Designed for versatility, this all-weather jacket is fully waterproof, windproof, and breathable. It features a lightweight shell, a removable fleece liner, adjustable cuffs and hood, and multiple zippered pockets for secure storage. Perfect for hiking, commuting, or any outdoor adventure.',
-    price: 129.99,
-    images: ['https://placehold.co/600x600', 'https://placehold.co/600x600'],
-    category: 'apparel',
-    rating: 4.9,
-    reviews: 512,
-    seller: { name: 'Outdoor Gear Co.', id: 'seller-3' },
-  },
-  {
-    id: '4',
-    name: 'Ergonomic Office Chair',
-    description: 'Comfortable chair with lumbar support and adjustable features.',
-    longDescription: 'Improve your posture and comfort during long workdays. This ergonomic chair offers adjustable lumbar support, armrests, seat height, and tilt tension. The breathable mesh back keeps you cool, and the high-density foam cushion provides lasting support.',
-    price: 350.0,
-    images: ['https://placehold.co/600x600'],
-    category: 'home-goods',
-    rating: 4.7,
-    reviews: 480,
-    seller: { name: 'ComfortZone', id: 'seller-4' },
-  },
-  {
-    id: '5',
-    name: 'Bestselling Sci-Fi Novel',
-    description: 'A thrilling adventure in space.',
-    longDescription: '"The Last Voyager" is a gripping tale of interstellar exploration and discovery. When a lone astronaut awakens from cryo-sleep millions of light-years from home, she must unravel a cosmic mystery to find her way back. A must-read for fans of hard science fiction.',
-    price: 19.99,
-    images: ['https://placehold.co/600x600'],
-    category: 'books',
-    rating: 4.5,
-    reviews: 2100,
-    seller: { name: 'PageTurners', id: 'seller-5' },
-  },
-  {
-    id: '6',
-    name: 'CNC Milling Machine',
-    description: 'Precision 3-axis CNC machine for small workshops.',
-    longDescription: 'Bring industrial precision to your workshop with this compact 3-axis CNC milling machine. Ideal for prototyping and small-batch production of parts from aluminum, plastics, and wood. Features a rigid frame, high-speed spindle, and user-friendly control software.',
-    price: 4500.0,
-    images: ['https://placehold.co/600x600', 'https://placehold.co/600x600'],
-    category: 'industrial',
-    rating: 4.8,
-    reviews: 45,
-    seller: { name: 'Pro-Machining Tools', id: 'seller-6' },
-  },
-  {
-    id: '7',
-    name: 'Wireless Noise-Cancelling Headphones',
-    description: 'Immersive sound with industry-leading noise cancellation.',
-    longDescription: 'Escape the noise and dive into your music. These headphones offer exceptional audio quality and superior active noise cancellation. With up to 30 hours of playtime, multi-device pairing, and a comfortable over-ear design, they are perfect for travel, work, and leisure.',
-    price: 349.99,
-    images: ['https://placehold.co/600x600', 'https://placehold.co/600x600'],
-    category: 'electronics',
-    rating: 4.9,
-    reviews: 1580,
-    seller: { name: 'AudioPhile Gear', id: 'seller-7' },
-  },
-  {
-    id: '8',
-    name: 'Organic Cotton T-Shirt',
-    description: 'Soft, durable, and ethically made.',
-    longDescription: 'A wardrobe essential made from 100% GOTS certified organic cotton. This t-shirt is incredibly soft, breathable, and designed for a classic fit. Ethically produced in a fair-trade certified factory, it\'s a choice you can feel good about.',
-    price: 35.0,
-    images: ['https://placehold.co/600x600'],
-    category: 'apparel',
-    rating: 4.9,
-    reviews: 890,
-    seller: { name: 'Pure Threads', id: 'seller-8' },
-  },
 ];
 
+const allProducts = [...featuredProducts, ...legacyProducts];
+
+const categories: Category[] = [
+  { id: 'lighting-electrical', name: 'Lighting & Electrical' },
+  { id: 'plumbing', name: 'Plumbing' },
+  { id: 'decor', name: 'Home & Decor' },
+  { id: 'roofing', name: 'Roofing & Fencing' },
+  { id: 'electronics', name: 'Electronics' },
+];
+
+export async function getHomePageCategories(): Promise<HomePageCategory[]> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return homePageCategories;
+}
+
+export async function getFeaturedProducts(): Promise<Product[]> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return featuredProducts;
+}
+
 export async function getProducts(): Promise<Product[]> {
-  // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 500));
-  return products;
+  return allProducts;
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-  // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 200));
-  return products.find(p => p.id === id);
+  return allProducts.find(p => p.id === id);
 }
 
 export async function getCategories(): Promise<Category[]> {
-  // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 100));
   return categories;
 }

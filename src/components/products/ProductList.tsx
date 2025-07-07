@@ -48,10 +48,10 @@ export default function ProductList({ products, categories }: ProductListProps) 
     }
   }, [products, searchTerm, category, priceRange, sortOption]);
 
-  const maxPrice = useMemo(() => Math.max(...products.map(p => p.price), 5000), [products]);
+  const maxPrice = useMemo(() => Math.max(...products.map(p => p.price), 15000), [products]);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(price);
+    return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES', minimumFractionDigits: 0 }).format(price);
   };
   
   return (
@@ -84,7 +84,7 @@ export default function ProductList({ products, categories }: ProductListProps) 
             id="price"
             min={0}
             max={maxPrice}
-            step={10}
+            step={100}
             value={priceRange}
             onValueChange={(value) => setPriceRange(value)}
             className="mt-2"

@@ -11,9 +11,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-KE', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'KES',
     }).format(price);
   };
 
@@ -39,8 +39,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </CardTitle>
         </Link>
-        <p className="mb-2 text-sm text-muted-foreground">{product.description}</p>
-        <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={16}/>
+        {/* Short description can be added back if needed */}
+        {/* <p className="mb-2 text-sm text-muted-foreground">{product.description}</p> */}
+        {/* The rating component can be added back if you have rating data */}
+        {/* <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={16}/> */}
       </CardContent>
       <CardFooter className="flex items-center justify-between p-4 pt-0">
         <p className="text-lg font-bold text-foreground">{formatPrice(product.price)}</p>
