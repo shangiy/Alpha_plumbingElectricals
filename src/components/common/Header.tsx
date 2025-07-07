@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Search, User, Menu, ChevronDown, Heart } from 'lucide-react';
+import { Search, User, Menu, ChevronDown } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -129,12 +129,6 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 md:flex">
-            <Link href="/wishlist" passHref>
-              <Button variant="ghost" size="icon">
-                <Heart className="h-5 w-5" />
-                <span className="sr-only">Wishlist</span>
-              </Button>
-            </Link>
             <AccountDropdown />
           </div>
           
@@ -178,12 +172,6 @@ export default function Header() {
                   ))}
                 </nav>
                 <div className="mt-auto flex items-center justify-end gap-4 border-t pt-4">
-                   <Link href="/wishlist" passHref>
-                      <Button variant="ghost" size="icon">
-                        <Heart className="h-6 w-6" />
-                        <span className="sr-only">Wishlist</span>
-                      </Button>
-                    </Link>
                    <AccountDropdown isMobile={true} />
                 </div>
               </div>
