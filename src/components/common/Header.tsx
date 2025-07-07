@@ -181,14 +181,14 @@ export default function Header() {
             {/* Center: Docked Search */}
             <div className="flex justify-center items-center">
                 <div className={cn(
-                  "relative h-10 transition-[width,opacity] duration-300 ease-in-out",
-                  showDockedSearch ? "w-full max-w-sm opacity-100" : "w-0 opacity-0"
+                  "relative transition-[width,opacity] duration-300 ease-in-out",
+                  showDockedSearch ? "w-full max-w-md opacity-100" : "w-0 opacity-0"
                 )}>
                     <div className={cn(
                       "absolute inset-0 transition-opacity duration-200 ease-in-out",
                       showDockedSearch ? "opacity-100 delay-150" : "opacity-0"
                     )}>
-                      <HeroSearch variant="docked" />
+                      <HeroSearch />
                     </div>
                 </div>
             </div>
@@ -328,10 +328,10 @@ export default function Header() {
             </div>
              {/* Bottom Row: Search Bar - Appears on scroll */}
              <div className={cn(
-                'overflow-hidden transition-all duration-300 ease-in-out',
-                showDockedSearch ? 'h-10 opacity-100 mb-2' : 'h-0 opacity-0'
+                'overflow-hidden transition-all duration-300 ease-in-out px-4',
+                showDockedSearch ? 'h-12 opacity-100' : 'h-0 opacity-0'
             )}>
-                <HeroSearch variant="docked" />
+                <HeroSearch />
             </div>
         </div>
       </div>
