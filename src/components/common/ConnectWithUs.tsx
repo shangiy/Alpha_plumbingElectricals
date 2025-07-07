@@ -18,12 +18,12 @@ export default function ConnectWithUs() {
           <h2 className="text-4xl font-bold font-headline">Connect with us!</h2>
           <p className="mt-2 text-lg">As You Enquire or make purchases</p>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-8 flex flex-col items-center justify-center gap-[76px] sm:flex-row">
             <blockquote
               className="tiktok-embed"
               cite="https://www.tiktok.com/@alphaelectricalsandplumb/video/7506475821771640070"
               data-video-id="7506475821771640070"
-              style={{ maxWidth: '325px', minWidth: '200px' }}
+              style={{ width: '227px', height: '378px' }}
             >
               <section>
                 <a
@@ -39,7 +39,7 @@ export default function ConnectWithUs() {
               className="tiktok-embed"
               cite="https://www.tiktok.com/@alphaelectricalsandplumb/video/7496094826002222342"
               data-video-id="7496094826002222342"
-              style={{ maxWidth: '325px', minWidth: '200px' }}
+              style={{ width: '227px', height: '378px' }}
             >
               <section>
                 <a
