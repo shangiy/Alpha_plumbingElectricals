@@ -106,7 +106,7 @@ export default function Header() {
      <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
             <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm whitespace-nowrap", navAndIconClasses)}>
+                <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 text-sm whitespace-nowrap", navAndIconClasses)}>
                     Products
                     <ChevronDown className="h-4 w-4" />
                 </Link>
@@ -194,40 +194,26 @@ export default function Header() {
 
   return (
     <header className={headerClasses}>
-      <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
+      <div className="container mx-auto flex h-24 items-center justify-between px-4">
         {/* Desktop Header */}
-        <div className="hidden w-full grid-cols-[auto_1fr_auto] items-center gap-8 lg:grid">
-             {/* Left: Logo and Name */}
+        <div className="hidden w-full grid-cols-[auto_1fr_auto] items-center gap-4 lg:grid">
+            {/* Left: Logo */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3">
-            <Image
-                src="/logo Alpha.png"
-                alt="Alpha Electricals & Plumbing Ltd Logo"
-                width={70}
-                height={70}
-                className="h-auto"
-            />
-            <span className={cn("hidden sm:inline-block font-bold text-xl", navAndIconClasses)}>Alpha Electricals</span>
+              <Image
+                  src="/logo Alpha.png"
+                  alt="Alpha Electricals & Plumbing Ltd Logo"
+                  width={70}
+                  height={70}
+                  className="h-auto"
+              />
+              <span className={cn("hidden sm:inline-block font-bold text-xl", navAndIconClasses)}>Alpha Electricals</span>
             </Link>
             
-            {/* Center: Navigation */}
-            <nav className='flex items-center justify-center gap-2'>
-                <ProductsDropdown />
-                {navLinks.map((link) => (
-                    <Link
-                        key={link.name}
-                        href={link.href}
-                        className={cn("px-4 py-2 text-sm whitespace-nowrap", navAndIconClasses)}
-                    >
-                        {link.name}
-                    </Link>
-                ))}
-            </nav>
-
-            {/* Right: Search and Icons */}
-            <div className="flex items-center justify-end gap-2">
+            {/* Center: Docked Search */}
+            <div className="flex justify-center items-center">
                 <div className={cn(
-                  "relative h-10 transition-[width] duration-300 ease-in-out",
-                  showDockedSearch ? "w-48" : "w-0"
+                  "relative h-10 transition-[width,opacity] duration-300 ease-in-out",
+                  showDockedSearch ? "w-full max-w-sm opacity-100" : "w-0 opacity-0"
                 )}>
                     <div className={cn(
                       "absolute inset-0 transition-opacity duration-200 ease-in-out",
@@ -236,8 +222,26 @@ export default function Header() {
                       <HeroSearch variant="docked" />
                     </div>
                 </div>
-                <UserAccountDropdown />
-                <ShoppingCart triggerClassName={navAndIconClasses} />
+            </div>
+
+            {/* Right: Navigation and Icons */}
+            <div className="flex items-center justify-end">
+                <nav className='flex items-center'>
+                    <ProductsDropdown />
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className={cn("px-3 py-2 text-sm whitespace-nowrap", navAndIconClasses)}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </nav>
+                <div className="flex items-center">
+                    <ShoppingCart triggerClassName={navAndIconClasses} />
+                    <UserAccountDropdown />
+                </div>
             </div>
         </div>
 
