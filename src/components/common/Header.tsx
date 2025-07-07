@@ -68,7 +68,7 @@ export default function Header() {
     const handleScroll = () => {
       // Opaque header appears sooner
       setIsHeaderOpaque(window.scrollY > 50);
-      // Docked search appears later
+      // Docked search appears later, when hero search is off-screen
       setIsSearchDocked(window.scrollY > 400); 
     };
 
@@ -138,6 +138,7 @@ export default function Header() {
      </div>
   );
 
+  // This SearchBar is only for mobile view, as desktop has the hero/docked search
   const SearchBar = ({ isMobile = false }) => {
     const [isSearchOpen, setSearchOpen] = useState(false);
     const searchContainerRef = useRef<HTMLFormElement>(null);
@@ -202,12 +203,12 @@ export default function Header() {
         
         {/* Center/Right: Actions (Desktop) */}
         <div className="hidden lg:flex flex-1 items-center justify-end">
-            <div className="flex-1 flex justify-center items-center relative h-12">
-                {/* Nav Links */}
+            <div className="flex-1 flex justify-center items-center relative h-12 overflow-hidden">
+                {/* Nav Links - will animate out */}
                  <div
                     className={cn(
-                        'flex items-center gap-1 transition-opacity duration-300 ease-in-out',
-                        (isSearchDocked || !isHomePage) && 'opacity-0 pointer-events-none'
+                        'flex items-center gap-1 transition-all duration-500 ease-in-out',
+                        (isSearchDocked || !isHomePage) && 'opacity-0 -translate-y-4 pointer-events-none'
                     )}
                  >
                     <ProductsDropdown />
@@ -222,10 +223,10 @@ export default function Header() {
                     ))}
                 </div>
                 
-                {/* Docked Search Bar */}
+                {/* Docked Search Bar - will animate in */}
                  <div className={cn(
                     "absolute inset-x-0 mx-auto w-full max-w-lg transition-all duration-500 ease-in-out",
-                    (isSearchDocked || !isHomePage) ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+                    (isSearchDocked || !isHomePage) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
                 )}>
                     <form className="w-full bg-input rounded-full p-1 flex items-center shadow-inner relative h-12">
                         <div className="flex-grow h-6 ml-4">
