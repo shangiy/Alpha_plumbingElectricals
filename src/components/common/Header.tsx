@@ -164,8 +164,8 @@ export default function Header() {
         )}>
             {/* Search Bar (appears on scroll or on non-home pages) */}
             <div className={cn(
-              "w-full max-w-lg transition-opacity duration-300", 
-              (showSearchInHeader || !isHomePage) ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              "w-full max-w-lg transition-all duration-500 ease-in-out", 
+              (showSearchInHeader || !isHomePage) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'
             )}>
               <form className="w-full bg-white rounded-full p-1 flex items-center border shadow-sm relative">
                   <div className="flex-grow h-6 ml-3">
