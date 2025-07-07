@@ -37,7 +37,7 @@ export default function HeroSearch({ variant = 'hero' }: HeroSearchProps) {
     return (
         <form
             onSubmit={handleSubmit}
-            className={cn(isHero && "w-full max-w-xl mx-auto")}
+            className={cn(isHero && "w-full max-w-xl")}
         >
             <div className="relative">
                 <label htmlFor={isHero ? "hero-search" : "docked-search"} className="sr-only">Search</label>

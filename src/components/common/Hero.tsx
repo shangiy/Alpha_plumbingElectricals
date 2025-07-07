@@ -10,7 +10,7 @@ export default function Hero() {
     { name: 'Solar Heaters', href: '/plumbing' },
   ];
   return (
-    <section className="relative h-[60vh] md:h-[70vh] w-full flex items-center justify-center text-white -mt-24">
+    <section className="relative h-[60vh] md:h-[70vh] w-full flex items-center justify-start text-white -mt-24">
       <Image
         src="/background.jpg"
         alt="Hero background image"
@@ -20,17 +20,17 @@ export default function Hero() {
         priority
       />
       <div className="absolute inset-0 bg-black/60 -z-10" />
-      <div className="container mx-auto px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
+      <div className="container mx-auto px-4 text-left">
+        <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 max-w-3xl">
           Welcome to Alpha Electricals & Plumbing Ltd
         </h1>
-        <p className="text-lg md:text-xl max-w-3xl mx-auto mb-8">
+        <p className="text-lg md:text-xl max-w-3xl mb-8">
           Your trusted source for Tanks, Lighting, Plumbing & More
         </p>
         
         <HeroSearch />
 
-        <div className="mt-6 flex items-center justify-center gap-2 md:gap-4 flex-wrap">
+        <div className="mt-6 flex items-center justify-start gap-2 md:gap-4 flex-wrap">
           <span className="text-sm font-medium">Frequently searched:</span>
           {frequentSearches.map((item) => (
             <Link
