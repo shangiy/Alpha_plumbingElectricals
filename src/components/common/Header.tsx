@@ -82,8 +82,6 @@ export default function Header() {
     !isHeaderOpaque && isHomePage ? "text-white" : "text-foreground"
   );
   
-  const navLinkHoverClasses = "hover:text-primary";
-  
   const handleProductsMenuEnter = () => {
     if (productsMenuTimerRef.current) {
       clearTimeout(productsMenuTimerRef.current);
@@ -101,7 +99,7 @@ export default function Header() {
      <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
             <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm font-semibold", navAndIconClasses, navLinkHoverClasses)}>
+                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm font-semibold", navAndIconClasses, "hover:text-red-500")}>
                     Products
                     <ChevronDown className="h-4 w-4" />
                 </Link>
@@ -195,7 +193,7 @@ export default function Header() {
                 <Link
                     key={link.name}
                     href={link.href}
-                    className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, navLinkHoverClasses)}
+                    className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, "hover:text-red-500")}
                 >
                     {link.name}
                 </Link>
@@ -203,7 +201,7 @@ export default function Header() {
             <ShoppingCart />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses, navLinkHoverClasses)}>
+                <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses, "hover:text-red-500")}>
                     <User className="h-5 w-5" />
                     <span className="text-sm font-semibold">{user ? user.username : 'Sign In'}</span>
                 </Button>
