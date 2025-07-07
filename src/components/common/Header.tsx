@@ -57,16 +57,23 @@ export default function Header() {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
-  const [isScrolled, setIsScrolled] = useState(false);
+
+  const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
+  const [showSearchInHeader, setShowSearchInHeader] = useState(false);
+
 
   useEffect(() => {
     if (!isHomePage) {
-      setIsScrolled(true);
+      setIsHeaderOpaque(true);
+      setShowSearchInHeader(true);
       return;
     }
     
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      // Header becomes opaque after a small scroll
+      setIsHeaderOpaque(window.scrollY > 50);
+      // Search bar appears only after the hero's search bar is mostly out of view
+      setShowSearchInHeader(window.scrollY > 400); 
     };
 
     handleScroll();
@@ -85,22 +92,22 @@ export default function Header() {
   
   const headerClasses = cn(
     "sticky top-0 z-50 w-full transition-colors duration-300",
-    isScrolled 
+    isHeaderOpaque 
       ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60" 
       : isHomePage ? "bg-transparent" : "bg-background border-b"
   );
 
   const navAndIconClasses = cn(
     "transition-colors",
-    !isScrolled && isHomePage ? "text-white" : "text-muted-foreground"
+    !isHeaderOpaque && isHomePage ? "text-white" : "text-muted-foreground"
   );
   
   const navLinkHoverClasses = cn(
-    !isScrolled && isHomePage ? "hover:text-white/80" : "hover:text-primary"
+    !isHeaderOpaque && isHomePage ? "hover:text-white/80" : "hover:text-primary"
   );
 
   const iconButtonHoverClasses = cn(
-    !isScrolled && isHomePage ? "hover:bg-white/20 hover:text-white" : "hover:bg-accent hover:text-accent-foreground"
+    !isHeaderOpaque && isHomePage ? "hover:bg-white/20 hover:text-white" : "hover:bg-accent hover:text-accent-foreground"
   );
 
   const ProductsDropdown = () => {
@@ -153,10 +160,13 @@ export default function Header() {
         {/* Center: Search Bar and Nav (Desktop) */}
         <div className={cn(
             "hidden lg:flex flex-1 items-center gap-6",
-            isScrolled || !isHomePage ? 'justify-between' : 'justify-end'
+            (showSearchInHeader || !isHomePage) ? 'justify-between' : 'justify-end'
         )}>
             {/* Search Bar (appears on scroll or on non-home pages) */}
-            <div className={cn("w-full max-w-lg transition-opacity duration-300", isScrolled || !isHomePage ? 'opacity-100' : 'opacity-0 pointer-events-none')}>
+            <div className={cn(
+              "w-full max-w-lg transition-opacity duration-300", 
+              (showSearchInHeader || !isHomePage) ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            )}>
               <form className="w-full bg-white rounded-full p-1 flex items-center border shadow-sm relative">
                   <div className="flex-grow h-6 ml-3">
                     <AnimatedPlaceholder placeholders={frequentSearches} />
@@ -171,6 +181,7 @@ export default function Header() {
                   </Button>
               </form>
             </div>
+
             {/* Navigation Links */}
             <nav className="flex items-center gap-2">
                 <ProductsDropdown />
