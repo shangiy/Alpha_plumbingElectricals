@@ -106,7 +106,7 @@ export default function Header() {
      <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
             <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm", navAndIconClasses)}>
+                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm whitespace-nowrap", navAndIconClasses)}>
                     Products
                     <ChevronDown className="h-4 w-4" />
                 </Link>
@@ -135,7 +135,7 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
         <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
             <User className="h-5 w-5" />
-            <span className="text-sm">{user ? user.username : 'Sign In'}</span>
+            <span className="text-sm hidden md:inline">{user ? user.username : 'Sign In'}</span>
         </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -196,7 +196,7 @@ export default function Header() {
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
         {/* Desktop Header */}
-        <div className="hidden w-full items-center justify-between lg:flex">
+        <div className="hidden w-full grid-cols-[auto_1fr_auto] items-center gap-8 lg:grid">
              {/* Left: Logo and Name */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3">
             <Image
@@ -209,29 +209,33 @@ export default function Header() {
             <span className={cn("hidden sm:inline-block font-bold text-xl", navAndIconClasses)}>Alpha Electricals</span>
             </Link>
             
-            {/* Center: Actions (Desktop) */}
-            <div className="relative flex-1 flex justify-center items-center px-8">
-                 <div className={cn("transition-all duration-300", showDockedSearch ? "opacity-0 -translate-y-4 pointer-events-none" : "opacity-100")}>
-                    <nav className='flex items-center gap-2'>
-                        <ProductsDropdown />
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className={cn("px-4 py-2 text-sm", navAndIconClasses)}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                    </nav>
-                 </div>
-                 <div className={cn("absolute w-full max-w-sm transition-all duration-300", !showDockedSearch ? "opacity-0 translate-y-4 pointer-events-none" : "opacity-100")}>
-                    <HeroSearch variant="docked" />
-                 </div>
-            </div>
+            {/* Center: Navigation */}
+            <nav className='flex items-center justify-center gap-2'>
+                <ProductsDropdown />
+                {navLinks.map((link) => (
+                    <Link
+                        key={link.name}
+                        href={link.href}
+                        className={cn("px-4 py-2 text-sm whitespace-nowrap", navAndIconClasses)}
+                    >
+                        {link.name}
+                    </Link>
+                ))}
+            </nav>
 
-            {/* Far Right Icons */}
-            <div className="flex items-center gap-1 ml-4">
+            {/* Right: Search and Icons */}
+            <div className="flex items-center justify-end gap-2">
+                <div className={cn(
+                  "relative h-10 transition-[width] duration-300 ease-in-out",
+                  showDockedSearch ? "w-48" : "w-0"
+                )}>
+                    <div className={cn(
+                      "absolute inset-0 transition-opacity duration-200 ease-in-out",
+                      showDockedSearch ? "opacity-100 delay-150" : "opacity-0"
+                    )}>
+                      <HeroSearch variant="docked" />
+                    </div>
+                </div>
                 <UserAccountDropdown />
                 <ShoppingCart triggerClassName={navAndIconClasses} />
             </div>
@@ -240,8 +244,7 @@ export default function Header() {
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
-            {/* Left side: Logo */}
-            <Link href="/">
+            <Link href="/" className="flex-shrink-0">
                 <Image
                     src="/logo Alpha.png"
                     alt="Alpha Electricals & Plumbing Ltd Logo"
@@ -251,7 +254,6 @@ export default function Header() {
                 />
             </Link>
 
-            {/* Right side: Icons */}
             <div className="flex items-center gap-1">
                 <ShoppingCart triggerClassName={navAndIconClasses} />
                 <MobileUserAccountDropdown />
