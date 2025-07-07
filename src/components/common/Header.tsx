@@ -56,8 +56,9 @@ export default function Header() {
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
-    { name: 'Contact Us', href: '/contact' },
     { name: 'About Us', href: '/about' },
+    { name: 'Team', href: '/team' },
+    { name: 'Contact Us', href: '/contact' },
   ];
 
   useEffect(() => {
@@ -74,32 +75,32 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-20 items-center justify-between px-4">
+      <div className="container mx-auto flex h-24 items-center justify-between px-4">
         
         {/* Left Group: Logo & Name */}
         <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-3">
-              <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={50} height={50} />
+              <Image src="/logo Alpha.png" alt="Alpha Electricals & Plumbing Ltd Logo" width={80} height={80} />
               <span className="hidden text-xl font-bold font-headline text-primary md:block">Alpha Electricals</span>
             </Link>
         </div>
 
-        {/* Right Group: Nav, Search & Icons */}
-        <div className="flex items-center gap-2">
-            
-            <nav className="hidden items-center gap-2 lg:flex">
-                <ProductsDropdown />
-                {navLinks.map((link) => (
-                   <Link
-                    key={link.name}
-                    href={link.href}
-                    className="px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-            </nav>
+        {/* Center Group: Nav */}
+        <nav className="hidden items-center gap-2 lg:flex">
+            <ProductsDropdown />
+            {navLinks.map((link) => (
+               <Link
+                key={link.name}
+                href={link.href}
+                className="px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
+              >
+                {link.name}
+              </Link>
+            ))}
+        </nav>
 
+        {/* Right Group: Search, Icons */}
+        <div className="flex items-center gap-2">
             {/* Search Bar */}
             <div ref={searchContainerRef} className="hidden md:flex relative items-center">
                 <form>
@@ -177,7 +178,7 @@ export default function Header() {
                 <SheetContent side="right" className="w-[300px] sm:w-[350px]">
                   <div className="flex h-full flex-col p-4">
                     <Link href="/" className="mb-4 flex items-center gap-2">
-                       <Image src="/logo Alpha.png" alt="Logo" width={40} height={40} />
+                       <Image src="/logo Alpha.png" alt="Logo" width={60} height={60} />
                        <span className="text-lg font-bold font-headline text-primary">Alpha Electricals</span>
                     </Link>
                     <DropdownMenuSeparator />
