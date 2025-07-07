@@ -63,6 +63,7 @@ export default function Header() {
 
 
   useEffect(() => {
+    // On non-home pages, the header is always opaque with the search bar
     if (!isHomePage) {
       setIsHeaderOpaque(true);
       setShowSearchInHeader(true);
@@ -76,7 +77,7 @@ export default function Header() {
       setShowSearchInHeader(window.scrollY > 400); 
     };
 
-    handleScroll();
+    handleScroll(); // Set initial state on mount
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
@@ -116,7 +117,7 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className={cn("px-3 py-2 text-sm font-medium", navAndIconClasses, navLinkHoverClasses)}
+            className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, navLinkHoverClasses)}
           >
             Products
             <ChevronDown className="ml-1 h-4 w-4" />
@@ -145,7 +146,7 @@ export default function Header() {
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
         {/* Left: Logo */}
-        <div className="flex flex-none items-center gap-3">
+        <div className="flex flex-shrink-0 items-center">
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logo Alpha.png"
@@ -157,14 +158,11 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Center: Search Bar and Nav (Desktop) */}
-        <div className={cn(
-            "hidden lg:flex flex-1 items-center gap-6",
-            (showSearchInHeader || !isHomePage) ? 'justify-between' : 'justify-end'
-        )}>
+        {/* Center: Nav or Search (Desktop) */}
+        <div className="hidden lg:flex flex-1 justify-center items-center relative h-full">
             {/* Search Bar (appears on scroll or on non-home pages) */}
             <div className={cn(
-              "w-full max-w-lg transition-all duration-500 ease-in-out", 
+              "absolute w-full max-w-lg transition-all duration-500 ease-in-out", 
               (showSearchInHeader || !isHomePage) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'
             )}>
               <form className="w-full bg-white rounded-full p-1 flex items-center border shadow-sm relative">
@@ -183,13 +181,16 @@ export default function Header() {
             </div>
 
             {/* Navigation Links */}
-            <nav className="flex items-center gap-2">
+            <nav className={cn(
+                "flex items-center gap-4 transition-opacity",
+                (showSearchInHeader || !isHomePage) ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            )}>
                 <ProductsDropdown />
                 {navLinks.map((link) => (
                     <Link
                     key={link.name}
                     href={link.href}
-                    className={cn("px-3 py-2 text-sm font-medium", navAndIconClasses, navLinkHoverClasses)}
+                    className={cn("px-4 py-2 text-sm font-semibold", navAndIconClasses, navLinkHoverClasses)}
                     >
                     {link.name}
                     </Link>
@@ -198,7 +199,8 @@ export default function Header() {
         </div>
 
         {/* Right: Actions */}
-        <div className="flex flex-none items-center justify-end gap-2">
+        <div className="flex flex-shrink-0 items-center justify-end gap-2">
+          {/* Mobile Search - separate from desktop logic */}
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className={cn("rounded-full lg:hidden", navAndIconClasses, iconButtonHoverClasses)}>
