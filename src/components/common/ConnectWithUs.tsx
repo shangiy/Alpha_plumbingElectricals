@@ -19,38 +19,61 @@ export default function ConnectWithUs() {
           <p className="mt-2 text-lg">As You Enquire or make purchases</p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-[76px] sm:flex-row">
-            <blockquote
-              className="tiktok-embed"
-              cite="https://www.tiktok.com/@alphaelectricalsandplumb/video/7506475821771640070"
-              data-video-id="7506475821771640070"
-              style={{ width: '227px', height: '378px' }}
-            >
-              <section>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.tiktok.com/@alphaelectricalsandplumb"
+            <div style={{
+              width: '227px',
+              height: '378px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              overflow: 'hidden'
+            }}>
+              <div style={{ transform: 'scale(0.5)', transformOrigin: 'top center' }}>
+                <blockquote
+                  className="tiktok-embed"
+                  cite="https://www.tiktok.com/@alphaelectricalsandplumb/video/7506475821771640070"
+                  data-video-id="7506475821771640070"
+                  style={{ width: '325px', minWidth: '325px' }}
                 >
-                  @alphaelectricalsandplumb
-                </a>
-              </section>
-            </blockquote>
-            <blockquote
-              className="tiktok-embed"
-              cite="https://www.tiktok.com/@alphaelectricalsandplumb/video/7496094826002222342"
-              data-video-id="7496094826002222342"
-              style={{ width: '227px', height: '378px' }}
-            >
-              <section>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.tiktok.com/@alphaelectricalsandplumb"
+                  <section>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://www.tiktok.com/@alphaelectricalsandplumb"
+                    >
+                      @alphaelectricalsandplumb
+                    </a>
+                  </section>
+                </blockquote>
+              </div>
+            </div>
+            
+            <div style={{
+              width: '227px',
+              height: '378px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              overflow: 'hidden'
+            }}>
+              <div style={{ transform: 'scale(0.5)', transformOrigin: 'top center' }}>
+                <blockquote
+                  className="tiktok-embed"
+                  cite="https://www.tiktok.com/@alphaelectricalsandplumb/video/7496094826002222342"
+                  data-video-id="7496094826002222342"
+                  style={{ width: '325px', minWidth: '325px' }}
                 >
-                  @alphaelectricalsandplumb
-                </a>
-              </section>
-            </blockquote>
+                  <section>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://www.tiktok.com/@alphaelectricalsandplumb"
+                    >
+                      @alphaelectricalsandplumb
+                    </a>
+                  </section>
+                </blockquote>
+              </div>
+            </div>
           </div>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
