@@ -9,8 +9,8 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
   SheetClose,
+  SheetTrigger,
 } from '@/components/ui/sheet';
 import {
   Dialog,
@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Search, User, Menu, ChevronDown, ShoppingCart as ShoppingCartIcon } from 'lucide-react';
+import { Search, User, Menu, ChevronDown } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -39,7 +39,7 @@ const productCategories = [
     href: '#',
     icon: '/decor lighting design.png',
   },
-  { name: 'Home & Décor', href: '#', icon: '/square lights.png' },
+  { name: 'Home & Décor', href: '/decor', icon: '/square lights.png' },
   { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
 ];
 
@@ -97,9 +97,6 @@ export default function Header() {
                 className="h-auto"
                 />
             </Link>
-            <span className="hidden text-xl font-bold font-headline text-primary md:block">
-                Alpha Electricals
-            </span>
         </div>
 
         {/* Center Group: Nav (Desktop) */}
@@ -200,24 +197,21 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
-              <SheetHeader className="sr-only">
-                <SheetTitle>Menu</SheetTitle>
-              </SheetHeader>
-              <div className="flex h-full flex-col">
-                <div className='p-4'>
-                    <Link href="/" className="mb-4 flex items-center gap-2">
-                      <Image
+              <SheetHeader className="p-4">
+                 <SheetTitle className="sr-only">Menu</SheetTitle>
+                 <Link href="/" className="mb-4 flex items-center gap-2">
+                    <Image
                         src="/logo Alpha.png"
                         alt="Logo"
                         width={90}
                         height={90}
-                      />
-                      <span className="text-lg font-bold font-headline text-primary">
+                    />
+                    <span className="text-lg font-bold font-headline text-primary">
                         Alpha Electricals
-                      </span>
-                    </Link>
-                </div>
-                <DropdownMenuSeparator />
+                    </span>
+                 </Link>
+              </SheetHeader>
+              <div className="flex h-full flex-col">
                 <nav className="flex flex-col gap-2 p-4">
                   <h3 className="px-2 text-sm font-semibold text-muted-foreground">
                     Products
