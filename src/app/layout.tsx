@@ -8,6 +8,7 @@ import Footer from '@/components/common/Footer';
 import { CartProvider } from '@/context/CartProvider';
 import WhatsAppButton from '@/components/common/WhatsAppButton';
 import ScrollToTopButton from '@/components/common/ScrollToTopButton';
+import Chatbot from '@/components/common/Chatbot';
 
 export const metadata: Metadata = {
   title: 'Alpha Electricals & Plumbing Ltd',
@@ -49,7 +50,10 @@ export default function RootLayout({
             <Footer />
           </div>
           <WhatsAppButton />
-          <ScrollToTopButton />
+          <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
+            <Chatbot />
+            <ScrollToTopButton />
+          </div>
           <Toaster />
         </CartProvider>
       </body>

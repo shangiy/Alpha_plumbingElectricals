@@ -45,49 +45,47 @@ export default function ScrollToTopButton() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <button
-        onClick={scrollToTop}
-        className={cn(
-          // Base styling for the button - removed border
-          'relative flex h-14 w-14 items-center justify-center rounded-full bg-background text-accent shadow-lg transition-all duration-300 hover:bg-muted',
-          // Visibility based on scroll position
-          isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        )}
-        aria-label="Scroll to top"
+    <button
+      onClick={scrollToTop}
+      className={cn(
+        // Base styling for the button - removed border
+        'relative flex h-14 w-14 items-center justify-center rounded-full bg-background text-accent shadow-lg transition-all duration-300 hover:bg-muted',
+        // Visibility based on scroll position
+        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      )}
+      aria-label="Scroll to top"
+    >
+      <ArrowUp className="relative z-10 h-6 w-6" />
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="absolute inset-0 transform -rotate-90"
       >
-        <ArrowUp className="relative z-10 h-6 w-6" />
-        <svg
-          width={size}
-          height={size}
-          viewBox={`0 0 ${size} ${size}`}
-          className="absolute inset-0 transform -rotate-90"
-        >
-          {/* Faint track circle which now acts as the border */}
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="hsl(var(--border))"
-            strokeWidth={strokeWidth}
-            fill="transparent"
-            strokeOpacity={0.25}
-          />
-          {/* Accent progress circle */}
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="hsl(var(--accent))"
-            strokeWidth={strokeWidth}
-            fill="transparent"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            className="transition-[stroke-dashoffset] duration-100 ease-linear"
-            strokeLinecap="round"
-          />
-        </svg>
-      </button>
-    </div>
+        {/* Faint track circle which now acts as the border */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="hsl(var(--border))"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+          strokeOpacity={0.25}
+        />
+        {/* Accent progress circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="hsl(var(--accent))"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          className="transition-[stroke-dashoffset] duration-100 ease-linear"
+          strokeLinecap="round"
+        />
+      </svg>
+    </button>
   );
 }
