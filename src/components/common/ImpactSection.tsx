@@ -54,7 +54,7 @@ function Counter({ target, duration = 5000 }: CounterProps) {
 }
 
 // Individual stat box component
-const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: number, label: string }) => (
+const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: number | string, label: string }) => (
   <div className="relative h-full text-center text-white border-2 border-green-400/50 rounded-lg">
     {/* Icon with background matching the section overlay to "erase" the border */}
     <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-gray-900/70 px-2">
@@ -63,7 +63,11 @@ const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: nu
     {/* Content with its own background and padding */}
     <div className="flex h-full flex-col items-center justify-center rounded-[6px] bg-black/20 p-8">
       <div className="mt-4 flex flex-col items-center justify-center flex-grow">
-        <Counter target={target} duration={5000} />
+        {typeof target === 'number' ? (
+          <Counter target={target} duration={5000} />
+        ) : (
+          <h3 className="text-2xl lg:text-3xl font-bold text-white">{target}</h3>
+        )}
         <p className="mt-2 text-sm uppercase tracking-wider text-white/80">{label}</p>
       </div>
     </div>
@@ -75,7 +79,7 @@ export default function ImpactSection() {
     { icon: <span className="text-4xl">🌍</span>, target: 11500, label: "Daily Average Reach" },
     { icon: <Database className="h-10 w-10 text-green-400" />, target: 142865, label: "Subscribers" },
     { icon: <Users className="h-10 w-10 text-green-400" />, target: 28255, label: "Benefitted Customers" },
-    { icon: <Award className="h-10 w-10 text-green-400" />, target: 23, label: "Awards" },
+    { icon: <Award className="h-10 w-10 text-green-400" />, target: "Coming Soon", label: "Awards" },
   ];
 
   return (
