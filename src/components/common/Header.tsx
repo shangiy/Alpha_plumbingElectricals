@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
   SheetClose,
 } from '@/components/ui/sheet';
@@ -17,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Search, User, Menu, ChevronDown, ShoppingCart as ShoppingCartIcon, Heart } from 'lucide-react';
+import { Search, User, Menu, ChevronDown, ShoppingCart as ShoppingCartIcon } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -27,8 +29,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -199,14 +200,17 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
+              <SheetHeader className="sr-only">
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
               <div className="flex h-full flex-col">
                 <div className='p-4'>
                     <Link href="/" className="mb-4 flex items-center gap-2">
                       <Image
                         src="/logo Alpha.png"
                         alt="Logo"
-                        width={60}
-                        height={60}
+                        width={90}
+                        height={90}
                       />
                       <span className="text-lg font-bold font-headline text-primary">
                         Alpha Electricals
