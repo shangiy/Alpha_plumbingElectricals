@@ -7,6 +7,7 @@ import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import { CartProvider } from '@/context/CartProvider';
 import WhatsAppButton from '@/components/common/WhatsAppButton';
+import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 
 export const metadata: Metadata = {
   title: 'Alpha Electricals & Plumbing Ltd',
@@ -48,6 +49,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <WhatsAppButton />
+          <ScrollToTopButton />
           <Toaster />
         </CartProvider>
       </body>
