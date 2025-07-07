@@ -3,7 +3,6 @@ import ProductCard from '@/components/products/ProductCard';
 import DeliveryServices from '@/components/common/DeliveryServices';
 import ConnectWithUs from '@/components/common/ConnectWithUs';
 import HomepageAbout from '@/components/common/HomepageAbout';
-import ImpactSection from '@/components/common/ImpactSection';
 import Hero from '@/components/common/Hero';
 import CategoryCarousel from '@/components/common/CategoryCarousel';
 
@@ -35,7 +34,6 @@ export default async function Home() {
       <DeliveryServices />
       <ConnectWithUs />
       <HomepageAbout />
-      <ImpactSection />
 
     </div>
   );
