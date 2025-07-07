@@ -163,9 +163,9 @@ export default function Header() {
 
   return (
     <header className={headerClasses}>
-      <div className="container mx-auto flex h-24 items-center justify-between px-4">
+      <div className="container mx-auto px-4">
         {/* Desktop Header */}
-        <div className="hidden w-full grid-cols-[auto_1fr_auto] items-center gap-4 lg:grid">
+        <div className="hidden h-24 w-full grid-cols-[auto_1fr_auto] items-center gap-4 lg:grid">
             {/* Left: Logo */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3">
               <Image
@@ -216,109 +216,122 @@ export default function Header() {
 
 
         {/* Mobile Header */}
-        <div className="flex w-full items-center justify-between lg:hidden">
-            <Link href="/" className="flex-shrink-0">
-                <Image
-                    src="/logo Alpha.png"
-                    alt="Alpha Electricals & Plumbing Ltd Logo"
-                    width={70}
-                    height={70}
-                    className="h-auto"
-                />
-            </Link>
+        <div className="w-full lg:hidden">
+            {/* Top Row: Logo & Icons */}
+            <div className="flex h-20 w-full items-center justify-between">
+                 <Link href="/" className="flex-shrink-0">
+                    <Image
+                        src="/logo Alpha.png"
+                        alt="Alpha Electricals & Plumbing Ltd Logo"
+                        width={70}
+                        height={70}
+                        className={cn(
+                            "h-auto transition-all duration-300",
+                            showDockedSearch ? "w-[50px]" : "w-[70px]"
+                        )}
+                    />
+                </Link>
 
-            <div className="flex items-center">
-                <ShoppingCart triggerClassName={navAndIconClasses} />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                            <User className="h-5 w-5" />
-                            <span className="sr-only">Account</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {user ? (
-                        <>
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
-                        </>
-                        ) : (
-                        <>
-                            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
-                        </>
-                        )}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                            <Menu className="h-6 w-6" />
-                            <span className="sr-only">Toggle menu</span>
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0 flex flex-col">
-                        <SheetHeader className="p-4 border-b">
-                            <SheetTitle>
-                                <SheetClose asChild>
-                                    <Link href="/" className="flex items-center gap-2">
-                                        <Image src="/logo Alpha.png" alt="Logo" width={60} height={60}/>
-                                        <span className="text-lg font-bold font-headline text-primary">Alpha Electricals</span>
-                                    </Link>
-                                </SheetClose>
-                            </SheetTitle>
-                        </SheetHeader>
-                        <ScrollArea className="flex-1">
-                            <nav className="flex flex-col gap-2 p-4">
-                            <h3 className="px-2 text-sm font-semibold text-muted-foreground">Products</h3>
-                            {productCategories.map((category) => (
-                                <SheetClose asChild key={category.name}>
-                                <Link href={category.href} className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
-                                    <Image src={category.icon} alt={category.name} width={24} height={24}/>
-                                    <span>{category.name}</span>
-                                </Link>
-                                </SheetClose>
-                            ))}
-                            <DropdownMenuSeparator />
-                            <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">Menu</h3>
-                            {[ ...navLinks, { name: 'Team', href: '/team' }].map((link) => (
-                                <SheetClose asChild key={link.name}>
-                                <Link href={link.href} className="rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">{link.name}</Link>
-                                </SheetClose>
-                            ))}
-                            {user && (
-                                <>
+                <div className="flex items-center">
+                    <ShoppingCart triggerClassName={navAndIconClasses} />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
+                                <User className="h-5 w-5" />
+                                <span className="sr-only">Account</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {user ? (
+                            <>
+                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">My Account</h3>
-                                <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Profile</Link></SheetClose>
-                                <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Orders</Link></SheetClose>
-                                <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Wishlist</Link></SheetClose>
-                                <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Settings</Link></SheetClose>
-                                </>
+                                <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                            </>
+                            ) : (
+                            <>
+                                <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                            </>
                             )}
-                            </nav>
-                        </ScrollArea>
-                        <div className="flex flex-col gap-2 border-t p-4 mt-auto">
-                        {user ? (
-                            <Button variant="outline" className="w-full" onClick={() => setUser(null)}>Log Out</Button>
-                        ) : (
-                            <div className="space-y-2">
-                            <Button className="w-full" onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</Button>
-                            <SheetClose asChild>
-                            <Link href="/seller/profile" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>Create Account</Link>
-                            </SheetClose>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
+                                <Menu className="h-6 w-6" />
+                                <span className="sr-only">Toggle menu</span>
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0 flex flex-col">
+                            <SheetHeader className="p-4 border-b">
+                                <SheetTitle>
+                                    <SheetClose asChild>
+                                        <Link href="/" className="flex items-center gap-2">
+                                            <Image src="/logo Alpha.png" alt="Logo" width={60} height={60}/>
+                                            <span className="text-lg font-bold font-headline text-primary">Alpha Electricals</span>
+                                        </Link>
+                                    </SheetClose>
+                                </SheetTitle>
+                            </SheetHeader>
+                            <ScrollArea className="flex-1">
+                                <nav className="flex flex-col gap-2 p-4">
+                                <h3 className="px-2 text-sm font-semibold text-muted-foreground">Products</h3>
+                                {productCategories.map((category) => (
+                                    <SheetClose asChild key={category.name}>
+                                    <Link href={category.href} className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                                        <Image src={category.icon} alt={category.name} width={24} height={24}/>
+                                        <span>{category.name}</span>
+                                    </Link>
+                                    </SheetClose>
+                                ))}
+                                <DropdownMenuSeparator />
+                                <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">Menu</h3>
+                                {[ ...navLinks, { name: 'Team', href: '/team' }].map((link) => (
+                                    <SheetClose asChild key={link.name}>
+                                    <Link href={link.href} className="rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">{link.name}</Link>
+                                    </SheetClose>
+                                ))}
+                                {user && (
+                                    <>
+                                    <DropdownMenuSeparator />
+                                    <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">My Account</h3>
+                                    <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Profile</Link></SheetClose>
+                                    <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Orders</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Wishlist</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Settings</Link></SheetClose>
+                                    </>
+                                )}
+                                </nav>
+                            </ScrollArea>
+                            <div className="flex flex-col gap-2 border-t p-4 mt-auto">
+                            {user ? (
+                                <Button variant="outline" className="w-full" onClick={() => setUser(null)}>Log Out</Button>
+                            ) : (
+                                <div className="space-y-2">
+                                <Button className="w-full" onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</Button>
+                                <SheetClose asChild>
+                                <Link href="/seller/profile" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>Create Account</Link>
+                                </SheetClose>
+                                </div>
+                            )}
                             </div>
-                        )}
-                        </div>
-                    </SheetContent>
-                </Sheet>
+                        </SheetContent>
+                    </Sheet>
+                </div>
+            </div>
+             {/* Bottom Row: Search Bar - Appears on scroll */}
+             <div className={cn(
+                'overflow-hidden transition-all duration-300 ease-in-out',
+                showDockedSearch ? 'h-10 opacity-100 mb-2' : 'h-0 opacity-0'
+            )}>
+                <HeroSearch variant="docked" />
             </div>
         </div>
       </div>
