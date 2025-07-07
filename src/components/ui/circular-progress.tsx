@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
 
 interface CircularProgressProps {
   progress: number;
@@ -21,48 +20,68 @@ export function CircularProgress({
   label,
 }: CircularProgressProps) {
   const [animatedProgress, setAnimatedProgress] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
+  const circleRef = useRef<SVGCircleElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (animatedProgress / 100) * circumference;
 
   useEffect(() => {
+    const circle = circleRef.current;
+    const container = containerRef.current;
+    if (!circle || !container) return;
+    
+    // Set initial state without transition
+    circle.style.transition = 'none';
+    circle.style.strokeDasharray = `${circumference}`;
+    circle.style.strokeDashoffset = `${circumference}`;
+    setAnimatedProgress(0);
+    
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const [entry] = entries;
         if (entry.isIntersecting) {
-          let startTimestamp: number | null = null;
-          const duration = 1500; // Animation duration in ms
+            // Animate percentage number
+            let current = 0;
+            const duration = 2000;
+            const stepTime = 16; // ms, for ~60fps
+            const stepValue = progress / (duration / stepTime);
+            
+            const counter = setInterval(() => {
+                current += stepValue;
+                if (current >= progress) {
+                    current = progress;
+                    clearInterval(counter);
+                }
+                setAnimatedProgress(current);
+            }, stepTime);
 
-          const step = (timestamp: number) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progressElapsed = timestamp - startTimestamp;
-            const currentProgress = Math.min((progressElapsed / duration) * progress, progress);
-            setAnimatedProgress(currentProgress);
-            if (progressElapsed < duration) {
-              requestAnimationFrame(step);
-            }
-          };
-          requestAnimationFrame(step);
+            // Animate circle stroke using a timeout to ensure initial styles are applied
+            setTimeout(() => {
+                if (circleRef.current) {
+                    const offset = circumference - (progress / 100) * circumference;
+                    circleRef.current.style.transition = 'stroke-dashoffset 2s ease';
+                    circleRef.current.style.strokeDashoffset = `${offset}`;
+                }
+            }, 50);
+
+            // Animate only once
+            observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.6 } // Start animation when 60% of element is visible
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    observer.observe(container);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+        observer.disconnect();
     };
-  }, [progress]);
+  }, [progress, circumference]);
 
   return (
     <div
-      ref={ref}
+      ref={containerRef}
       className="relative flex flex-col items-center justify-center gap-2"
       style={{ width: size, height: size }}
     >
@@ -76,17 +95,14 @@ export function CircularProgress({
           fill="transparent"
         />
         <circle
+          ref={circleRef}
           cx={size / 2}
           cy={size / 2}
           r={radius}
           stroke={progressColor}
           strokeWidth={strokeWidth}
           fill="transparent"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
           strokeLinecap="round"
-          className="transition-all duration-500 ease-out"
-          style={{ transitionProperty: 'stroke-dashoffset' }}
         />
       </svg>
       <div className="absolute flex flex-col items-center justify-center">

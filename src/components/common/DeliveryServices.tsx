@@ -2,10 +2,10 @@ import { CircularProgress } from '@/components/ui/circular-progress';
 
 export default function DeliveryServices() {
   return (
-    <section className="relative mt-16 h-[60vh] w-full overflow-hidden rounded-lg">
+    <section className="relative mt-16 h-[70vh] w-full overflow-hidden rounded-lg md:h-[60vh]">
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://placehold.co/1200x600')" }}
+        style={{ backgroundImage: "url('/delivery teamVan.jpg')" }}
         data-ai-hint="delivery team work"
       ></div>
       <div className="absolute inset-0 bg-black/60"></div>
@@ -24,10 +24,16 @@ export default function DeliveryServices() {
               experience convenient and hassle-free.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-around gap-8 md:flex-row">
-            <CircularProgress progress={7} label="Returned Goods" />
-            <CircularProgress progress={90} label="Good User Experience" />
-            <CircularProgress progress={98} label="Customer Satisfaction" />
+          <div className="flex flex-col items-center justify-center gap-y-4 md:flex-row md:items-center md:justify-center md:gap-x-0">
+             <div className="md:-mr-8">
+                <CircularProgress progress={90} size={150} strokeWidth={10} label="Good User Experience" />
+            </div>
+            <div className="z-10 md:-mt-4">
+                <CircularProgress progress={98} size={200} strokeWidth={12} label="Customer Satisfaction" />
+            </div>
+            <div className="md:-ml-12 md:mt-16">
+                <CircularProgress progress={7} size={120} strokeWidth={8} label="Returned Goods" />
+            </div>
           </div>
         </div>
       </div>
