@@ -57,10 +57,20 @@ const chatbotFlow = ai.defineFlow(
     outputSchema: ChatbotOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
-    if (!output) {
-      return "I'm sorry, I was unable to generate a response. Please try rephrasing your question.";
+    try {
+      const {output} = await prompt(input);
+      if (!output) {
+        return "I'm sorry, I was unable to generate a response. Please try rephrasing your question.";
+      }
+      return output;
+    } catch (e: any) {
+      console.error('Error in chatbotFlow:', e);
+      // Check for specific error types, like safety blocks.
+      if (e.finishReason === 'blocked') {
+        return "I'm sorry, but I can't respond to that. The topic may be sensitive. Please try another question.";
+      }
+      // For other errors, return a more informative generic message from the backend.
+      return "I'm sorry, an unexpected error occurred while I was thinking. Could you please try again?";
     }
-    return output;
   }
 );
