@@ -11,7 +11,7 @@ import {
   SheetClose,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { User, Menu, ChevronDown, Search } from 'lucide-react';
+import { User, Menu, ChevronDown } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -25,6 +25,7 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import HeroSearch from './HeroSearch';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -47,14 +48,28 @@ export default function Header() {
   const [isProductsMenuOpen, setProductsMenuOpen] = useState(false);
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
+  const [showDockedSearch, setShowDockedSearch] = useState(false);
+  const heroSearchRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     if (!isHomePage) {
       setIsHeaderOpaque(true);
+      setShowDockedSearch(true);
       return;
     }
     
     const handleScroll = () => {
-      setIsHeaderOpaque(window.scrollY > 50);
+        const scrollY = window.scrollY;
+        setIsHeaderOpaque(scrollY > 50);
+
+        const heroSearchEl = heroSearchRef.current;
+        if (heroSearchEl) {
+            // Show docked search when the hero search is scrolled past
+            setShowDockedSearch(scrollY > heroSearchEl.offsetTop + heroSearchEl.offsetHeight);
+        } else {
+            // Fallback for when ref is not ready
+            setShowDockedSearch(scrollY > 400); 
+        }
     };
 
     handleScroll();
@@ -99,7 +114,7 @@ export default function Header() {
      <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
             <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm", navAndIconClasses, "hover:text-red-500")}>
+                <Link href="#" className={cn("flex items-center gap-1 px-4 py-2 text-sm", navAndIconClasses)}>
                     Products
                     <ChevronDown className="h-4 w-4" />
                 </Link>
@@ -126,7 +141,7 @@ export default function Header() {
   const UserAccountDropdown = () => (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses, "hover:text-red-500")}>
+        <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
             <User className="h-5 w-5" />
             <span className="text-sm">{user ? user.username : 'Sign In'}</span>
         </Button>
@@ -186,6 +201,7 @@ export default function Header() {
   );
 
   return (
+    <>
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
         {/* Desktop Header */}
@@ -203,33 +219,51 @@ export default function Header() {
             </Link>
             
             {/* Center: Actions (Desktop) */}
-            <div className="flex items-center justify-end gap-2">
-                <nav className='flex items-center gap-2'>
-                    <ProductsDropdown />
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className={cn("px-4 py-2 text-sm", navAndIconClasses, "hover:text-red-500")}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                </nav>
+            <div className="relative flex-1 flex justify-center items-center px-8">
+                 <div className={cn("transition-all duration-300", showDockedSearch ? "opacity-0 -translate-y-4 pointer-events-none" : "opacity-100")}>
+                    <nav className='flex items-center gap-2'>
+                        <ProductsDropdown />
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={cn("px-4 py-2 text-sm", navAndIconClasses)}
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                    </nav>
+                 </div>
+                 <div className={cn("absolute w-full max-w-sm transition-all duration-300", !showDockedSearch ? "opacity-0 translate-y-4 pointer-events-none" : "opacity-100")}>
+                    <HeroSearch variant="docked" />
+                 </div>
+            </div>
 
-                {/* Far Right Icons */}
-                <div className="flex items-center gap-1 ml-4">
-                    <ShoppingCart triggerClassName={navAndIconClasses} />
-                    <UserAccountDropdown />
-                </div>
+            {/* Far Right Icons */}
+            <div className="flex items-center gap-1 ml-4">
+                <UserAccountDropdown />
+                <ShoppingCart triggerClassName={navAndIconClasses} />
             </div>
         </div>
 
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
-            {/* Left side: Menu, Account, Cart */}
+            {/* Left side: Logo */}
+            <Link href="/">
+                <Image
+                    src="/logo Alpha.png"
+                    alt="Alpha Electricals & Plumbing Ltd Logo"
+                    width={70}
+                    height={70}
+                    className="h-auto"
+                />
+            </Link>
+
+            {/* Right side: Icons */}
             <div className="flex items-center gap-1">
+                <ShoppingCart triggerClassName={navAndIconClasses} />
+                <MobileUserAccountDropdown />
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
@@ -237,7 +271,7 @@ export default function Header() {
                             <span className="sr-only">Toggle menu</span>
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-[300px] sm:w-[350px] p-0 flex flex-col">
+                    <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0 flex flex-col">
                         <SheetHeader className="p-4 border-b">
                             <SheetTitle>
                                 <SheetClose asChild>
@@ -292,23 +326,12 @@ export default function Header() {
                         </div>
                     </SheetContent>
                 </Sheet>
-                <MobileUserAccountDropdown />
-                <ShoppingCart triggerClassName={navAndIconClasses} />
             </div>
-
-            {/* Right side: Logo */}
-            <Link href="/">
-                <Image
-                    src="/logo Alpha.png"
-                    alt="Alpha Electricals & Plumbing Ltd Logo"
-                    width={60}
-                    height={60}
-                    className="h-auto"
-                />
-            </Link>
         </div>
 
       </div>
     </header>
+    <div ref={heroSearchRef}></div>
+    </>
   );
 }
