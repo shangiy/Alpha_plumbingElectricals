@@ -11,7 +11,7 @@ import {
   SheetClose,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { User, Menu, ChevronDown } from 'lucide-react';
+import { User, Menu, ChevronDown, ShoppingCart as ShoppingCartIcon } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -60,7 +60,7 @@ export default function Header() {
     const handleScroll = () => {
         const scrollY = window.scrollY;
         setIsHeaderOpaque(scrollY > 50);
-        // Show docked search when user has scrolled past the hero section
+        // Show docked search when user has scrolled past the hero section (approx 450px)
         setShowDockedSearch(scrollY > 450);
     };
 
@@ -161,37 +161,6 @@ export default function Header() {
     </DropdownMenu>
   );
 
-  const MobileUserAccountDropdown = () => (
-     <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                <User className="h-5 w-5" />
-                <span className="sr-only">Account</span>
-            </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-            {user ? (
-            <>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
-            </>
-            ) : (
-            <>
-                <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
-            </>
-            )}
-        </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
   return (
     <header className={headerClasses}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
@@ -258,9 +227,7 @@ export default function Header() {
                 />
             </Link>
 
-            <div className="flex items-center gap-1">
-                <ShoppingCart triggerClassName={navAndIconClasses} />
-                <MobileUserAccountDropdown />
+            <div className="flex items-center">
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
@@ -323,9 +290,37 @@ export default function Header() {
                         </div>
                     </SheetContent>
                 </Sheet>
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
+                            <User className="h-5 w-5" />
+                            <span className="sr-only">Account</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        {user ? (
+                        <>
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                        </>
+                        ) : (
+                        <>
+                            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                        </>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                <ShoppingCart triggerClassName={navAndIconClasses} />
             </div>
         </div>
-
       </div>
     </header>
   );
