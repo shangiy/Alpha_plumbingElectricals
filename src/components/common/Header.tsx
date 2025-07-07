@@ -228,6 +228,35 @@ export default function Header() {
             </Link>
 
             <div className="flex items-center">
+                <ShoppingCart triggerClassName={navAndIconClasses} />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
+                            <User className="h-5 w-5" />
+                            <span className="sr-only">Account</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        {user ? (
+                        <>
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                        </>
+                        ) : (
+                        <>
+                            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                        </>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
@@ -290,35 +319,6 @@ export default function Header() {
                         </div>
                     </SheetContent>
                 </Sheet>
-                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                            <User className="h-5 w-5" />
-                            <span className="sr-only">Account</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {user ? (
-                        <>
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
-                        </>
-                        ) : (
-                        <>
-                            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
-                        </>
-                        )}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <ShoppingCart triggerClassName={navAndIconClasses} />
             </div>
         </div>
       </div>
