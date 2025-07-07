@@ -22,7 +22,6 @@ export default {
         code: ['monospace'],
       },
       colors: {
-        'tesla-red': '#CC0000',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
