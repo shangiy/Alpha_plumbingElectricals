@@ -167,7 +167,7 @@ export default function Chatbot() {
       {/* Floating Button */}
       <Button
         size="icon"
-        className="bg-primary hover:bg-primary/90 rounded-full h-14 w-14 shadow-lg flex items-center justify-center"
+        className="bg-[#0b748a] hover:bg-[#0b748a]/90 rounded-full h-14 w-14 shadow-lg flex items-center justify-center"
         aria-label="Open AI Chat"
         onClick={() => setIsOpen(!isOpen)}
       >
