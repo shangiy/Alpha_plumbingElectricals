@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import { CartProvider } from '@/context/CartProvider';
+import { AuthProvider } from '@/context/AuthProvider';
 import WhatsAppButton from '@/components/common/WhatsAppButton';
 import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 import Chatbot from '@/components/common/Chatbot';
@@ -43,19 +44,21 @@ export default function RootLayout({
           ptSans.variable
         )}
       >
-        <CartProvider>
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <WhatsAppButton />
-          <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
-            <Chatbot />
-            <ScrollToTopButton />
-          </div>
-          <Toaster />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <WhatsAppButton />
+            <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
+              <Chatbot />
+              <ScrollToTopButton />
+            </div>
+            <Toaster />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

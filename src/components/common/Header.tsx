@@ -11,7 +11,7 @@ import {
   SheetClose,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { User, Menu, ChevronDown, ShoppingCart as ShoppingCartIcon } from 'lucide-react';
+import { User, Menu, ChevronDown } from 'lucide-react';
 import ShoppingCart from './ShoppingCart';
 import {
   DropdownMenu,
@@ -26,6 +26,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import HeroSearch from './HeroSearch';
+import { useAuth } from '@/context/AuthProvider';
 
 const productCategories = [
   { name: 'Tanks Collection', href: '/tanks', icon: '/kentank 2000l.png' },
@@ -40,7 +41,7 @@ const productCategories = [
 ];
 
 export default function Header() {
-  const [user, setUser] = useState<{ username: string } | null>(null);
+  const { user, logout } = useAuth();
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   
@@ -187,7 +188,7 @@ export default function Header() {
                         <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
                             <User className="h-7 w-7" />
-                            <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
+                            <span className="hidden md:inline">{user ? user.name : 'Sign In'}</span>
                         </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -201,13 +202,13 @@ export default function Header() {
                             <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
                             <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                            <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
                             </>
                         ) : (
                             <>
-                            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/auth/login">Sign In</Link></DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/auth/login">Create Account</Link></DropdownMenuItem>
                             </>
                         )}
                         </DropdownMenuContent>
@@ -251,13 +252,13 @@ export default function Header() {
                                 <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
                                 <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                                <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
                             </>
                             ) : (
                             <>
-                                <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/auth/login">Sign In</Link></DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/auth/login">Create Account</Link></DropdownMenuItem>
                             </>
                             )}
                         </DropdownMenuContent>
@@ -317,12 +318,14 @@ export default function Header() {
                             </ScrollArea>
                             <div className="flex flex-col gap-2 border-t p-4 mt-auto">
                             {user ? (
-                                <Button variant="outline" className="w-full" onClick={() => setUser(null)}>Log Out</Button>
+                                <Button variant="outline" className="w-full" onClick={logout}>Log Out</Button>
                             ) : (
                                 <div className="space-y-2">
-                                <Button className="w-full" onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</Button>
                                 <SheetClose asChild>
-                                <Link href="/seller/profile" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>Create Account</Link>
+                                <Link href="/auth/login" className={cn(buttonVariants({ variant: "default" }), "w-full")}>Sign In</Link>
+                                </SheetClose>
+                                <SheetClose asChild>
+                                <Link href="/auth/login" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>Create Account</Link>
                                 </SheetClose>
                                 </div>
                             )}

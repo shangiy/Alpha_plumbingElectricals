@@ -19,6 +19,7 @@ import { useCart } from '@/context/CartProvider';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 const checkoutFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -29,7 +30,7 @@ const checkoutFormSchema = z.object({
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
 
-export default function CheckoutPage() {
+function CheckoutContent() {
     const { toast } = useToast();
     const { cartItems, cartTotal, clearCart } = useCart();
     const router = useRouter();
@@ -188,4 +189,12 @@ export default function CheckoutPage() {
             </div>
         </div>
     );
+}
+
+export default function CheckoutPage() {
+    return (
+        <AuthGuard>
+            <CheckoutContent />
+        </AuthGuard>
+    )
 }

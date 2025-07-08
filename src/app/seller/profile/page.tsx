@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 const profileFormSchema = z.object({
   businessName: z.string().min(2, 'Business name must be at least 2 characters.'),
@@ -28,7 +29,7 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-export default function SellerProfilePage() {
+function SellerProfileContent() {
     const { toast } = useToast();
 
     const form = useForm<ProfileFormValues>({
@@ -140,4 +141,12 @@ export default function SellerProfilePage() {
             </Card>
         </div>
     );
+}
+
+export default function SellerProfilePage() {
+    return (
+        <AuthGuard>
+            <SellerProfileContent />
+        </AuthGuard>
+    )
 }
