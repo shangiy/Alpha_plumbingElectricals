@@ -51,7 +51,7 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
-                <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-red-500">
+                <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-[#8a0b0d]">
                   {social.name}
                 </Link>
               ))}
@@ -63,7 +63,7 @@ export default function Footer() {
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link href={link.href} className="text-sm text-muted-foreground hover:text-red-500">
+                    <Link href={link.href} className="text-sm text-muted-foreground hover:text-[#8a0b0d]">
                       {link.name}
                     </Link>
                   </li>
