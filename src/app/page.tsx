@@ -35,8 +35,8 @@ export default async function Home() {
       
       <DeliveryServices />
       <ConnectWithUs />
-      <ImpactSection />
       <HomepageAbout />
+      <ImpactSection />
 
     </div>
   );
