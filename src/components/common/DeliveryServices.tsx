@@ -3,7 +3,7 @@
 import { CircularProgress } from '@/components/ui/circular-progress';
 
 export default function DeliveryServices() {
-  const ocrText = "We offer fast and reliable delivery services for all our products across the region. We have free delivery for orders above Ksh 5,000 within Eldoret and its environs. Whether you're ordering electrical fittings, plumbing supplies, lighting solutions, or home décor items, Alpha Electricals & Plumbing Ltd ensures your purchases are delivered safely and on time. Our goal is to make your shopping experience convenient and hassle-free.";
+  const ocrText = "We offer fast and reliable delivery services for all our products across the region — a service that our customers truly appreciate, as reflected in positive reviews and analytics feedback. We provide free delivery for all orders above Ksh 5,000 within Eldoret and its surrounding areas. In the rare event that a return is necessary, we do allow goods to be returned provided they meet our return policy requirements. For more details, please refer to our Terms and Conditions document available in the footer. Whether you're ordering electrical fittings, plumbing supplies, lighting solutions, or home décor items, Alpha Electricals & Plumbing Ltd ensures that your purchases are delivered safely and on time. Our goal is to make your shopping experience as convenient and hassle-free as possible.";
 
   return (
     <section 
