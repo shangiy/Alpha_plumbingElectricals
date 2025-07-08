@@ -49,7 +49,7 @@ export default function ScrollToTopButton() {
       onClick={scrollToTop}
       className={cn(
         // Base styling for the button - removed border
-        'relative flex h-14 w-14 items-center justify-center rounded-full bg-background text-accent shadow-lg transition-all duration-300 hover:bg-muted',
+        'relative flex h-14 w-14 items-center justify-center rounded-full bg-background text-[#2b235f] shadow-lg transition-all duration-300 hover:bg-muted',
         // Visibility based on scroll position
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       )}
@@ -77,7 +77,7 @@ export default function ScrollToTopButton() {
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="hsl(var(--accent))"
+          stroke="#2b235f"
           strokeWidth={strokeWidth}
           fill="transparent"
           strokeDasharray={circumference}
