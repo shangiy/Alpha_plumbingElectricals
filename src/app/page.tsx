@@ -1,10 +1,11 @@
+
 import { getFeaturedProducts } from '@/lib/data';
 import ProductCard from '@/components/products/ProductCard';
 import DeliveryServices from '@/components/common/DeliveryServices';
 import HomepageAbout from '@/components/common/HomepageAbout';
 import Hero from '@/components/common/Hero';
 import CategoryCarousel from '@/components/common/CategoryCarousel';
-import ImpactSection from '@/components/common/ImpactSection';
+import ConnectWithUs from '@/components/common/ConnectWithUs';
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
@@ -33,7 +34,7 @@ export default async function Home() {
       
       <DeliveryServices />
       <HomepageAbout />
-      <ImpactSection />
+      <ConnectWithUs />
 
     </div>
   );
