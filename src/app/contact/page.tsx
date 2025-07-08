@@ -16,16 +16,18 @@ export default function ContactPage() {
   return (
     <>
       <section 
-        className="relative py-20 bg-cover bg-center bg-fixed"
+        className="relative h-[50vh] bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/elegant_background.jpg')" }}
         data-ai-hint="elegant abstract background"
       >
         <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl font-bold font-headline md:text-5xl">Contact Us</h1>
-          <p className="mt-2 text-lg max-w-2xl mx-auto">
-            You can pay us a visit at our offices located at:
-          </p>
+        <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
+          <div className="container px-4">
+            <h1 className="text-4xl font-bold font-headline md:text-5xl">Contact Us</h1>
+            <p className="mt-2 text-lg max-w-2xl mx-auto">
+              You can pay us a visit at our offices located at:
+            </p>
+          </div>
         </div>
       </section>
 
