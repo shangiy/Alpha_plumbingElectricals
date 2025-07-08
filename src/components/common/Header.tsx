@@ -106,7 +106,7 @@ export default function Header() {
      <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
             <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 text-sm whitespace-nowrap", navAndIconClasses)}>
+                <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 text-base whitespace-nowrap", navAndIconClasses)}>
                     Products
                     <ChevronDown className="h-4 w-4" />
                 </Link>
@@ -134,8 +134,8 @@ export default function Header() {
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
         <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
-            <User className="h-5 w-5" />
-            <span className="text-sm hidden md:inline">{user ? user.username : 'Sign In'}</span>
+            <User className="h-6 w-6" />
+            <span className="text-base hidden md:inline">{user ? user.username : 'Sign In'}</span>
         </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -201,7 +201,7 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className={cn("px-3 py-2 text-sm whitespace-nowrap", navAndIconClasses)}
+                            className={cn("px-3 py-2 text-base whitespace-nowrap", navAndIconClasses)}
                         >
                             {link.name}
                         </Link>
@@ -237,7 +237,7 @@ export default function Header() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                                <User className="h-5 w-5" />
+                                <User className="h-6 w-6" />
                                 <span className="sr-only">Account</span>
                             </Button>
                         </DropdownMenuTrigger>

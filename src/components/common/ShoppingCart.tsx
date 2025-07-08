@@ -23,7 +23,7 @@ export default function ShoppingCart({ triggerClassName }: { triggerClassName?: 
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className={cn("relative rounded-full", triggerClassName)}>
-          <ShoppingCartIcon className="h-5 w-5" />
+          <ShoppingCartIcon className="h-6 w-6" />
           <span className="sr-only">Cart</span>
           {totalItems > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
