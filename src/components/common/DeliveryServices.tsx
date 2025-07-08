@@ -7,7 +7,7 @@ export default function DeliveryServices() {
 
   return (
     <section 
-        className="relative mt-16 w-full overflow-hidden bg-cover bg-center bg-fixed py-20 md:py-28"
+        className="relative w-full overflow-hidden bg-cover bg-center bg-fixed py-20 md:py-28"
         style={{ backgroundImage: "url('/delivery teamVan.jpg')" }}
         data-ai-hint="delivery team work"
     >
@@ -27,7 +27,7 @@ export default function DeliveryServices() {
             <div className="relative h-96 lg:h-[450px]">
                  <div className="absolute top-[25%] left-[5%] sm:left-[15%] lg:left-[5%]">
                      <CircularProgress 
-                         progress={7} 
+                         progress={3} 
                          label="Returned Goods" 
                          size={120} 
                          strokeWidth={8} 
