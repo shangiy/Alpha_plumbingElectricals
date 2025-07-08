@@ -90,12 +90,14 @@ export default function Header() {
   
   const navAndIconClasses = cn(
     "font-semibold text-base",
-    dynamicColorClasses
+    dynamicColorClasses,
+    "hover:text-red-500"
   );
 
   const logoTextClasses = cn(
     "hidden sm:flex flex-col",
-    dynamicColorClasses
+    dynamicColorClasses,
+    "group-hover:text-red-500"
   );
   
   const handleProductsMenuEnter = () => {
@@ -117,7 +119,7 @@ export default function Header() {
         {/* Desktop Header */}
         <div className="hidden h-24 w-full items-center gap-4 lg:flex">
             {/* Left: Logo */}
-            <Link href="/" className="flex flex-shrink-0 items-center gap-3">
+            <Link href="/" className="flex flex-shrink-0 items-center gap-3 group">
                 <Image
                     src="/logo Alpha.png"
                     alt="Alpha Electricals & Plumbing Ltd Logo"
@@ -285,7 +287,7 @@ export default function Header() {
                                 <h3 className="px-2 text-sm font-semibold text-muted-foreground">Products</h3>
                                 {productCategories.map((category) => (
                                     <SheetClose asChild key={category.name}>
-                                    <Link href={category.href} className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                                    <Link href={category.href} className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-red-500">
                                         <Image src={category.icon} alt={category.name} width={24} height={24}/>
                                         <span>{category.name}</span>
                                     </Link>
@@ -295,17 +297,17 @@ export default function Header() {
                                 <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">Menu</h3>
                                 {[ ...navLinks, { name: 'Team', href: '/team' }].map((link) => (
                                     <SheetClose asChild key={link.name}>
-                                    <Link href={link.href} className="rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">{link.name}</Link>
+                                    <Link href={link.href} className="rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-red-500">{link.name}</Link>
                                     </SheetClose>
                                 ))}
                                 {user && (
                                     <>
                                     <DropdownMenuSeparator />
                                     <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">My Account</h3>
-                                    <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Profile</Link></SheetClose>
-                                    <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Orders</Link></SheetClose>
-                                    <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">My Wishlist</Link></SheetClose>
-                                    <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">Settings</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-red-500">Profile</Link></SheetClose>
+                                    <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-red-500">My Orders</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-red-500">My Wishlist</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-red-500">Settings</Link></SheetClose>
                                     </>
                                 )}
                                 </nav>
