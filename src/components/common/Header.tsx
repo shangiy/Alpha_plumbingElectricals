@@ -168,14 +168,18 @@ export default function Header() {
         <div className="hidden h-24 w-full grid-cols-[auto_1fr_auto] items-center gap-4 lg:grid">
             {/* Left: Logo */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3">
-              <Image
-                  src="/logo Alpha.png"
-                  alt="Alpha Electricals & Plumbing Ltd Logo"
-                  width={70}
-                  height={70}
-                  className="h-auto"
-              />
-              <span className={cn("hidden sm:inline-block font-bold text-xl", navAndIconClasses)}>Alpha Electricals</span>
+                <Image
+                    src="/logo Alpha.png"
+                    alt="Alpha Electricals & Plumbing Ltd Logo"
+                    width={70}
+                    height={70}
+                    className="h-auto"
+                />
+                <div className="hidden sm:flex flex-col text-[#2b235f]">
+                    <span className="font-bold text-[18px] leading-tight">Alpha</span>
+                    <div className="w-full h-px bg-[#2b235f]" />
+                    <span className="text-[11px] leading-tight">Electricals & Plumbing Ltd</span>
+                </div>
             </Link>
             
             {/* Center: Docked Search */}
@@ -208,7 +212,7 @@ export default function Header() {
                     ))}
                 </nav>
                 <div className="flex items-center">
-                    <ShoppingCart triggerClassName={navAndIconClasses} />
+                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')} />
                     <UserAccountDropdown />
                 </div>
             </div>
@@ -233,7 +237,7 @@ export default function Header() {
                 </Link>
 
                 <div className="flex items-center">
-                    <ShoppingCart triggerClassName={navAndIconClasses} />
+                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')} />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
@@ -275,7 +279,11 @@ export default function Header() {
                                     <SheetClose asChild>
                                         <Link href="/" className="flex items-center gap-2">
                                             <Image src="/logo Alpha.png" alt="Logo" width={60} height={60}/>
-                                            <span className="text-lg font-bold font-headline text-primary">Alpha Electricals</span>
+                                            <div className="flex flex-col text-[#2b235f]">
+                                                <span className="font-bold text-[18px] leading-tight">Alpha</span>
+                                                <div className="w-full h-px bg-[#2b235f]" />
+                                                <span className="text-[11px] leading-tight">Electricals & Plumbing Ltd</span>
+                                            </div>
                                         </Link>
                                     </SheetClose>
                                 </SheetTitle>
