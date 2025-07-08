@@ -2,12 +2,11 @@ import { CircularProgress } from '@/components/ui/circular-progress';
 
 export default function DeliveryServices() {
   return (
-    <section className="relative mt-16 h-[70vh] w-full overflow-hidden rounded-lg md:h-[60vh]">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
+    <section 
+        className="relative mt-16 w-full overflow-hidden rounded-lg bg-cover bg-center bg-fixed py-20"
         style={{ backgroundImage: "url('/delivery teamVan.jpg')" }}
         data-ai-hint="delivery team work"
-      ></div>
+      >
       <div className="absolute inset-0 bg-black/60"></div>
       <div className="relative z-10 flex h-full items-center justify-center text-white">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
@@ -24,14 +23,14 @@ export default function DeliveryServices() {
               experience convenient and hassle-free.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-y-4 md:flex-row md:items-center md:justify-center md:gap-x-0">
-             <div className="md:-mr-8">
+          <div className="flex flex-col items-center justify-center gap-y-8 md:flex-row md:items-center md:justify-center md:gap-x-0">
+             <div className="md:-mr-8 md:-mt-20">
                 <CircularProgress progress={90} size={150} strokeWidth={10} label="Good User Experience" />
             </div>
-            <div className="z-10 md:-mt-4">
+            <div className="z-10">
                 <CircularProgress progress={98} size={200} strokeWidth={12} label="Customer Satisfaction" />
             </div>
-            <div className="md:-ml-12 md:mt-16">
+            <div className="md:-ml-12 md:mt-24">
                 <CircularProgress progress={7} size={120} strokeWidth={8} label="Returned Goods" />
             </div>
           </div>
