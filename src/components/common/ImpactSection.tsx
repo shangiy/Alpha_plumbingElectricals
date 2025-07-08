@@ -1,7 +1,24 @@
 'use client';
 
-import { Users, Database, Award } from 'lucide-react';
+import { Award, Smile, Users } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+
+// TikTok Icon SVG Component
+const TikTokIcon = ({ className }: { className?: string }) => (
+    <svg 
+        viewBox="0 0 2859 3333" 
+        shapeRendering="geometricPrecision" 
+        textRendering="geometricPrecision" 
+        imageRendering="optimizeQuality" 
+        fillRule="evenodd" 
+        clipRule="evenodd" 
+        className={className}
+        fill="currentColor"
+    >
+        <path d="M2081 0c55 473 319 755 778 785v532c-266 26-499-61-770-225v995c0 1264-1378 1659-1735 742-29-74-16-162-16-233V1006c0-54 44-98 98-98s98 44 98 98v1123c0 38 11 67 29 95 39 62 101 121 217 121 117 0 178-59 178-121v-995c0-54 44-98 98-98s98 44 98 98v995c0 133 108 241 241 241s241-108 241-241V0h531z"/>
+    </svg>
+);
+
 
 // Counter component for animating numbers
 interface CounterProps {
@@ -76,9 +93,9 @@ const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: nu
 
 export default function ImpactSection() {
   const impactStats = [
-    { icon: <span className="text-4xl">🌍</span>, target: 11500, label: "Daily Average Reach" },
-    { icon: <Database className="h-10 w-10 text-green-400" />, target: 23768, label: "Subscribers" },
-    { icon: <Users className="h-10 w-10 text-green-400" />, target: 28255, label: "Benefitted Customers" },
+    { icon: <TikTokIcon className="h-10 w-10 text-green-400" />, target: 22500, label: "Daily Average Reach" },
+    { icon: <Users className="h-10 w-10 text-green-400" />, target: 22865, label: "Subscribers" },
+    { icon: <Smile className="h-10 w-10 text-green-400" />, target: 28255, label: "Benefitted Customers" },
     { icon: <Award className="h-10 w-10 text-green-400" />, target: "Coming Soon", label: "Awards" },
   ];
 
@@ -91,7 +108,7 @@ export default function ImpactSection() {
         <div className="absolute inset-0 bg-gray-900/70"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold font-headline text-white">Our Impact</h2>
-            <p className="mt-2 text-lg text-white/80">Join our movements</p>
+            <p className="mt-2 text-lg text-white/80">Become part of our movement</p>
             <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                 {impactStats.map((stat, index) => (
                     <ImpactStat key={index} {...stat} />
