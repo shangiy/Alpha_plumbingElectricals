@@ -31,3 +31,9 @@ export interface CarouselCategory {
   image: string;
   href: string;
 }
+
+export interface MockUser {
+  id: string;
+  name: string;
+  email: string;
+}

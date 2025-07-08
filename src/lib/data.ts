@@ -1,4 +1,4 @@
-import type { Product, Category, HomePageCategory, CarouselCategory } from './types';
+import type { Product, Category, HomePageCategory, CarouselCategory, MockUser } from './types';
 
 const homePageCategories: HomePageCategory[] = [
     { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
@@ -589,6 +589,10 @@ const categories: Category[] = [
   { id: 'electronics', name: 'Electronics' },
 ];
 
+const users: MockUser[] = [
+    { id: 'user-1', name: 'Valued Customer', email: 'customer@example.com' },
+];
+
 export async function getHomePageCategories(): Promise<HomePageCategory[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return homePageCategories;
@@ -632,4 +636,11 @@ export async function getDecorProducts(): Promise<Product[]> {
 export async function getPlumbingProducts(): Promise<Product[]> {
     await new Promise(resolve => setTimeout(resolve, 100));
     return allProducts.filter(p => p.category === 'plumbing');
+}
+
+export async function getUserByEmail(email: string): Promise<MockUser | undefined> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    // In a real app, you would query your database.
+    // For now, we'll check our mock user list.
+    return users.find(u => u.email.toLowerCase() === email.toLowerCase());
 }

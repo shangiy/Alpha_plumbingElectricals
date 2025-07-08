@@ -21,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
+import { getUserByEmail } from '@/lib/data';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
@@ -73,16 +74,22 @@ export default function LoginPage() {
         defaultValues: { name: "", email: "", password: "", confirmPassword: "", recaptcha: false },
     });
 
-    function onLogin(data: LoginFormValues) {
+    async function onLogin(data: LoginFormValues) {
         // In a real app, you would verify credentials with a backend
         console.log('Login attempt:', data);
-        login({ name: 'Signed In User', email: data.email });
+
+        // Simulate fetching user from a DB to get their name
+        const existingUser = await getUserByEmail(data.email);
+        const userName = existingUser ? existingUser.name : 'Signed In User';
+
+        login({ name: userName, email: data.email });
         toast({ title: "Login Successful!", description: "Welcome back!" });
         router.push(redirectUrl);
     }
 
     function onSignUp(data: SignUpFormValues) {
-        // In a real app, you would register the user with a backend
+        // In a real app, you would register the user with a backend.
+        // For now, new users won't be saved permanently.
         console.log('Sign Up attempt:', data);
         login({ name: data.name, email: data.email });
         toast({ title: "Account Created!", description: "Welcome! You are now logged in." });
