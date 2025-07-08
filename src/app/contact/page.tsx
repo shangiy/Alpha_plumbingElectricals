@@ -1,7 +1,23 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Facebook } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+
+const TiktokIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
+        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.85-.38-6.95-1.91-1.86-1.33-3.1-3.36-3.46-5.73-.03-.25-.05-.5-.07-.76.01-1.33.02-2.65.04-3.98.08-1.52.63-3.09 1.75-4.17 1.12-1.09 2.7-1.6 4.24-1.77v4.03c-1.44.05-2.89.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01-2.92-.01-5.84.02-8.75.08-1.39.54-2.79 1.35-3.94 1.31-1.92 3.58-3.17 5.91-3.21z"></path>
+    </svg>
+);
+
 
 export default function ContactPage() {
+  const socialLinks = [
+    { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-6 w-6" /> },
+    { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <TiktokIcon /> },
+    { name: 'WhatsApp', href: 'https://wa.me/254117484887', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={24} height={24} /> },
+  ];
+
   return (
     <div className="bg-secondary py-12 md:py-20">
       <div className="container mx-auto px-4">
@@ -68,6 +84,36 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="max-w-4xl mx-auto mt-12 shadow-lg">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Join Our Community</CardTitle>
+            <CardDescription>
+              Stay updated with the latest trends, special offers, and new arrivals.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="py-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-semibold mb-4">Follow Us on Social Media</h3>
+                <div className="flex justify-center md:justify-start gap-4">
+                  {socialLinks.map((social) => (
+                    <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full border hover:bg-accent" aria-label={social.name}>
+                      {social.icon}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-2">
+                 <h3 className="text-lg font-semibold text-center md:text-left">Subscribe to our Newsletter</h3>
+                 <form className="flex w-full gap-2">
+                    <Input type="email" placeholder="Enter your email" className="bg-background flex-1" />
+                    <Button type="submit">Subscribe</Button>
+                </form>
+              </div>
             </div>
           </CardContent>
         </Card>
