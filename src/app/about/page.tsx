@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lightbulb, Wrench, Home, Warehouse, Twitter, Facebook, User } from 'lucide-react';
@@ -132,13 +133,13 @@ export default function AboutPage() {
       {/* Features Section */}
       <section className="py-16 bg-secondary">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold font-headline mb-12">Why Choose Us?</h2>
+          <h2 className="text-3xl font-bold font-headline mb-12 text-[#2b235f]">Why Choose Us?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="text-center bg-card hover:shadow-xl transition-shadow">
                 <CardHeader>
                   <div className="flex justify-center">{feature.icon}</div>
-                  <CardTitle>{feature.title}</CardTitle>
+                  <CardTitle className="text-[#2b235f]">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">{feature.description}</p>
