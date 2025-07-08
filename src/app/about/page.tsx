@@ -176,11 +176,16 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 bg-secondary">
-        <div className="container mx-auto px-4">
+      <section 
+        className="relative py-16 bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: "url('/connect-bg.jpg')" }}
+        data-ai-hint="team background"
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 container mx-auto px-4">
             <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold font-headline text-[#2b235f]">Here Is Our Very Able Team</h1>
-            <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+            <h1 className="text-4xl font-bold font-headline text-white">Here Is Our Very Able Team</h1>
+            <p className="text-lg text-white/80 mt-2 max-w-2xl mx-auto">
                 Meet the dedicated individuals behind the thriving Alpha Electricals & Plumbing Ltd.
             </p>
             </div>
