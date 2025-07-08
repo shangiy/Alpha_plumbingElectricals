@@ -196,6 +196,7 @@ export default function Header() {
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
                             <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
                             <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
                             <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
@@ -245,6 +246,7 @@ export default function Header() {
                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
                                 <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
                                 <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
                                 <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
@@ -305,6 +307,7 @@ export default function Header() {
                                     <DropdownMenuSeparator />
                                     <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">My Account</h3>
                                     <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Profile</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/admin" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Admin Dashboard</Link></SheetClose>
                                     <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">My Orders</Link></SheetClose>
                                     <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">My Wishlist</Link></SheetClose>
                                     <SheetClose asChild><Link href="/seller/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Settings</Link></SheetClose>
