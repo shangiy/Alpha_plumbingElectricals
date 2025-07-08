@@ -102,11 +102,10 @@ export default function HeroSearch() {
     <>
       <form onSubmit={handleSubmit} className="w-full max-w-2xl">
         <div className="relative flex items-center w-full p-1 pr-2 space-x-1 bg-white border border-gray-200 rounded-full shadow-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
           
           <div 
             className={cn(
-              "absolute left-11 top-1/2 -translate-y-1/2 flex items-center pointer-events-none transition-opacity",
+              "absolute left-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none transition-opacity",
               query ? "opacity-0" : "opacity-100"
             )}
           >
@@ -119,7 +118,7 @@ export default function HeroSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder=""
-            className="flex-1 pl-11 pr-4 text-base bg-transparent border-none appearance-none h-11 text-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="flex-1 pl-4 pr-4 text-base bg-transparent border-none appearance-none h-11 text-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <Dialog open={isCameraDialogOpen} onOpenChange={setIsCameraDialogOpen}>
             <DialogTrigger asChild>
