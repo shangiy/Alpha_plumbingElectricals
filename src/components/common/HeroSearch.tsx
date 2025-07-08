@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AnimatedPlaceholder } from './AnimatedPlaceholder';
+import { cn } from '@/lib/utils';
 
 export default function HeroSearch() {
   const [query, setQuery] = useState('');
@@ -27,6 +29,8 @@ export default function HeroSearch() {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const placeholders = ["tanks", "chandelier", "solar heater", "ironsheet mabati"];
 
   const getCameraPermission = async () => {
     if (stream) {
@@ -97,13 +101,25 @@ export default function HeroSearch() {
   return (
     <>
       <form onSubmit={handleSubmit} className="w-full max-w-2xl">
-        <div className="flex items-center w-full p-1 pr-2 space-x-1 bg-white border border-gray-200 rounded-full shadow-md">
+        <div className="relative flex items-center w-full p-1 pr-2 space-x-1 bg-white border border-gray-200 rounded-full shadow-md">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+          
+          <div 
+            className={cn(
+              "absolute left-11 top-1/2 -translate-y-1/2 flex items-center pointer-events-none transition-opacity",
+              query ? "opacity-0" : "opacity-100"
+            )}
+          >
+            <span className="text-base text-muted-foreground">Search for&nbsp;</span>
+            <AnimatedPlaceholder placeholders={placeholders} />
+          </div>
+
           <Input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for tanks, lights, plumbing..."
-            className="flex-1 px-4 text-base bg-transparent border-none appearance-none h-11 text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+            placeholder=""
+            className="flex-1 pl-11 pr-4 text-base bg-transparent border-none appearance-none h-11 text-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <Dialog open={isCameraDialogOpen} onOpenChange={setIsCameraDialogOpen}>
             <DialogTrigger asChild>
