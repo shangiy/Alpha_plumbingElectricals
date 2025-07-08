@@ -53,7 +53,7 @@ export function CircularProgress({
                     current = progress;
                     clearInterval(counter);
                 }
-                setAnimatedProgress(current);
+                setAnimatedProgress(Math.round(current));
             }, stepTime);
 
             // Animate circle stroke using a timeout to ensure initial styles are applied
@@ -82,33 +82,35 @@ export function CircularProgress({
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col items-center justify-center gap-2"
-      style={{ width: size, height: size }}
+      className="flex flex-col items-center justify-center gap-2"
+      style={{ width: size }}
     >
-      <svg width={size} height={size} className="transform -rotate-90">
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={trackColor}
-          strokeWidth={strokeWidth}
-          fill="transparent"
-        />
-        <circle
-          ref={circleRef}
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={progressColor}
-          strokeWidth={strokeWidth}
-          fill="transparent"
-          strokeLinecap="round"
-        />
-      </svg>
-      <div className="absolute flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold">{Math.round(animatedProgress)}%</span>
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="transform -rotate-90">
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke={trackColor}
+            strokeWidth={strokeWidth}
+            fill="transparent"
+          />
+          <circle
+            ref={circleRef}
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke={progressColor}
+            strokeWidth={strokeWidth}
+            fill="transparent"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-3xl font-bold text-white">{animatedProgress}%</span>
+        </div>
       </div>
-      {label && <span className="mt-2 text-center text-sm font-medium">{label}</span>}
+      {label && <span className="mt-1 max-w-[15ch] text-center text-sm font-medium text-white/90">{label}</span>}
     </div>
   );
 }

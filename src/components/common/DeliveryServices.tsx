@@ -1,16 +1,57 @@
+'use client';
+
+import { CircularProgress } from '@/components/ui/circular-progress';
+
 export default function DeliveryServices() {
+  const ocrText = "We offer fast and reliable delivery services for all our products across the region. We have free delivery for orders above Ksh 5,000 within Eldoret and its environs. Whether you're ordering electrical fittings, plumbing supplies, lighting solutions, or home décor items, Alpha Electricals & Plumbing Ltd ensures your purchases are delivered safely and on time. Our goal is to make your shopping experience convenient and hassle-free.";
+
   return (
     <section 
-        className="relative mt-16 w-full overflow-hidden bg-cover bg-center bg-fixed py-20"
+        className="relative mt-16 w-full overflow-hidden bg-cover bg-center bg-fixed py-20 md:py-28"
         style={{ backgroundImage: "url('/delivery teamVan.jpg')" }}
         data-ai-hint="delivery team work"
-      >
+    >
       <div className="absolute inset-0 bg-black/60"></div>
-      <div className="relative z-10 flex h-full items-center justify-start text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold font-headline md:text-4xl">
-            We Also Offer Delivery Services
-          </h2>
+      <div className="relative z-10 container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column: Text */}
+            <div className="text-white space-y-6 text-center lg:text-left">
+                <h2 className="text-3xl font-bold font-headline md:text-4xl">
+                    We Also Offer Delivery Services
+                </h2>
+                <p className="text-base md:text-lg leading-relaxed text-white/90">
+                   {ocrText}
+                </p>
+            </div>
+            {/* Right Column: Progress Circles */}
+            <div className="relative h-96 lg:h-[450px]">
+                 <div className="absolute top-[25%] left-[5%] sm:left-[15%] lg:left-[5%]">
+                     <CircularProgress 
+                         progress={7} 
+                         label="Returned Goods" 
+                         size={120} 
+                         strokeWidth={8} 
+                         progressColor="#f59e0b"
+                         trackColor="rgba(255, 255, 255, 0.15)"
+                     />
+                 </div>
+                 <div className="absolute top-0 right-[5%] sm:right-[15%] lg:right-[5%]">
+                     <CircularProgress 
+                         progress={90} 
+                         label="Good User Experience" 
+                         size={160} 
+                         strokeWidth={10} 
+                     />
+                 </div>
+                 <div className="absolute top-[55%] left-[40%] sm:left-1/2 lg:left-[45%] transform -translate-x-1/2">
+                     <CircularProgress 
+                         progress={98} 
+                         label="Satisfactory Service Delivery" 
+                         size={160} 
+                         strokeWidth={10} 
+                     />
+                 </div>
+            </div>
         </div>
       </div>
     </section>
