@@ -96,7 +96,7 @@ export default function HeroSearch() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+      <form onSubmit={handleSubmit} className="w-full max-w-2xl">
         <div className="flex items-center w-full p-1 pr-2 space-x-1 bg-white border border-gray-200 rounded-full shadow-md">
           <Input
             type="search"
