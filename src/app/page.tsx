@@ -33,8 +33,8 @@ export default async function Home() {
       </div>
       
       <DeliveryServices />
-      <HomepageAbout />
       <ConnectWithUs />
+      <HomepageAbout />
 
     </div>
   );
