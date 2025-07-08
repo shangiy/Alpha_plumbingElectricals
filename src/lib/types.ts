@@ -37,4 +37,7 @@ export interface MockUser {
   name: string;
   email: string;
   password?: string;
+  signedUp: string;
+  lastSeen: string;
+  orders: number;
 }

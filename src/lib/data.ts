@@ -590,8 +590,10 @@ const categories: Category[] = [
 ];
 
 const users: MockUser[] = [
-    { id: 'user-1', name: 'Valued Customer', email: 'customer@example.com', password: 'password123' },
-    { id: 'user-2', name: 'Admin User', email: 'admin@example.com', password: 'adminpassword' },
+    { id: 'user-1', name: 'Valued Customer', email: 'customer@example.com', password: 'password123', signedUp: '2024-05-01', lastSeen: '2024-07-20', orders: 3 },
+    { id: 'user-2', name: 'Admin User', email: 'admin@example.com', password: 'adminpassword', signedUp: '2024-04-15', lastSeen: '2024-07-21', orders: 1 },
+    { id: 'user-3', name: 'Jane Doe', email: 'jane.doe@example.com', password: 'password123', signedUp: '2024-05-10', lastSeen: '2024-07-18', orders: 5 },
+    { id: 'user-4', name: 'John Smith', email: 'john.smith@example.com', password: 'password123', signedUp: '2024-05-12', lastSeen: '2024-07-19', orders: 0 },
 ];
 
 export async function getHomePageCategories(): Promise<HomePageCategory[]> {
@@ -637,6 +639,11 @@ export async function getDecorProducts(): Promise<Product[]> {
 export async function getPlumbingProducts(): Promise<Product[]> {
     await new Promise(resolve => setTimeout(resolve, 100));
     return allProducts.filter(p => p.category === 'plumbing');
+}
+
+export async function getUsers(): Promise<MockUser[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return users;
 }
 
 export async function getUserByEmail(email: string): Promise<MockUser | undefined> {

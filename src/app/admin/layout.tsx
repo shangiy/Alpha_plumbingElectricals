@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, Package, LogOut, Settings, LifeBuoy } from 'lucide-react';
+import { LayoutDashboard, Package, LogOut, Settings, LifeBuoy, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({
@@ -33,10 +33,18 @@ export default function AdminLayout({
           <SidebarContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard" isActive={true}>
+                <SidebarMenuButton asChild tooltip="Dashboard">
                   <Link href="/admin">
                     <LayoutDashboard />
                     <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Users">
+                  <Link href="/admin/users">
+                    <Users />
+                    <span>Users</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -72,7 +80,7 @@ export default function AdminLayout({
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-            <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-6 sticky top-0 bg-background z-10">
+            <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-6 sticky top-24 bg-background z-10">
                 <SidebarTrigger className="md:hidden" />
                 <div className="flex-1">
                     {/* You can add breadcrumbs or page titles here */}
