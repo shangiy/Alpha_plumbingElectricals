@@ -22,6 +22,7 @@ export function CircularProgress({
   const [animatedProgress, setAnimatedProgress] = useState(0);
   const circleRef = useRef<SVGCircleElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -31,50 +32,63 @@ export function CircularProgress({
     const container = containerRef.current;
     if (!circle || !container) return;
     
-    // Set initial state without transition
-    circle.style.transition = 'none';
-    circle.style.strokeDasharray = `${circumference}`;
-    circle.style.strokeDashoffset = `${circumference}`;
-    setAnimatedProgress(0);
-    
+    const resetAnimation = () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (circle) {
+           circle.style.transition = 'none';
+           circle.style.strokeDashoffset = `${circumference}`;
+      }
+      setAnimatedProgress(0);
+    };
+
+    const startAnimation = () => {
+        resetAnimation(); // Ensure clean start
+
+        // Animate percentage number
+        let current = 0;
+        const duration = 2000;
+        const stepTime = 16; // ms, for ~60fps
+        const stepValue = progress / (duration / stepTime);
+        
+        intervalRef.current = setInterval(() => {
+            current += stepValue;
+            if (current >= progress) {
+                current = progress;
+                if (intervalRef.current) clearInterval(intervalRef.current);
+            }
+            setAnimatedProgress(Math.round(current));
+        }, stepTime);
+
+        // Animate circle stroke
+        setTimeout(() => {
+            if (circleRef.current) {
+                const offset = circumference - (progress / 100) * circumference;
+                circleRef.current.style.transition = 'stroke-dashoffset 2s ease';
+                circleRef.current.style.strokeDashoffset = `${offset}`;
+            }
+        }, 50);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting) {
-            // Animate percentage number
-            let current = 0;
-            const duration = 2000;
-            const stepTime = 16; // ms, for ~60fps
-            const stepValue = progress / (duration / stepTime);
-            
-            const counter = setInterval(() => {
-                current += stepValue;
-                if (current >= progress) {
-                    current = progress;
-                    clearInterval(counter);
-                }
-                setAnimatedProgress(Math.round(current));
-            }, stepTime);
-
-            // Animate circle stroke using a timeout to ensure initial styles are applied
-            setTimeout(() => {
-                if (circleRef.current) {
-                    const offset = circumference - (progress / 100) * circumference;
-                    circleRef.current.style.transition = 'stroke-dashoffset 2s ease';
-                    circleRef.current.style.strokeDashoffset = `${offset}`;
-                }
-            }, 50);
-
-            // Animate only once
-            observer.unobserve(entry.target);
+            startAnimation();
+        } else {
+            resetAnimation();
         }
       },
       { threshold: 0.6 } // Start animation when 60% of element is visible
     );
 
+    // Set initial state
+    circle.style.strokeDasharray = `${circumference}`;
+    resetAnimation();
+
     observer.observe(container);
 
     return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
         observer.disconnect();
     };
   }, [progress, circumference]);

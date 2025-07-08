@@ -12,11 +12,13 @@ interface CounterProps {
 function Counter({ target, duration = 5000 }: CounterProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLHeadingElement>(null);
+  const animationFrameRef = useRef<number>();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
           let startTime: number | null = null;
           const animate = (timestamp: number) => {
             if (!startTime) startTime = timestamp;
@@ -26,13 +28,18 @@ function Counter({ target, duration = 5000 }: CounterProps) {
             setCount(currentCount);
 
             if (progress < duration) {
-              requestAnimationFrame(animate);
+              animationFrameRef.current = requestAnimationFrame(animate);
             } else {
               setCount(target);
             }
           };
-          requestAnimationFrame(animate);
-          observer.unobserve(entries[0].target);
+          animationFrameRef.current = requestAnimationFrame(animate);
+        } else {
+          // Reset count when not intersecting
+          if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+          }
+          setCount(0);
         }
       },
       { threshold: 0.5 }
@@ -44,6 +51,9 @@ function Counter({ target, duration = 5000 }: CounterProps) {
     }
 
     return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       if (currentRef) {
         observer.unobserve(currentRef);
       }
