@@ -24,7 +24,7 @@ export default function ContactPage() {
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
           <h1 className="text-4xl font-bold font-headline md:text-5xl">Contact Us</h1>
           <p className="mt-2 text-lg max-w-2xl mx-auto">
-            Your trusted source for Tanks, Plumbing, Lighting, Electrical, Home Decor & more!
+            Come for a site visit or get in touch with:
           </p>
         </div>
       </section>
