@@ -84,9 +84,19 @@ export default function Header() {
       : "bg-transparent border-b border-transparent"
   );
 
+  const dynamicColorClasses = cn(
+    "transition-colors",
+    !isHeaderOpaque && isHomePage ? "text-white" : "text-[#2b235f]"
+  );
+
   const navAndIconClasses = cn(
-    "transition-colors font-semibold",
-    !isHeaderOpaque && isHomePage ? "text-white" : "text-foreground"
+    "font-semibold",
+    dynamicColorClasses
+  );
+
+  const logoTextClasses = cn(
+    "hidden sm:flex flex-col",
+    dynamicColorClasses
   );
   
   const handleProductsMenuEnter = () => {
@@ -133,9 +143,9 @@ export default function Header() {
   const UserAccountDropdown = () => (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
+        <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md text-base", navAndIconClasses)}>
             <User className="h-6 w-6" />
-            <span className="text-base hidden md:inline">{user ? user.username : 'Sign In'}</span>
+            <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
         </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -175,9 +185,9 @@ export default function Header() {
                     height={70}
                     className="h-auto"
                 />
-                <div className="hidden sm:flex flex-col text-[#2b235f]">
+                <div className={logoTextClasses}>
                     <span className="font-bold text-[18px] leading-tight">Alpha</span>
-                    <div className="w-full h-px bg-[#2b235f]" />
+                    <div className="w-full h-px bg-current" />
                     <span className="text-[11px] leading-tight">Electricals & Plumbing Ltd</span>
                 </div>
             </Link>
@@ -212,7 +222,7 @@ export default function Header() {
                     ))}
                 </nav>
                 <div className="flex items-center">
-                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')} />
+                    <ShoppingCart triggerClassName={cn(navAndIconClasses, 'text-base', '[&_svg]:h-6 [&_svg]:w-6')} />
                     <UserAccountDropdown />
                 </div>
             </div>
