@@ -39,16 +39,16 @@ export default function DeliveryServices() {
                      <CircularProgress 
                          progress={90} 
                          label="Good User Experience" 
-                         size={160} 
-                         strokeWidth={10} 
+                         size={150} 
+                         strokeWidth={9} 
                      />
                  </div>
-                 <div className="absolute top-[55%] left-[40%] sm:left-1/2 lg:left-[45%] transform -translate-x-1/2">
+                 <div className="absolute top-[55%] left-1/2 transform -translate-x-1/2">
                      <CircularProgress 
                          progress={98} 
                          label="Satisfactory Service Delivery" 
-                         size={160} 
-                         strokeWidth={10} 
+                         size={180} 
+                         strokeWidth={11} 
                      />
                  </div>
             </div>
