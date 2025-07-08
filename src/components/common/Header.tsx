@@ -48,20 +48,15 @@ export default function Header() {
   const [isProductsMenuOpen, setProductsMenuOpen] = useState(false);
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  const [showDockedSearch, setShowDockedSearch] = useState(false);
-  
   useEffect(() => {
     if (!isHomePage) {
       setIsHeaderOpaque(true);
-      setShowDockedSearch(true);
       return;
     }
     
     const handleScroll = () => {
         const scrollY = window.scrollY;
         setIsHeaderOpaque(scrollY > 50);
-        // Show docked search when user has scrolled past the hero section (approx 450px)
-        setShowDockedSearch(scrollY > 450);
     };
 
     handleScroll();
@@ -88,9 +83,9 @@ export default function Header() {
     "transition-colors",
     !isHeaderOpaque && isHomePage ? "text-white" : "text-[#2b235f]"
   );
-
+  
   const navAndIconClasses = cn(
-    "font-semibold",
+    "font-semibold text-base",
     dynamicColorClasses
   );
 
@@ -112,70 +107,11 @@ export default function Header() {
     }, 200);
   };
 
-  const ProductsDropdown = () => (
-     <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
-        <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
-            <DropdownMenuTrigger asChild>
-                <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 text-base whitespace-nowrap", navAndIconClasses)}>
-                    Products
-                    <ChevronDown className="h-4 w-4" />
-                </Link>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56" onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave}>
-                {productCategories.map((category) => (
-                    <DropdownMenuItem key={category.name} asChild>
-                    <Link href={category.href} className="flex items-center gap-3 py-2">
-                        <Image
-                        src={category.icon}
-                        alt={category.name}
-                        width={24}
-                        height={24}
-                        />
-                        <span>{category.name}</span>
-                    </Link>
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
-     </div>
-  );
-
-  const UserAccountDropdown = () => (
-    <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md text-base", navAndIconClasses)}>
-            <User className="h-6 w-6" />
-            <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
-        </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-        {user ? (
-            <>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
-            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
-            <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
-            <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
-            </>
-        ) : (
-            <>
-            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
-            </>
-        )}
-        </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
   return (
     <header className={headerClasses}>
       <div className="container mx-auto px-4">
         {/* Desktop Header */}
-        <div className="hidden h-24 w-full grid-cols-[auto_1fr_auto] items-center gap-4 lg:grid">
+        <div className="hidden h-24 w-full items-center gap-4 lg:flex">
             {/* Left: Logo */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3">
                 <Image
@@ -192,66 +128,104 @@ export default function Header() {
                 </div>
             </Link>
             
-            {/* Center: Docked Search */}
-            <div className="flex justify-center items-center">
-                <div className={cn(
-                  "relative transition-[width,opacity] duration-300 ease-in-out",
-                  showDockedSearch ? "w-full max-w-md opacity-100" : "w-0 opacity-0"
-                )}>
-                    <div className={cn(
-                      "absolute inset-0 transition-opacity duration-200 ease-in-out",
-                      showDockedSearch ? "opacity-100 delay-150" : "opacity-0"
-                    )}>
-                      <HeroSearch />
-                    </div>
-                </div>
+            {/* Center: Search */}
+            <div className="flex-1 w-full max-w-xl mx-auto">
+                <HeroSearch />
             </div>
 
             {/* Right: Navigation and Icons */}
             <div className="flex items-center justify-end">
                 <nav className='flex items-center'>
-                    <ProductsDropdown />
+                    <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
+                        <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
+                            <DropdownMenuTrigger asChild>
+                                <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 whitespace-nowrap", navAndIconClasses)}>
+                                    Products
+                                    <ChevronDown className="h-4 w-4" />
+                                </Link>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-56" onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave}>
+                                {productCategories.map((category) => (
+                                    <DropdownMenuItem key={category.name} asChild>
+                                    <Link href={category.href} className="flex items-center gap-3 py-2">
+                                        <Image
+                                        src={category.icon}
+                                        alt={category.name}
+                                        width={24}
+                                        height={24}
+                                        />
+                                        <span>{category.name}</span>
+                                    </Link>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className={cn("px-3 py-2 text-base whitespace-nowrap", navAndIconClasses)}
+                            className={cn("px-3 py-2 whitespace-nowrap", navAndIconClasses)}
                         >
                             {link.name}
                         </Link>
                     ))}
                 </nav>
                 <div className="flex items-center">
-                    <ShoppingCart triggerClassName={cn(navAndIconClasses, 'text-base', '[&_svg]:h-6 [&_svg]:w-6')} />
-                    <UserAccountDropdown />
+                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')} />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
+                            <User className="h-7 w-7" />
+                            <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
+                        </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                        {user ? (
+                            <>
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Profile</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Settings</Link></DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setUser(null)}>Log out</DropdownMenuItem>
+                            </>
+                        ) : (
+                            <>
+                            <DropdownMenuItem onClick={() => setUser({ username: 'JaneDoe' })}>Sign In</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild><Link href="/seller/profile">Create Account</Link></DropdownMenuItem>
+                            </>
+                        )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
         </div>
 
 
         {/* Mobile Header */}
-        <div className="w-full lg:hidden">
+        <div className="w-full lg:hidden flex flex-col gap-4 py-3">
             {/* Top Row: Logo & Icons */}
-            <div className="flex h-20 w-full items-center justify-between">
+            <div className="flex w-full items-center justify-between">
                  <Link href="/" className="flex-shrink-0">
                     <Image
                         src="/logo Alpha.png"
                         alt="Alpha Electricals & Plumbing Ltd Logo"
                         width={70}
                         height={70}
-                        className={cn(
-                            "h-auto transition-all duration-300",
-                            showDockedSearch ? "w-[50px]" : "w-[70px]"
-                        )}
+                        className="h-auto w-[60px]"
                     />
                 </Link>
 
                 <div className="flex items-center">
-                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')} />
+                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')} />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                                <User className="h-6 w-6" />
+                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')}>
+                                <User />
                                 <span className="sr-only">Account</span>
                             </Button>
                         </DropdownMenuTrigger>
@@ -278,8 +252,8 @@ export default function Header() {
                     </DropdownMenu>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses)}>
-                                <Menu className="h-6 w-6" />
+                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')}>
+                                <Menu />
                                 <span className="sr-only">Toggle menu</span>
                             </Button>
                         </SheetTrigger>
@@ -344,11 +318,8 @@ export default function Header() {
                     </Sheet>
                 </div>
             </div>
-             {/* Bottom Row: Search Bar - Appears on scroll */}
-             <div className={cn(
-                'overflow-hidden transition-all duration-300 ease-in-out px-4',
-                showDockedSearch ? 'h-12 opacity-100' : 'h-0 opacity-0'
-            )}>
+             {/* Bottom Row: Search Bar - Always visible */}
+             <div className="px-0">
                 <HeroSearch />
             </div>
         </div>
