@@ -85,8 +85,8 @@ export default function ImpactSection() {
   return (
     <section 
         className="relative w-full py-20 bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: "url('/delivery teamVan.jpg')" }}
-        data-ai-hint="delivery van background"
+        style={{ backgroundImage: "url('/tank delivery.png')" }}
+        data-ai-hint="tank delivery"
     >
         <div className="absolute inset-0 bg-gray-900/70"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
