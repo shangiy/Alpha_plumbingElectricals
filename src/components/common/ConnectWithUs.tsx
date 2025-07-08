@@ -10,8 +10,8 @@ export default function ConnectWithUs() {
       <section className="group relative h-auto w-full overflow-hidden py-16 text-white">
         <div
           className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-110"
-          style={{ backgroundImage: "url('/tank delivery.png')" }}
-          data-ai-hint="tank delivery"
+          style={{ backgroundImage: "url('/connect-bg.jpg')" }}
+          data-ai-hint="team background"
         ></div>
         <div className="absolute inset-0 bg-black/70"></div>
         <div className="relative z-10 mx-auto flex flex-col items-center justify-center px-4 text-center">
