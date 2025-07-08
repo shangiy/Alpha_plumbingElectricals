@@ -75,14 +75,21 @@ export default function LoginPage() {
     });
 
     async function onLogin(data: LoginFormValues) {
-        // In a real app, you would verify credentials with a backend
-        console.log('Login attempt:', data);
-
-        // Simulate fetching user from a DB to get their name
+        // Fetch user from our mock database
         const existingUser = await getUserByEmail(data.email);
-        const userName = existingUser ? existingUser.name : 'Signed In User';
 
-        login({ name: userName, email: data.email });
+        // Securely check credentials
+        if (!existingUser || existingUser.password !== data.password) {
+            toast({
+                variant: "destructive",
+                title: "Login Failed",
+                description: "Invalid email or password. Please try again.",
+            });
+            return; // Stop the function if credentials are wrong
+        }
+        
+        // If credentials are correct, proceed with login
+        login({ name: existingUser.name, email: data.email });
         toast({ title: "Login Successful!", description: "Welcome back!" });
         router.push(redirectUrl);
     }

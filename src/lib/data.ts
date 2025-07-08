@@ -590,7 +590,8 @@ const categories: Category[] = [
 ];
 
 const users: MockUser[] = [
-    { id: 'user-1', name: 'Valued Customer', email: 'customer@example.com' },
+    { id: 'user-1', name: 'Valued Customer', email: 'customer@example.com', password: 'password123' },
+    { id: 'user-2', name: 'Admin User', email: 'admin@example.com', password: 'adminpassword' },
 ];
 
 export async function getHomePageCategories(): Promise<HomePageCategory[]> {
