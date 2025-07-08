@@ -1,7 +1,6 @@
 import { getFeaturedProducts } from '@/lib/data';
 import ProductCard from '@/components/products/ProductCard';
 import DeliveryServices from '@/components/common/DeliveryServices';
-import ConnectWithUs from '@/components/common/ConnectWithUs';
 import HomepageAbout from '@/components/common/HomepageAbout';
 import Hero from '@/components/common/Hero';
 import CategoryCarousel from '@/components/common/CategoryCarousel';
@@ -33,7 +32,6 @@ export default async function Home() {
       </div>
       
       <DeliveryServices />
-      <ConnectWithUs />
       <HomepageAbout />
       <ImpactSection />
 
