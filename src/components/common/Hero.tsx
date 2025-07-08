@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import HeroSearch from './HeroSearch';
 
 export default function Hero() {
   const frequentSearches = [
@@ -26,6 +27,10 @@ export default function Hero() {
         <p className="text-lg md:text-xl max-w-3xl mb-8">
           Your trusted source for Tanks, Lighting, Plumbing & More
         </p>
+
+        <div className="mb-6">
+          <HeroSearch />
+        </div>
         
         <div className="mt-6 flex items-center justify-start gap-2 md:gap-4 flex-wrap">
           <span className="text-sm font-medium">Frequently searched:</span>

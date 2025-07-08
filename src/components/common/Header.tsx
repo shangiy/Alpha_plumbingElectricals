@@ -45,18 +45,22 @@ export default function Header() {
   const isHomePage = pathname === '/';
   
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(!isHomePage);
+  const [showSearchInHeader, setShowSearchInHeader] = useState(!isHomePage);
+
   const [isProductsMenuOpen, setProductsMenuOpen] = useState(false);
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
     if (!isHomePage) {
       setIsHeaderOpaque(true);
+      setShowSearchInHeader(true);
       return;
     }
     
     const handleScroll = () => {
         const scrollY = window.scrollY;
         setIsHeaderOpaque(scrollY > 50);
+        setShowSearchInHeader(scrollY > 300);
     };
 
     handleScroll();
@@ -130,7 +134,11 @@ export default function Header() {
             
             {/* Center: Search */}
             <div className="flex-1 w-full max-w-xl mx-auto">
-                <HeroSearch />
+                {showSearchInHeader && (
+                    <div className="animate-in fade-in duration-300">
+                        <HeroSearch />
+                    </div>
+                )}
             </div>
 
             {/* Right: Navigation and Icons */}
@@ -319,9 +327,11 @@ export default function Header() {
                 </div>
             </div>
              {/* Bottom Row: Search Bar - Always visible */}
-             <div className="px-0">
-                <HeroSearch />
-            </div>
+             {showSearchInHeader && (
+                <div className="px-0 animate-in fade-in duration-300">
+                    <HeroSearch />
+                </div>
+            )}
         </div>
       </div>
     </header>
