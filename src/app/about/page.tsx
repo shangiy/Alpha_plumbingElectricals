@@ -185,7 +185,7 @@ export default function AboutPage() {
       <section className="py-16 bg-secondary">
         <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold font-headline text-[#0c758b]">Here Is Our Very Able Team</h1>
+            <h1 className="text-4xl font-bold font-headline text-[#2b235f]">Here Is Our Very Able Team</h1>
             <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
                 Meet the dedicated individuals behind the thriving Alpha Electricals & Plumbing Ltd.
             </p>
