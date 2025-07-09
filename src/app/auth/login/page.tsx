@@ -83,15 +83,15 @@ export default function LoginPage() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
-    const initialTab = searchParams.get('tab') || 'login';
-    const [activeTab, setActiveTab] = useState(initialTab);
+    const tabParam = searchParams.get('tab');
+    const [activeTab, setActiveTab] = useState(tabParam || 'login');
 
     useEffect(() => {
-        const newTab = searchParams.get('tab') || 'login';
+        const newTab = tabParam || 'login';
         if (newTab !== activeTab) {
             setActiveTab(newTab);
         }
-    }, [searchParams, activeTab]);
+    }, [tabParam, activeTab]);
 
     const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
