@@ -169,12 +169,7 @@ export default function LoginPage() {
                                     name="password"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <div className="flex justify-between items-center">
-                                                <FormLabel>Password</FormLabel>
-                                                <Link href="#" className="text-sm font-medium text-primary hover:underline">
-                                                    Forgot password?
-                                                </Link>
-                                            </div>
+                                            <FormLabel>Password</FormLabel>
                                             <FormControl>
                                                 <PasswordInput field={field} placeholder="••••••••" />
                                             </FormControl>
@@ -183,6 +178,12 @@ export default function LoginPage() {
                                     )}
                                 />
                                 <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>Sign In</Button>
+                                
+                                <div className="text-sm">
+                                    <Link href="#" className="font-medium text-primary hover:underline">
+                                        Forgot password?
+                                    </Link>
+                                </div>
 
                                 <div className="relative">
                                     <div className="absolute inset-0 flex items-center">
@@ -199,7 +200,7 @@ export default function LoginPage() {
                                 </div>
 
                                 <p className="text-center text-sm text-muted-foreground">
-                                    Don&apos;t have an account?{' '}
+                                    You don&apos;t have an account?{' '}
                                     <button type="button" className="font-medium text-primary hover:underline" onClick={() => setActiveTab('signup')}>
                                       Sign up
                                     </button>
