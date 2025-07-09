@@ -21,7 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { getUserByEmail } from '@/lib/data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -83,6 +83,14 @@ export default function LoginPage() {
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
     const initialTab = searchParams.get('tab') || 'login';
+    const [activeTab, setActiveTab] = useState(initialTab);
+
+    useEffect(() => {
+        const newTab = searchParams.get('tab') || 'login';
+        if (newTab !== activeTab) {
+            setActiveTab(newTab);
+        }
+    }, [searchParams, activeTab]);
 
     const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -127,7 +135,7 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-12">
-        <Tabs defaultValue={initialTab} className="w-full max-w-md">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-md">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -192,9 +200,9 @@ export default function LoginPage() {
 
                                 <p className="text-center text-sm text-muted-foreground">
                                     Don&apos;t have an account?{' '}
-                                    <TabsTrigger value="signup" asChild>
-                                        <button type="button" className="font-medium text-primary hover:underline">Sign up</button>
-                                    </TabsTrigger>
+                                    <button type="button" className="font-medium text-primary hover:underline" onClick={() => setActiveTab('signup')}>
+                                      Sign up
+                                    </button>
                                 </p>
                             </form>
                         </Form>
@@ -313,9 +321,9 @@ export default function LoginPage() {
 
                                  <p className="text-center text-sm text-muted-foreground">
                                     Already have an account?{' '}
-                                    <TabsTrigger value="login" asChild>
-                                         <button type="button" className="font-medium text-primary hover:underline">Login</button>
-                                    </TabsTrigger>
+                                    <button type="button" className="font-medium text-primary hover:underline" onClick={() => setActiveTab('login')}>
+                                        Login
+                                    </button>
                                 </p>
                             </form>
                         </Form>
