@@ -23,9 +23,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { Category } from '@/lib/types';
 import { getCategories } from '@/lib/data';
 import { useEffect, useState } from 'react';
-import { Wand2, Trash2, PlusCircle, LoaderCircle } from 'lucide-react';
+import { Wand2, Trash2, PlusCircle, LoaderCircle, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 
 const productFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -33,16 +35,20 @@ const productFormSchema = z.object({
   price: z.coerce.number().min(0, 'Price must be a positive number.'),
   category: z.string({ required_error: "Please select a category."}).min(1, 'Category is required.'),
   barcode: z.string().optional(),
-  images: z.array(z.string().url({ message: "Please enter a valid image URL." })).min(1, "At least one image is required."),
+  images: z.array(z.string().min(1, { message: "Image URL or data cannot be empty." })).min(1, "At least one image is required."),
+  colors: z.array(z.string()).optional(),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
+
+const availableColors = ["Black", "White", "Silver", "Red", "Blue", "Green"];
 
 export default function AddProductPage() {
     const { toast } = useToast();
     const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
         async function loadCategories() {
@@ -60,7 +66,8 @@ export default function AddProductPage() {
             price: 0,
             category: "",
             barcode: "",
-            images: [""]
+            images: [""],
+            colors: [],
         },
     });
 
@@ -82,7 +89,14 @@ export default function AddProductPage() {
 
         setIsGenerating(true);
         try {
-            const result = await generateProductDescription({ productTitle: productName });
+            const images = form.getValues("images");
+            const firstImage = images && images.length > 0 ? images[0] : undefined;
+
+            const result = await generateProductDescription({ 
+                productTitle: productName,
+                productImageDataUri: firstImage
+            });
+
             form.setValue("description", result.productDescription, { shouldValidate: true });
             toast({
                 title: "Description Generated!",
@@ -97,6 +111,45 @@ export default function AddProductPage() {
             });
         } finally {
             setIsGenerating(false);
+        }
+    };
+
+    const handleFile = (file: File) => {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                const images = form.getValues('images');
+                if (images.length === 1 && images[0] === '') {
+                    form.setValue('images.0', base64String, { shouldValidate: true });
+                } else {
+                    append(base64String);
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Invalid File Type",
+                description: "Please drop or paste an image file.",
+            });
+        }
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleFile(e.dataTransfer.files[0]);
+            e.dataTransfer.clearData();
+        }
+    };
+    
+    const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+        if (e.clipboardData.files && e.clipboardData.files.length > 0) {
+            e.preventDefault();
+            handleFile(e.clipboardData.files[0]);
         }
     };
 
@@ -211,11 +264,55 @@ export default function AddProductPage() {
                                 </FormItem>
                             )}
                         />
+                        <FormItem>
+                            <FormLabel>Colors</FormLabel>
+                            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 pt-2">
+                                {availableColors.map((color) => (
+                                    <FormField
+                                        key={color}
+                                        control={form.control}
+                                        name="colors"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                                <FormControl>
+                                                    <Checkbox
+                                                        checked={field.value?.includes(color)}
+                                                        onCheckedChange={(checked) => {
+                                                            return checked
+                                                                ? field.onChange([...(field.value || []), color])
+                                                                : field.onChange(
+                                                                    field.value?.filter(
+                                                                        (value) => value !== color
+                                                                    )
+                                                                );
+                                                        }}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal text-sm">{color}</FormLabel>
+                                            </FormItem>
+                                        )}
+                                    />
+                                ))}
+                            </div>
+                             <FormDescription>Optional: Select the available colors for the product.</FormDescription>
+                             <FormMessage />
+                        </FormItem>
                          <FormItem>
                             <FormLabel>Product Images</FormLabel>
-                            <Card>
-                                <CardContent className="p-4">
-                                    <div className="space-y-4">
+                            <Card 
+                                onDrop={handleDrop} 
+                                onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }} 
+                                onDragEnter={() => setIsDragging(true)}
+                                onDragLeave={() => setIsDragging(false)}
+                                onPaste={handlePaste}
+                            >
+                                <CardContent className={cn("p-4 relative", isDragging && "border-2 border-dashed border-primary bg-primary/10")}>
+                                    {isDragging && (
+                                        <div className="absolute inset-0 flex items-center justify-center text-primary font-semibold z-10">
+                                            <Upload className="mr-2 h-5 w-5" /> Drop image here
+                                        </div>
+                                    )}
+                                    <div className={cn("space-y-4", isDragging && "opacity-50")}>
                                         {fields.map((field, index) => (
                                             <div key={field.id} className="flex items-start gap-4">
                                                 <div className="relative w-20 h-20 rounded-md overflow-hidden border flex-shrink-0 bg-muted">
@@ -232,7 +329,7 @@ export default function AddProductPage() {
                                                     render={({ field }) => (
                                                         <FormItem className="flex-grow">
                                                             <FormControl>
-                                                                <Input placeholder="https://example.com/image.png" {...field} />
+                                                                <Input placeholder="https://example.com/image.png or drop/paste an image" {...field} />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -263,7 +360,7 @@ export default function AddProductPage() {
                                 </CardContent>
                             </Card>
                             <FormDescription>
-                                Add URLs for your product images. The first image will be the main one.
+                               Add URLs for your product images, or drag and drop/paste an image file into the box. The first image will be the main one.
                             </FormDescription>
                             <FormMessage className="text-destructive">{form.formState.errors.images?.message}</FormMessage>
                         </FormItem>

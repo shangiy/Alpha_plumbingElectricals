@@ -13,6 +13,7 @@ export interface Product {
     id: string;
   };
   barcode?: string;
+  colors?: string[];
 }
 
 export interface Category {

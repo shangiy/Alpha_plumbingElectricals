@@ -36,6 +36,7 @@ const featuredProducts: Product[] = [
     reviews: 10,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
     barcode: 'ALPHA-ELEC-001',
+    colors: ['White', 'Silver'],
   },
   {
     id: 'oval-toilet',
@@ -49,6 +50,7 @@ const featuredProducts: Product[] = [
     reviews: 25,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
     barcode: 'ALPHA-PLUMB-002',
+    colors: ['White'],
   },
   {
     id: 'sink-cabinet',
@@ -61,6 +63,7 @@ const featuredProducts: Product[] = [
     rating: 4.7,
     reviews: 18,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['White', 'Black'],
   },
   {
     id: 'solar-heater',
@@ -73,6 +76,7 @@ const featuredProducts: Product[] = [
     rating: 4.9,
     reviews: 32,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['Silver'],
   },
   {
     id: 'artistic-lights',
@@ -97,6 +101,7 @@ const featuredProducts: Product[] = [
     rating: 4.9,
     reviews: 50,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['Black', 'Red', 'Blue', 'Green'],
   },
   {
     id: 'wall-bracket',
@@ -109,6 +114,7 @@ const featuredProducts: Product[] = [
     rating: 4.5,
     reviews: 22,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['Silver'],
   },
   {
     id: 'ppr-fittings',
@@ -136,6 +142,7 @@ const tankProducts: Product[] = [
     rating: 4.7,
     reviews: 45,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['Black', 'Green'],
   },
   {
     id: 'kentank-3000l',
@@ -148,6 +155,7 @@ const tankProducts: Product[] = [
     rating: 4.8,
     reviews: 30,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['Black', 'Green'],
   },
   {
     id: 'cuboid-tank',
@@ -160,6 +168,7 @@ const tankProducts: Product[] = [
     rating: 4.5,
     reviews: 20,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['White'],
   },
   {
     id: 'septic-tank',
@@ -172,6 +181,7 @@ const tankProducts: Product[] = [
     rating: 4.9,
     reviews: 55,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    colors: ['Black'],
   },
   {
     id: 'plastic-reservoir-tank',
@@ -577,6 +587,7 @@ const legacyProducts: Product[] = [
     rating: 4.8,
     reviews: 125,
     seller: { name: 'TechFly Inc.', id: 'seller-1' },
+    colors: ['Black', 'White'],
   },
 ];
 

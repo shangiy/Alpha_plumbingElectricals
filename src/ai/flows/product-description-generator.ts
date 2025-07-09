@@ -13,13 +13,19 @@ import {z} from 'genkit';
 
 const GenerateProductDescriptionInputSchema = z.object({
   productTitle: z.string().describe('The title of the product.'),
+  productImageDataUri: z
+    .string()
+    .optional()
+    .describe(
+      "A photo of the product, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+    ),
 });
 export type GenerateProductDescriptionInput = z.infer<
   typeof GenerateProductDescriptionInputSchema
 >;
 
 const GenerateProductDescriptionOutputSchema = z.object({
-  productDescription: z.string().describe('The generated product description.'),
+  productDescription: z.string().describe('The generated product description, formatted as 3-4 distinct sentences, with each sentence on a new line.'),
 });
 export type GenerateProductDescriptionOutput = z.infer<
   typeof GenerateProductDescriptionOutputSchema
@@ -37,9 +43,12 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateProductDescriptionOutputSchema},
   prompt: `You are an expert copywriter specializing in creating compelling product descriptions for e-commerce.
 
-  Based on the product title, generate a detailed and engaging product description that highlights the key features and benefits.
+  Based on the product title and optional image, generate a detailed and engaging product description that highlights the key features and benefits. The description should be 3-4 concise, engaging sentences. Each sentence must be on a new line.
 
-  Product Title: {{{productTitle}}}`,
+  Product Title: {{{productTitle}}}
+  {{#if productImageDataUri}}
+  Image: {{media url=productImageDataUri}}
+  {{/if}}`,
 });
 
 const generateProductDescriptionFlow = ai.defineFlow(
