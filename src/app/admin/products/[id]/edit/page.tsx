@@ -18,11 +18,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { Category } from '@/lib/types';
-import { getCategories } from '@/lib/data';
+import { useRouter, notFound } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { getProductById, getCategories } from '@/lib/data';
+import type { Product, Category } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
+
 
 const productFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -33,45 +35,78 @@ const productFormSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
 
-export default function AddProductPage() {
+export default function EditProductPage({ params }: { params: { id: string } }) {
     const { toast } = useToast();
     const router = useRouter();
+    const [product, setProduct] = useState<Product | null | undefined>(null);
     const [categories, setCategories] = useState<Category[]>([]);
-
-    useEffect(() => {
-        async function loadCategories() {
-            const fetchedCategories = await getCategories();
-            setCategories(fetchedCategories);
-        }
-        loadCategories();
-    }, []);
-
+    
     const form = useForm<ProductFormValues>({
-        resolver: zodResolver(productFormSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-            price: 0,
-            category: "",
-        },
+        resolver: zodResolver(productFormSchema)
     });
 
+     useEffect(() => {
+        async function loadData() {
+            const [fetchedProduct, fetchedCategories] = await Promise.all([
+                getProductById(params.id),
+                getCategories()
+            ]);
+
+            if (fetchedProduct) {
+                setProduct(fetchedProduct);
+                setCategories(fetchedCategories);
+                form.reset({
+                    name: fetchedProduct.name,
+                    description: fetchedProduct.description,
+                    price: fetchedProduct.price,
+                    category: fetchedProduct.category,
+                });
+            } else {
+                setProduct(undefined);
+            }
+        }
+
+        loadData();
+    }, [params.id, form]);
+
     function onSubmit(data: ProductFormValues) {
-        // In a real app, you would send this data to your API to create a new product.
-        console.log(data);
+        // In a real app, you would send this data to your API to update the product.
+        console.log("Updated product data:", { id: params.id, ...data });
         toast({
-            title: "Product Created!",
-            description: `${data.name} has been added to the store.`,
+            title: "Product Updated!",
+            description: `${data.name} has been updated.`,
         });
         router.push('/admin/products');
+    }
+
+    if (product === null) {
+        return (
+             <Card className="max-w-3xl mx-auto">
+                <CardHeader>
+                    <CardTitle><Skeleton className="h-8 w-48" /></CardTitle>
+                    <CardDescription><Skeleton className="h-5 w-64" /></CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                   <div className="space-y-2"><Skeleton className="h-5 w-24" /><Skeleton className="h-10 w-full" /></div>
+                   <div className="space-y-2"><Skeleton className="h-5 w-24" /><Skeleton className="h-20 w-full" /></div>
+                   <div className="space-y-2"><Skeleton className="h-5 w-24" /><Skeleton className="h-10 w-full" /></div>
+                   <div className="space-y-2"><Skeleton className="h-5 w-24" /><Skeleton className="h-10 w-full" /></div>
+                   <div className="flex gap-2"><Skeleton className="h-10 w-32" /><Skeleton className="h-10 w-24" /></div>
+                </CardContent>
+            </Card>
+        );
+    }
+    
+    if (product === undefined) {
+        return notFound();
     }
 
     return (
         <Card className="max-w-3xl mx-auto">
             <CardHeader>
-                <CardTitle>Add New Product</CardTitle>
+                <CardTitle>Edit Product</CardTitle>
                 <CardDescription>
-                    Fill out the form below to add a new product to your store.
+                    Update the details for "{product.name}".
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -136,7 +171,7 @@ export default function AddProductPage() {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                     <FormDescription>
+                                    <FormDescription>
                                         The product category will help with filtering and search.
                                     </FormDescription>
                                     <FormMessage />
@@ -144,7 +179,7 @@ export default function AddProductPage() {
                             )}
                         />
                         <div className="flex gap-2">
-                           <Button type="submit">Save Product</Button>
+                           <Button type="submit" disabled={form.formState.isSubmitting}>Save Changes</Button>
                            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
                         </div>
                     </form>
