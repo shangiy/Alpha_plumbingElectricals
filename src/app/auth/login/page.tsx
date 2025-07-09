@@ -89,7 +89,7 @@ export default function LoginPage() {
         }
         
         // If credentials are correct, proceed with login
-        login({ name: existingUser.name, email: data.email });
+        login({ name: existingUser.name, email: data.email, role: existingUser.role });
         toast({ title: "Login Successful!", description: "Welcome back!" });
         router.push(redirectUrl);
     }
@@ -98,7 +98,7 @@ export default function LoginPage() {
         // In a real app, you would register the user with a backend.
         // For now, new users won't be saved permanently.
         console.log('Sign Up attempt:', data);
-        login({ name: data.name, email: data.email });
+        login({ name: data.name, email: data.email, role: 'user' });
         toast({ title: "Account Created!", description: "Welcome! You are now logged in." });
         router.push(redirectUrl);
     }

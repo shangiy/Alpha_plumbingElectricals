@@ -39,6 +39,7 @@ export interface MockUser {
   name: string;
   email: string;
   password?: string;
+  role: 'admin' | 'staff' | 'user';
   signedUp: string;
   lastSeen: string;
   orders: number;

@@ -26,11 +26,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/AuthProvider';
 
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
 
     useEffect(() => {
         async function loadProducts() {
@@ -114,7 +116,9 @@ export default function AdminProductsPage() {
                                                 <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                            {user?.role === 'admin' && (
+                                              <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                            )}
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
