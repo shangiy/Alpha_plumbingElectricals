@@ -35,6 +35,7 @@ const featuredProducts: Product[] = [
     rating: 4.5,
     reviews: 10,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    barcode: 'ALPHA-ELEC-001',
   },
   {
     id: 'oval-toilet',
@@ -47,6 +48,7 @@ const featuredProducts: Product[] = [
     rating: 4.8,
     reviews: 25,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+    barcode: 'ALPHA-PLUMB-002',
   },
   {
     id: 'sink-cabinet',

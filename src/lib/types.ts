@@ -12,6 +12,7 @@ export interface Product {
     name: string;
     id: string;
   };
+  barcode?: string;
 }
 
 export interface Category {
