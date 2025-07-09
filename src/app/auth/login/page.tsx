@@ -20,19 +20,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
 import { getUserByEmail } from '@/lib/data';
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
   password: z.string().min(1, 'Password is required.'),
-  recaptcha: z.boolean().refine((val) => val === true, {
-    message: 'Please confirm you are not a robot.',
-  }),
 });
 
 const signUpSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
+  username: z.string().min(3, 'Username must be at least 3 characters.').regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores.'),
   email: z.string().email('Please enter a valid email.'),
   password: z.string().min(8, 'Password must be at least 8 characters.'),
   confirmPassword: z.string(),
@@ -57,55 +58,76 @@ const FacebookIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 fill-current"><title>Facebook</title><path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.35C0 23.407.593 24 1.325 24H12.82v-9.29h-3.128v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.732 0 1.325-.593 1.325-1.325V1.325C24 .593 23.407 0 22.675 0z"/></svg>
 );
 
+const PasswordInput = ({ field, ...props }: any) => {
+    const [showPassword, setShowPassword] = useState(false);
+    return (
+        <div className="relative">
+            <Input type={showPassword ? "text" : "password"} {...props} {...field} />
+            <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-muted-foreground"
+                onClick={() => setShowPassword(prev => !prev)}
+            >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </Button>
+        </div>
+    );
+};
+
 export default function LoginPage() {
-    const { login } = useAuth();
+    const { login, signUp } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
+    const initialTab = searchParams.get('tab') || 'login';
 
     const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
-        defaultValues: { email: "", password: "", recaptcha: false },
+        defaultValues: { email: "", password: "" },
     });
 
     const signUpForm = useForm<SignUpFormValues>({
         resolver: zodResolver(signUpSchema),
-        defaultValues: { name: "", email: "", password: "", confirmPassword: "", recaptcha: false },
+        defaultValues: { name: "", username: "", email: "", password: "", confirmPassword: "", recaptcha: false },
     });
 
     async function onLogin(data: LoginFormValues) {
-        // Fetch user from our mock database
         const existingUser = await getUserByEmail(data.email);
 
-        // Securely check credentials
         if (!existingUser || existingUser.password !== data.password) {
             toast({
                 variant: "destructive",
                 title: "Login Failed",
                 description: "Invalid email or password. Please try again.",
             });
-            return; // Stop the function if credentials are wrong
+            return;
         }
         
-        // If credentials are correct, proceed with login
-        login({ name: existingUser.name, email: data.email, role: existingUser.role });
-        toast({ title: "Login Successful!", description: "Welcome back!" });
+        login({ name: existingUser.name, username: existingUser.username, email: data.email, role: existingUser.role });
+        toast({ title: "Login Successful!", description: `Welcome back, ${existingUser.username}!` });
         router.push(redirectUrl);
     }
 
-    function onSignUp(data: SignUpFormValues) {
-        // In a real app, you would register the user with a backend.
-        // For now, new users won't be saved permanently.
-        console.log('Sign Up attempt:', data);
-        login({ name: data.name, email: data.email, role: 'user' });
-        toast({ title: "Account Created!", description: "Welcome! You are now logged in." });
-        router.push(redirectUrl);
+    async function onSignUp(data: SignUpFormValues) {
+        try {
+            const newUser = await signUp(data);
+            toast({ title: "Account Created!", description: "Welcome! You are now logged in." });
+            router.push(redirectUrl);
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: "Sign-Up Failed",
+                description: error.message || "An error occurred. Please try again.",
+            });
+        }
     }
 
   return (
     <div className="container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-12">
-        <Tabs defaultValue="login" className="w-[400px]">
+        <Tabs defaultValue={initialTab} className="w-full max-w-md">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -146,31 +168,13 @@ export default function LoginPage() {
                                                 </Link>
                                             </div>
                                             <FormControl>
-                                                <Input type="password" placeholder="••••••••" {...field} />
+                                                <PasswordInput field={field} placeholder="••••••••" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                 <FormField
-                                    control={loginForm.control}
-                                    name="recaptcha"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                                        <FormControl>
-                                            <Checkbox
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                            />
-                                        </FormControl>
-                                        <div className="space-y-1 leading-none">
-                                            <FormLabel>I am not a robot</FormLabel>
-                                            <FormMessage />
-                                        </div>
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="submit" className="w-full">Sign In</Button>
+                                <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>Sign In</Button>
 
                                 <div className="relative">
                                     <div className="absolute inset-0 flex items-center">
@@ -180,11 +184,18 @@ export default function LoginPage() {
                                         <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
                                     </div>
                                 </div>
-
+                                
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Button variant="outline" type="button"><GoogleIcon/>Google</Button>
-                                    <Button variant="outline" type="button" className="text-[#1877F2] hover:text-[#1877F2]"><FacebookIcon/>Facebook</Button>
+                                     <Button variant="outline" type="button" asChild className="cursor-pointer"><a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer"><GoogleIcon/>Google</a></Button>
+                                     <Button variant="outline" type="button" asChild className="text-[#1877F2] hover:text-[#1877F2] cursor-pointer"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FacebookIcon/>Facebook</a></Button>
                                 </div>
+
+                                <p className="text-center text-sm text-muted-foreground">
+                                    Don&apos;t have an account?{' '}
+                                    <TabsTrigger value="signup" asChild>
+                                        <button type="button" className="font-medium text-primary hover:underline">Sign up</button>
+                                    </TabsTrigger>
+                                </p>
                             </form>
                         </Form>
                     </CardContent>
@@ -214,6 +225,19 @@ export default function LoginPage() {
                                         </FormItem>
                                     )}
                                 />
+                                 <FormField
+                                    control={signUpForm.control}
+                                    name="username"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Username</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="johndoe99" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <FormField
                                     control={signUpForm.control}
                                     name="email"
@@ -234,7 +258,7 @@ export default function LoginPage() {
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input type="password" placeholder="••••••••" {...field} />
+                                                <PasswordInput field={field} placeholder="••••••••" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -247,7 +271,7 @@ export default function LoginPage() {
                                         <FormItem>
                                             <FormLabel>Confirm Password</FormLabel>
                                             <FormControl>
-                                                <Input type="password" placeholder="••••••••" {...field} />
+                                                 <PasswordInput field={field} placeholder="••••••••" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -271,7 +295,7 @@ export default function LoginPage() {
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit" className="w-full">Create Account</Button>
+                                <Button type="submit" className="w-full" disabled={signUpForm.formState.isSubmitting}>Create Account</Button>
                                 
                                 <div className="relative">
                                     <div className="absolute inset-0 flex items-center">
@@ -283,9 +307,16 @@ export default function LoginPage() {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Button variant="outline" type="button"><GoogleIcon/>Google</Button>
-                                    <Button variant="outline" type="button" className="text-[#1877F2] hover:text-[#1877F2]"><FacebookIcon/>Facebook</Button>
+                                    <Button variant="outline" type="button" asChild className="cursor-pointer"><a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer"><GoogleIcon/>Google</a></Button>
+                                    <Button variant="outline" type="button" asChild className="text-[#1877F2] hover:text-[#1877F2] cursor-pointer"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FacebookIcon/>Facebook</a></Button>
                                 </div>
+
+                                 <p className="text-center text-sm text-muted-foreground">
+                                    Already have an account?{' '}
+                                    <TabsTrigger value="login" asChild>
+                                         <button type="button" className="font-medium text-primary hover:underline">Login</button>
+                                    </TabsTrigger>
+                                </p>
                             </form>
                         </Form>
                     </CardContent>

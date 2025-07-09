@@ -37,6 +37,7 @@ export interface CarouselCategory {
 export interface MockUser {
   id: string;
   name: string;
+  username: string;
   email: string;
   password?: string;
   role: 'admin' | 'staff' | 'user';

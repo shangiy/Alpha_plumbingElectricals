@@ -1,16 +1,29 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { signUpUser, getUserByEmail } from '@/lib/data';
+import type { MockUser } from '@/lib/types';
 
 export interface User {
+  id: string;
   name: string;
+  username: string;
   email: string;
   role: 'admin' | 'staff' | 'user';
 }
 
+interface SignUpData {
+    name: string;
+    username: string;
+    email: string;
+    password?: string;
+}
+
 interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
+  login: (userData: Omit<User, 'id'>) => void;
+  signUp: (signUpData: SignUpData) => Promise<User>;
+  updateUser: (updatedData: Partial<User>) => void;
   logout: () => void;
   loading: boolean;
 }
@@ -29,16 +42,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Simulate checking for an existing session on mount
   useEffect(() => {
-    // In a real app, you'd check localStorage or make an API call
-    // For now, we'll just assume no user is logged in on mount.
     setLoading(false);
   }, []);
 
-  const login = (userData: User) => {
-    // In a real app, you'd get this from an API response
-    setUser(userData);
+  const login = async (userData: Omit<User, 'id'>) => {
+    const existingUser = await getUserByEmail(userData.email);
+    if(existingUser) {
+        setUser({
+            id: existingUser.id,
+            name: existingUser.name,
+            username: existingUser.username,
+            email: existingUser.email,
+            role: existingUser.role,
+        });
+    }
+  };
+
+  const signUp = async (signUpData: SignUpData): Promise<User> => {
+    const newUser = await signUpUser(signUpData);
+    login(newUser);
+    return newUser;
+  };
+
+  const updateUser = (updatedData: Partial<User>) => {
+    setUser(currentUser => {
+        if (!currentUser) return null;
+        return { ...currentUser, ...updatedData };
+    })
   };
 
   const logout = () => {
@@ -48,6 +79,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = {
     user,
     login,
+    signUp,
+    updateUser,
     logout,
     loading,
   };

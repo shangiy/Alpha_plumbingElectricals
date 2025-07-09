@@ -603,10 +603,10 @@ const categories: Category[] = [
 ];
 
 const users: MockUser[] = [
-    { id: 'user-1', name: 'Valued Customer', email: 'customer@example.com', password: 'password123', role: 'user', signedUp: '2024-05-01T10:30:00Z', lastSeen: '2024-07-20T14:00:00Z', orders: 3, visitDuration: 15 },
-    { id: 'user-2', name: 'Admin User', email: 'admin@example.com', password: 'adminpassword', role: 'admin', signedUp: '2024-04-15T09:00:00Z', lastSeen: '2024-07-21T11:20:00Z', orders: 1, visitDuration: 45 },
-    { id: 'user-3', name: 'Jane Doe', email: 'jane.doe@example.com', password: 'password123', role: 'staff', signedUp: '2024-05-10T18:45:00Z', lastSeen: '2024-07-18T20:10:00Z', orders: 5, visitDuration: 25 },
-    { id: 'user-4', name: 'John Smith', email: 'john.smith@example.com', password: 'password123', role: 'user', signedUp: '2024-05-12T11:00:00Z', lastSeen: '2024-07-19T08:05:00Z', orders: 0, visitDuration: 5 },
+    { id: 'user-1', name: 'Valued Customer', username: 'valued_customer', email: 'customer@example.com', password: 'password123', role: 'user', signedUp: '2024-05-01T10:30:00Z', lastSeen: '2024-07-20T14:00:00Z', orders: 3, visitDuration: 15 },
+    { id: 'user-2', name: 'Admin User', username: 'admin_user', email: 'admin@example.com', password: 'adminpassword', role: 'admin', signedUp: '2024-04-15T09:00:00Z', lastSeen: '2024-07-21T11:20:00Z', orders: 1, visitDuration: 45 },
+    { id: 'user-3', name: 'Jane Doe', username: 'jane_doe', email: 'jane.doe@example.com', password: 'password123', role: 'staff', signedUp: '2024-05-10T18:45:00Z', lastSeen: '2024-07-18T20:10:00Z', orders: 5, visitDuration: 25 },
+    { id: 'user-4', name: 'John Smith', username: 'john_smith', email: 'john.smith@example.com', password: 'password123', role: 'user', signedUp: '2024-05-12T11:00:00Z', lastSeen: '2024-07-19T08:05:00Z', orders: 0, visitDuration: 5 },
 ];
 
 const transactions: Transaction[] = [
@@ -669,9 +669,28 @@ export async function getUsers(): Promise<MockUser[]> {
 
 export async function getUserByEmail(email: string): Promise<MockUser | undefined> {
     await new Promise(resolve => setTimeout(resolve, 100));
-    // In a real app, you would query your database.
-    // For now, we'll check our mock user list.
     return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+}
+
+export async function signUpUser(newUser: Omit<MockUser, 'id' | 'signedUp' | 'lastSeen' | 'orders' | 'visitDuration' | 'role'>): Promise<MockUser> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const userExists = users.some(u => u.email.toLowerCase() === newUser.email.toLowerCase());
+    if (userExists) {
+        throw new Error('User with this email already exists.');
+    }
+    const createdUser: MockUser = {
+        ...newUser,
+        id: `user-${Date.now()}`,
+        role: 'user',
+        signedUp: new Date().toISOString(),
+        lastSeen: new Date().toISOString(),
+        orders: 0,
+        visitDuration: 0,
+    };
+    // In a real app, you'd save this to a database.
+    // For this mock, we'll just add it to the session's array.
+    users.push(createdUser);
+    return createdUser;
 }
 
 export async function getTransactions(): Promise<Transaction[]> {
