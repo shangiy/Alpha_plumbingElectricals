@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter, notFound } from 'next/navigation';
+import { useRouter, notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getCategories } from '@/lib/data';
 import type { Product, Category } from '@/lib/types';
@@ -48,9 +48,12 @@ type ProductFormValues = z.infer<typeof productFormSchema>;
 
 const availableColors = ["Black", "White", "Silver", "Red", "Blue", "Green"];
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage() {
     const { toast } = useToast();
     const router = useRouter();
+    const params = useParams();
+    const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+
     const [product, setProduct] = useState<Product | null | undefined>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -67,8 +70,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     });
 
      useEffect(() => {
+        if (!productId) return;
         async function loadData() {
-            const fetchedProduct = getProductById(params.id);
+            const fetchedProduct = getProductById(productId);
 
             if (fetchedProduct) {
                 const fetchedCategories = await getCategories();
@@ -89,7 +93,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             }
         }
         loadData();
-    }, [params.id, form, getProductById, productsLoading]);
+    }, [productId, form, getProductById, productsLoading]);
 
     const handleGenerateDescription = async () => {
         const productName = form.getValues("name");
@@ -178,7 +182,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     };
 
     function onSubmit(data: ProductFormValues) {
-        updateProduct(params.id, data);
+        if (!productId) return;
+        updateProduct(productId, data);
         toast({
             title: "Product Updated!",
             description: `${data.name} has been updated.`,
