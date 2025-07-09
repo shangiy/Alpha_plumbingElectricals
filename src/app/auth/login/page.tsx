@@ -22,10 +22,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { getUserByEmail } from '@/lib/data';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { cn } from '@/lib/utils';
-
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
@@ -83,15 +81,9 @@ export default function LoginPage() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
-    const tabParam = searchParams.get('tab');
-    const [activeTab, setActiveTab] = useState(tabParam || 'login');
-
-    useEffect(() => {
-        const newTab = tabParam || 'login';
-        if (newTab !== activeTab) {
-            setActiveTab(newTab);
-        }
-    }, [tabParam, activeTab]);
+    
+    // The active tab is now determined by the URL search parameter on every render.
+    const activeTab = searchParams.get('tab') || 'login';
 
     const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -102,6 +94,11 @@ export default function LoginPage() {
         resolver: zodResolver(signUpSchema),
         defaultValues: { name: "", username: "", email: "", password: "", confirmPassword: "", recaptcha: false },
     });
+    
+    // This function will be used by onValueChange to update the URL without a full page reload.
+    const handleTabChange = (tab: string) => {
+        router.push(`/auth/login?tab=${tab}`, { scroll: false });
+    };
 
     async function onLogin(data: LoginFormValues) {
         const existingUser = await getUserByEmail(data.email);
@@ -136,7 +133,7 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-12">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-md">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full max-w-md">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -202,13 +199,13 @@ export default function LoginPage() {
 
                                 <p className="text-center text-sm text-muted-foreground">
                                     Don&apos;t have an account?{' '}
-                                    <button
-                                      type="button"
+                                    <Link
+                                      href="/auth/login?tab=signup"
+                                      scroll={false}
                                       className="font-medium text-primary hover:underline"
-                                      onClick={() => setActiveTab('signup')}
                                     >
                                       Sign up
-                                    </button>
+                                    </Link>
                                 </p>
                             </form>
                         </Form>
@@ -327,13 +324,13 @@ export default function LoginPage() {
 
                                  <p className="text-center text-sm text-muted-foreground">
                                     Already have an account?{' '}
-                                    <button
-                                      type="button"
+                                    <Link
+                                      href="/auth/login?tab=login"
+                                      scroll={false}
                                       className="font-medium text-primary hover:underline"
-                                      onClick={() => setActiveTab('login')}
                                     >
                                       Login
-                                    </button>
+                                    </Link>
                                 </p>
                             </form>
                         </Form>
