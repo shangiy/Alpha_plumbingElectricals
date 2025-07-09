@@ -52,7 +52,7 @@ export default function AddProductPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const { addProduct, loading: productsLoading } = useProducts();
+    const { addProduct } = useProducts();
 
     useEffect(() => {
         async function loadCategories() {
@@ -97,7 +97,6 @@ export default function AddProductPage() {
             const images = form.getValues("images");
             let firstImage: string | undefined = images && images.length > 0 ? images[0] : undefined;
             
-            // Ensure we only send a data URI to the AI flow
             if (firstImage && !firstImage.startsWith('data:image')) {
                 firstImage = undefined;
             }
@@ -169,12 +168,20 @@ export default function AddProductPage() {
     };
 
     async function onSubmit(data: ProductFormValues) {
-        await addProduct(data);
-        toast({
-            title: "Product Created!",
-            description: `${data.name} has been added to the store.`,
-        });
-        router.push('/admin/products');
+        try {
+            await addProduct(data);
+            toast({
+                title: "Product Created!",
+                description: `${data.name} has been added to the store.`,
+            });
+            router.push('/admin/products');
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Creation Failed",
+                description: "Could not create the product. Please try again.",
+            });
+        }
     }
 
     return (
@@ -401,7 +408,7 @@ export default function AddProductPage() {
                             <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
-                           <Button type="submit" disabled={form.formState.isSubmitting || productsLoading}>
+                           <Button type="submit" disabled={form.formState.isSubmitting}>
                              {form.formState.isSubmitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                              Save Product
                            </Button>

@@ -61,7 +61,8 @@ export default function EditProductPage() {
     const { getProductById, updateProduct, loading: productsLoading } = useProducts();
     
     const form = useForm<ProductFormValues>({
-        resolver: zodResolver(productFormSchema)
+        resolver: zodResolver(productFormSchema),
+        // We will set default values in useEffect once product is loaded
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -153,7 +154,7 @@ export default function EditProductPage() {
             reader.onloadend = () => {
                 const dataUrl = reader.result as string;
                 const latestImages = form.getValues('images');
-                const emptyIndex = latestImages.findIndex(img => !img || img === '');
+                const emptyIndex = latestImages.findIndex(img => !img || img.trim() === '');
                 if (emptyIndex !== -1) {
                     form.setValue(`images.${emptyIndex}`, dataUrl, { shouldValidate: true });
                 } else if (latestImages.length < 7) {
@@ -183,12 +184,20 @@ export default function EditProductPage() {
 
     async function onSubmit(data: ProductFormValues) {
         if (!productId) return;
-        await updateProduct(productId, data);
-        toast({
-            title: "Product Updated!",
-            description: `${data.name} has been updated.`,
-        });
-        router.push('/admin/products');
+        try {
+            await updateProduct(productId, data);
+            toast({
+                title: "Product Updated!",
+                description: `${data.name} has been updated.`,
+            });
+            router.push('/admin/products');
+        } catch (error) {
+             toast({
+                variant: "destructive",
+                title: "Update Failed",
+                description: "Could not update the product. Please try again.",
+            });
+        }
     }
 
     if (productsLoading || product === null) {
@@ -437,7 +446,7 @@ export default function EditProductPage() {
                              <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
-                           <Button type="submit" disabled={form.formState.isSubmitting || productsLoading}>
+                           <Button type="submit" disabled={form.formState.isSubmitting}>
                                 {form.formState.isSubmitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                                 Save Changes
                             </Button>

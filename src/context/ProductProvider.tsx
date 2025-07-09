@@ -3,9 +3,9 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Product } from '@/lib/types';
-import { getProducts as fetchProductsFromDb, seedProducts } from '@/lib/data';
+import { seedProducts } from '@/lib/data';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 
 export interface ProductFormData {
@@ -23,7 +23,7 @@ interface ProductContextType {
   products: Product[];
   loading: boolean;
   addProduct: (productData: ProductFormData) => Promise<void>;
-  updateProduct: (productId: string, productData: ProductFormData) => Promise<void>;
+  updateProduct: (productId: string, productData: Partial<ProductFormData>) => Promise<void>;
   getProductById: (productId: string) => Product | undefined;
 }
 
@@ -42,75 +42,57 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function initializeProducts() {
-      try {
-        await seedProducts(); // Seed data if db is empty, does nothing if not.
-        const fetchedProducts = await fetchProductsFromDb();
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error("Error initializing products:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+    // Seed the database on first load if it's empty
+    seedProducts();
 
-    initializeProducts();
+    const productsCollection = collection(db, "products");
+    const unsubscribe = onSnapshot(productsCollection, (snapshot) => {
+        const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        setProducts(productList);
+        setLoading(false);
+    }, (error) => {
+        console.error("Error fetching products from Firestore: ", error);
+        setLoading(false);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   const addProduct = useCallback(async (productData: ProductFormData) => {
-    setLoading(true);
     try {
         const newProductDocument: Omit<Product, 'id'> = {
-        ...productData,
-        rating: Math.floor(Math.random() * 2) + 3.5, // 3.5 to 4.5
-        reviews: Math.floor(Math.random() * 100),
-        seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
-        longDescription: productData.description,
-        isFeatured: productData.isFeatured || false,
+            ...productData,
+            rating: Math.floor(Math.random() * 2) + 3.5, // 3.5 to 4.5
+            reviews: Math.floor(Math.random() * 100),
+            seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
+            longDescription: productData.description,
+            isFeatured: productData.isFeatured || false,
         };
-        const docRef = await addDoc(collection(db, "products"), newProductDocument);
-        
-        const newProduct: Product = { id: docRef.id, ...newProductDocument };
-        setProducts(prevProducts => [newProduct, ...prevProducts]);
+        await addDoc(collection(db, "products"), newProductDocument);
+        // Real-time listener will update the state, no need to manually setProducts
     } catch (error) {
         console.error("Error adding product:", error);
-    } finally {
-        setLoading(false);
+        throw error;
     }
   }, []);
 
-  const updateProduct = useCallback(async (productId: string, productData: ProductFormData) => {
-    setLoading(true);
+  const updateProduct = useCallback(async (productId: string, productData: Partial<ProductFormData>) => {
     try {
         const productRef = doc(db, "products", productId);
         
-        const existingProduct = products.find(p => p.id === productId);
-        if (!existingProduct) {
-            console.error("Product not found for update:", productId);
-            return;
+        const updateData: Partial<Product> = { ...productData };
+        if (productData.description) {
+            updateData.longDescription = productData.description;
         }
 
-        const updatedProductData: Product = {
-            ...existingProduct,
-            ...productData,
-            longDescription: productData.description,
-        };
-        
-        await setDoc(productRef, updatedProductData);
-
-        setProducts(prevProducts =>
-        prevProducts.map(p =>
-            p.id === productId 
-            ? updatedProductData
-            : p
-        )
-        );
+        await updateDoc(productRef, updateData);
+        // Real-time listener will update the state
     } catch (error) {
         console.error("Error updating product:", error);
-    } finally {
-        setLoading(false);
+        throw error;
     }
-  }, [products]);
+  }, []);
 
   const getProductById = useCallback((productId: string): Product | undefined => {
       return products.find(p => p.id === productId);
