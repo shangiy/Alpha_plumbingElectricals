@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -200,8 +201,12 @@ export default function LoginPage() {
                                 </div>
 
                                 <p className="text-center text-sm text-muted-foreground">
-                                    You don&apos;t have an account?{' '}
-                                    <button type="button" className="font-medium text-primary hover:underline" onClick={() => setActiveTab('signup')}>
+                                    Don&apos;t have an account?{' '}
+                                    <button
+                                      type="button"
+                                      className="font-medium text-primary hover:underline"
+                                      onClick={() => setActiveTab('signup')}
+                                    >
                                       Sign up
                                     </button>
                                 </p>
@@ -322,8 +327,12 @@ export default function LoginPage() {
 
                                  <p className="text-center text-sm text-muted-foreground">
                                     Already have an account?{' '}
-                                    <button type="button" className="font-medium text-primary hover:underline" onClick={() => setActiveTab('login')}>
-                                        Login
+                                    <button
+                                      type="button"
+                                      className="font-medium text-primary hover:underline"
+                                      onClick={() => setActiveTab('login')}
+                                    >
+                                      Login
                                     </button>
                                 </p>
                             </form>
