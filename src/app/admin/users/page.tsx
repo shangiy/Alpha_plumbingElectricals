@@ -39,12 +39,24 @@ export default function AdminUsersPage() {
         loadUsers();
     }, []);
 
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
+    const formatDateTime = (dateString: string) => {
+        const date = new Date(dateString);
+        const dateOptions: Intl.DateTimeFormatOptions = {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
-        });
+        };
+        const timeOptions: Intl.DateTimeFormatOptions = {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        };
+        return (
+            <div>
+                <div>{date.toLocaleDateString('en-US', dateOptions)}</div>
+                <div className="text-xs text-muted-foreground">{date.toLocaleTimeString('en-US', timeOptions)}</div>
+            </div>
+        );
     }
 
     if (loading) {
@@ -63,8 +75,10 @@ export default function AdminUsersPage() {
                         <TableRow>
                             <TableHead>User</TableHead>
                             <TableHead className="hidden md:table-cell">Email</TableHead>
-                            <TableHead className="hidden md:table-cell">Orders</TableHead>
+                            <TableHead className="hidden xl:table-cell">Orders</TableHead>
                             <TableHead className="hidden sm:table-cell">Signed Up</TableHead>
+                            <TableHead className="hidden lg:table-cell">Last Seen</TableHead>
+                            <TableHead className="hidden xl:table-cell">Avg. Visit</TableHead>
                             <TableHead>
                                 <span className="sr-only">Actions</span>
                             </TableHead>
@@ -83,10 +97,12 @@ export default function AdminUsersPage() {
                                     </div>
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">{user.email}</TableCell>
-                                <TableCell className="hidden md:table-cell">
+                                <TableCell className="hidden xl:table-cell">
                                     <Badge variant={user.orders > 0 ? "default" : "secondary"}>{user.orders}</Badge>
                                 </TableCell>
-                                <TableCell className="hidden sm:table-cell">{formatDate(user.signedUp)}</TableCell>
+                                <TableCell className="hidden sm:table-cell">{formatDateTime(user.signedUp)}</TableCell>
+                                <TableCell className="hidden lg:table-cell">{formatDateTime(user.lastSeen)}</TableCell>
+                                <TableCell className="hidden xl:table-cell">{user.visitDuration} mins</TableCell>
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

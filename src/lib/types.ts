@@ -41,4 +41,5 @@ export interface MockUser {
   signedUp: string;
   lastSeen: string;
   orders: number;
+  visitDuration: number; // in minutes
 }
