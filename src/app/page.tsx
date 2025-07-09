@@ -19,7 +19,7 @@ export default function Home() {
 
   const ProductListSkeleton = () => (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {[...Array(4)].map((_, i) => (
+      {[...Array(8)].map((_, i) => (
         <div key={i} className="space-y-2">
             <Skeleton className="aspect-square w-full" />
             <Skeleton className="h-5 w-3/4" />
@@ -41,14 +41,14 @@ export default function Home() {
             <ProductListSkeleton />
           ) : featuredProducts.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {featuredProducts.map((product) => (
+              {featuredProducts.slice(0, 12).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <h3 className="text-2xl font-headline font-semibold">No Featured Products Found</h3>
-              <p className="mt-2 text-muted-foreground">Admin can mark products as featured to show them here.</p>
+            <div className="flex flex-col items-center justify-center py-20 text-center rounded-lg border-2 border-dashed">
+              <h3 className="text-2xl font-headline font-semibold">No Featured Products Yet</h3>
+              <p className="mt-2 text-muted-foreground">Go to the admin panel to mark products as "featured" to show them here.</p>
             </div>
           )}
         </section>
