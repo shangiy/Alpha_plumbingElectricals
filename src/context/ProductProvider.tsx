@@ -13,6 +13,7 @@ export interface ProductFormData {
     barcode?: string;
     images: string[];
     colors?: string[];
+    isFeatured?: boolean;
 }
 
 const generateId = () => `prod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -56,6 +57,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
       reviews: 0,
       seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
       longDescription: productData.description,
+      isFeatured: productData.isFeatured || false,
     };
     setProducts(prevProducts => [newProduct, ...prevProducts]);
   };

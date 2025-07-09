@@ -30,6 +30,7 @@ import { generateProductDescription } from '@/ai/flows/product-description-gener
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import { useProducts } from '@/context/ProductProvider';
+import { Switch } from '@/components/ui/switch';
 
 
 const productFormSchema = z.object({
@@ -40,6 +41,7 @@ const productFormSchema = z.object({
   barcode: z.string().optional(),
   images: z.array(z.string().min(1, { message: "Image URL or data cannot be empty." })).min(1, "At least one image is required.").max(7, "You can upload a maximum of 7 images."),
   colors: z.array(z.string()).optional(),
+  isFeatured: z.boolean().default(false),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -80,6 +82,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     barcode: fetchedProduct.barcode || '',
                     images: fetchedProduct.images,
                     colors: fetchedProduct.colors || [],
+                    isFeatured: fetchedProduct.isFeatured || false,
                 });
             } else if (!productsLoading) {
                 setProduct(undefined);
@@ -297,6 +300,26 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                                         The product category will help with filtering and search.
                                     </FormDescription>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="isFeatured"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                    <div className="space-y-0.5">
+                                        <FormLabel>Feature on homepage</FormLabel>
+                                        <FormDescription>
+                                            If enabled, this product will appear in the "Featured Products" section.
+                                        </FormDescription>
+                                    </div>
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />

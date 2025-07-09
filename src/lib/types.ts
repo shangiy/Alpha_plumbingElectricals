@@ -14,6 +14,7 @@ export interface Product {
   };
   barcode?: string;
   colors?: string[];
+  isFeatured?: boolean;
 }
 
 export interface Category {
