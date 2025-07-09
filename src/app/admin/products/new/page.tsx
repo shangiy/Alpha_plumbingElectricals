@@ -52,7 +52,7 @@ export default function AddProductPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const { addProduct } = useProducts();
+    const { addProduct, loading: productsLoading } = useProducts();
 
     useEffect(() => {
         async function loadCategories() {
@@ -401,7 +401,10 @@ export default function AddProductPage() {
                             <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
-                           <Button type="submit" disabled={form.formState.isSubmitting}>Save Product</Button>
+                           <Button type="submit" disabled={form.formState.isSubmitting || productsLoading}>
+                             {form.formState.isSubmitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                             Save Product
+                           </Button>
                            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
                         </div>
                     </form>

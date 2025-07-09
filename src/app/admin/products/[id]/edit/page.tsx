@@ -437,7 +437,10 @@ export default function EditProductPage() {
                              <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
-                           <Button type="submit" disabled={form.formState.isSubmitting}>Save Changes</Button>
+                           <Button type="submit" disabled={form.formState.isSubmitting || productsLoading}>
+                                {form.formState.isSubmitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                                Save Changes
+                            </Button>
                            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
                         </div>
                     </form>
