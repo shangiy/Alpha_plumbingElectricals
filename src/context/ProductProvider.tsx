@@ -3,7 +3,10 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Product } from '@/lib/types';
-import { getProducts as fetchProducts } from '@/lib/data';
+import { getProducts as fetchProducts, seedProducts } from '@/lib/data';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
+
 
 export interface ProductFormData {
     name: string;
@@ -16,13 +19,11 @@ export interface ProductFormData {
     isFeatured?: boolean;
 }
 
-const generateId = () => `prod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
 interface ProductContextType {
   products: Product[];
   loading: boolean;
-  addProduct: (productData: ProductFormData) => void;
-  updateProduct: (productId: string, productData: ProductFormData) => void;
+  addProduct: (productData: ProductFormData) => Promise<void>;
+  updateProduct: (productId: string, productData: ProductFormData) => Promise<void>;
   getProductById: (productId: string) => Product | undefined;
 }
 
@@ -40,42 +41,72 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadProducts() {
-      setLoading(true);
-      const fetchedProducts = await fetchProducts();
-      setProducts(fetchedProducts);
-      setLoading(false);
-    }
-    loadProducts();
+  const loadProducts = useCallback(async () => {
+    setLoading(true);
+    await seedProducts(); // Seed data if db is empty
+    const fetchedProducts = await fetchProducts();
+    setProducts(fetchedProducts);
+    setLoading(false);
   }, []);
 
-  const addProduct = useCallback((productData: ProductFormData) => {
-    const newProduct: Product = {
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
+
+  const addProduct = useCallback(async (productData: ProductFormData) => {
+    const newProductDocument: Omit<Product, 'id'> = {
       ...productData,
-      id: generateId(),
       rating: Math.floor(Math.random() * 2) + 3.5, // 3.5 to 4.5
       reviews: Math.floor(Math.random() * 100),
       seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
       longDescription: productData.description,
       isFeatured: productData.isFeatured || false,
     };
-    setProducts(prevProducts => [newProduct, ...prevProducts]);
+    const docRef = await addDoc(collection(db, "products"), newProductDocument);
+    setProducts(prevProducts => [{ id: docRef.id, ...newProductDocument }, ...prevProducts]);
   }, []);
 
-  const updateProduct = useCallback((productId: string, productData: ProductFormData) => {
+  const updateProduct = useCallback(async (productId: string, productData: ProductFormData) => {
+    const productRef = doc(db, "products", productId);
+    
+    // We need to fetch the existing product to keep non-form fields
+    const existingProduct = products.find(p => p.id === productId);
+    if (!existingProduct) {
+        console.error("Product not found for update:", productId);
+        return;
+    }
+
+    const updatedProductData: Product = {
+        ...existingProduct,
+        ...productData,
+        longDescription: productData.description,
+    };
+
+    // We only update the fields that are part of the form, preserving rating etc.
+    // Firestore's setDoc with merge:true would also work, but this is explicit.
+    await setDoc(productRef, {
+        name: updatedProductData.name,
+        description: updatedProductData.description,
+        longDescription: updatedProductData.longDescription,
+        price: updatedProductData.price,
+        images: updatedProductData.images,
+        category: updatedProductData.category,
+        seller: updatedProductData.seller,
+        barcode: updatedProductData.barcode,
+        colors: updatedProductData.colors,
+        isFeatured: updatedProductData.isFeatured,
+        rating: existingProduct.rating, // preserve original rating
+        reviews: existingProduct.reviews, // preserve original reviews
+    });
+
     setProducts(prevProducts =>
       prevProducts.map(p =>
         p.id === productId 
-        ? { 
-            ...p,
-            ...productData,
-            longDescription: productData.description, // ensure long description is also updated
-          } 
+        ? updatedProductData
         : p
       )
     );
-  }, []);
+  }, [products]);
 
   const getProductById = useCallback((productId: string): Product | undefined => {
       return products.find(p => p.id === productId);

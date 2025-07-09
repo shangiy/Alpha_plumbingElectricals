@@ -1,4 +1,6 @@
 import type { Product, Category, HomePageCategory, CarouselCategory, MockUser, Transaction } from './types';
+import { db } from './firebase';
+import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
 
 const homePageCategories: HomePageCategory[] = [
     { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
@@ -23,10 +25,10 @@ const carouselCategories: CarouselCategory[] = [
   { id: 'lighting-3', name: 'Lighting & Electrical', image: '/classic chandelier.png', href: '#' },
 ];
 
-const allProductsData: Product[] = [
+// This data is now used for a one-time seeding of Firestore
+const allProductsData: Omit<Product, 'id'>[] = [
   // Featured Products from original list
   {
-    id: 'ample-light',
     name: 'Ample Light',
     price: 2500.00,
     images: ['/Ample Light.png'],
@@ -41,7 +43,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'oval-toilet',
     name: 'Oval Toilet',
     price: 7500.00,
     images: ['/Oval Toilet.png'],
@@ -56,7 +57,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'sink-cabinet',
     name: 'Whole complete sink and cabinet',
     price: 7000.00,
     images: ['/Whole complete sink and cabinet.png'],
@@ -70,7 +70,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'solar-heater',
     name: 'Solar Heater non-pressurized',
     price: 12000.00,
     images: ['/Solar Heater non-pressurized.png'],
@@ -84,7 +83,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'artistic-lights',
     name: 'Artistic Lights',
     price: 3300.00,
     images: ['/Artistic Lights.png'],
@@ -97,7 +95,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'electric-cable',
     name: 'Electric cable',
     price: 3000.00,
     images: ['/electric cable.png'],
@@ -111,7 +108,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'wall-bracket',
     name: 'Warm light wall bracket',
     price: 1900.00,
     images: ['/Warm light wall bracket.png'],
@@ -125,7 +121,6 @@ const allProductsData: Product[] = [
     isFeatured: true,
   },
   {
-    id: 'ppr-fittings',
     name: 'PPR Pipe Fittings',
     price: 30.00,
     images: ['/PPR Pipe Fittings.png'],
@@ -137,10 +132,7 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
     isFeatured: true,
   },
-
-  // Tank Products
   {
-    id: 'kentank-2000l',
     name: 'Kentank 2000L',
     price: 15000.00,
     images: ['/kentank 2000l.png'],
@@ -153,7 +145,6 @@ const allProductsData: Product[] = [
     colors: ['Black', 'Green'],
   },
   {
-    id: 'kentank-3000l',
     name: 'Kentank 3000L',
     price: 10000.00,
     images: ['/kentanks 3000L.png'],
@@ -166,7 +157,6 @@ const allProductsData: Product[] = [
     colors: ['Black', 'Green'],
   },
   {
-    id: 'cuboid-tank',
     name: 'Water Tank',
     price: 6500.00,
     images: ['/cuboidTank.PNG'],
@@ -179,7 +169,6 @@ const allProductsData: Product[] = [
     colors: ['White'],
   },
   {
-    id: 'septic-tank',
     name: 'Septic Tank',
     price: 20000.00,
     images: ['/septic Tank.png'],
@@ -192,7 +181,6 @@ const allProductsData: Product[] = [
     colors: ['Black'],
   },
   {
-    id: 'plastic-reservoir-tank',
     name: 'Reservoir Tank',
     price: 5000.00,
     images: ['/plastic-tank.png'],
@@ -204,7 +192,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'top-tank-1500l',
     name: 'Top Tank 1500L',
     price: 4500.00,
     images: ['/top tank 1500L.png'],
@@ -216,7 +203,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'top-tank-2000l',
     name: 'Tank 2000L',
     price: 5000.00,
     images: ['/top tank.png'],
@@ -228,7 +214,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'rainwater-tank',
     name: 'Rainwater Harvesting Tank',
     price: 8000.00,
     images: ['/rainwater-tank.png'],
@@ -239,10 +224,7 @@ const allProductsData: Product[] = [
     reviews: 40,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
-
-  // Decor Products
   {
-    id: 'golden-chandelier',
     name: 'Golden Chandelier',
     price: 3500.00,
     images: ['/golden chandelier.png'],
@@ -254,7 +236,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'rugged-chandelier',
     name: 'Rugged Chandelier',
     price: 5000.00,
     images: ['/rugged chandelier.png'],
@@ -266,7 +247,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'square-lights',
     name: 'Decorative Square Lights',
     price: 2800.00,
     images: ['/square lights.png'],
@@ -278,7 +258,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'birds-lights',
     name: 'Birds Lights',
     price: 1900.00,
     images: ['/birds lights.png'],
@@ -290,7 +269,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'pinkish-sink',
     name: 'Pinkish Sink',
     price: 3000.00,
     images: ['/pinkish sink.png'],
@@ -302,7 +280,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'bathroom-makeover-sink',
     name: 'Bathroom Makeover Sink',
     price: 7500.00,
     images: ['/Bathroom makeOver Sink.png'],
@@ -314,7 +291,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'monkey-lights',
     name: 'Monkey Lights',
     price: 4000.00,
     images: ['/monkey lights.png'],
@@ -326,7 +302,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'golden-stripe-chandelier',
     name: 'Golden Stripe Chandelier',
     price: 8000.00,
     images: ['/Golden stripe Chandelier.jpg'],
@@ -338,7 +313,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
    {
-    id: 'blackmate-golden-chandelier',
     name: 'BlackMate Golden Chandelier',
     price: 8500.00,
     images: ['/BlackMate golden Chandelier.jpg'],
@@ -350,7 +324,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
    {
-    id: 'wall-lights',
     name: 'Wall Lights',
     price: 2000.00,
     images: ['/Wall lights.jpg'],
@@ -362,7 +335,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
    {
-    id: 'modern-soap-dish',
     name: 'Modern Soap Dish',
     price: 1500.00,
     images: ['/soap dish.png'],
@@ -374,7 +346,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
    {
-    id: 'round-brown-frencia-countertop',
     name: 'Round Brown Frencia Countertop',
     price: 5500.00,
     images: ['/Round brown frencia countertop.jpg'],
@@ -386,7 +357,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'golden-layers-chandelier',
     name: 'Golden Layers Chandelier',
     price: 4000.00,
     images: ['/golden layers.jpg'],
@@ -398,7 +368,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'pink-oval-frencia-toilet',
     name: 'PinkOval Frencia Toilet',
     price: 8500.00,
     images: ['/PinkOval Frencia toilet.jpg'],
@@ -410,7 +379,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'designer-single-unit-toilet',
     name: 'Designer Single-Unit Toilet',
     price: 29500.00,
     images: ['/Designer singleUnit toilet.jpg'],
@@ -422,7 +390,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'striped-chandelier',
     name: 'Striped Chandelier',
     price: 8000.00,
     images: ['/Striped Chandelier.jpg'],
@@ -434,7 +401,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'decor-large-chandelier',
     name: 'Decor Large Chandelier',
     price: 14500.00,
     images: ['/Decor large Chandelier.jpg'],
@@ -446,7 +412,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'classic-chandelier',
     name: 'Classic Chandelier',
     price: 2500.00,
     images: ['/classic chandelier.png'],
@@ -458,7 +423,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'stylish-mirror',
     name: 'Stylish Mirror',
     price: 2000.00,
     images: ['/Stylish mirror.jpg'],
@@ -470,7 +434,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: '5-lamp-chandelier-general',
     name: '5-Lamp Chandelier General',
     price: 5100.00,
     images: ['/5 Lamp Chandelier General.png'],
@@ -482,7 +445,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'hexagonal-decor-light',
     name: 'Hexagonal Decor Light',
     price: 3800.00,
     images: ['/hexagonal decor light.jpg'],
@@ -494,7 +456,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'round-smart-mirror',
     name: 'Round Smart Mirror',
     price: 4500.00,
     images: ['/Round smart mirror.jpg'],
@@ -506,7 +467,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'stunning-mirror',
     name: 'Stunning Mirror',
     price: 1000.00,
     images: ['/Stunning mirror.jpg'],
@@ -518,7 +478,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'ceiling-3mode-light',
     name: 'Ceiling 3-Mode Light',
     price: 6500.00,
     images: ['/Ceiling 3mode light.jpg'],
@@ -530,7 +489,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'square-toilet-decor',
     name: 'Square Toilet',
     price: 29000.00,
     images: ['/square toilet.jpg'],
@@ -542,7 +500,6 @@ const allProductsData: Product[] = [
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
   {
-    id: 'designer-sink',
     name: 'Designer Sink',
     price: 3500.00,
     images: ['/Designer sink.jpg'],
@@ -553,47 +510,30 @@ const allProductsData: Product[] = [
     reviews: 18,
     seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
   },
-
-  // Plumbing Products
-  { id: 'plumbing-pipe', name: 'Plumbing Pipe', price: 2000.00, images: ['/ppr pipes.png'], description: 'High-quality plumbing pipes.', longDescription: 'Durable and reliable plumbing pipes suitable for a variety of residential and commercial applications. Available in multiple sizes.', category: 'plumbing', rating: 4.8, reviews: 80, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'ppr-elbows', name: 'PPR elbows', price: 100.00, images: ['/pipe elbows.png'], description: 'Durable PPR elbows for pipe fitting.', longDescription: 'High-quality PPR elbows for changing pipe direction. Designed for a secure, leak-proof fit.', category: 'plumbing', rating: 4.9, reviews: 150, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'tee-ppr-connector', name: 'Tee PPR connector', price: 50.00, images: ['/Tee PPR connector.png'], description: 'A reliable Tee PPR connector.', longDescription: 'A T-shaped connector for joining three pipes. Made from high-grade PPR for durability and heat resistance.', category: 'plumbing', rating: 4.9, reviews: 200, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'plumbing-valve', name: 'Plumbing Valve', price: 1500.00, images: ['/ppr pipe fittings.png'], description: 'A robust valve for plumbing systems.', longDescription: 'A durable plumbing valve to control water flow. Features easy operation and a long service life.', category: 'plumbing', rating: 4.7, reviews: 95, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'ppr-pipe-roll', name: 'PPR pipe roll', price: 8000.00, images: ['/100m PPR roll.png'], description: 'A 100m roll of PPR pipe.', longDescription: 'A 100-meter roll of flexible and durable PPR pipe, suitable for large-scale plumbing installations.', category: 'plumbing', rating: 4.8, reviews: 60, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'hdpe-pipe', name: 'HDPE 100M PIPE PN6 50mm', price: 12000.00, images: ['/HDPE 100M PIPE.jpg'], description: '100m of 50mm HDPE pipe.', longDescription: 'High-density polyethylene pipe, 100 meters long and 50mm in diameter, suitable for high-pressure applications.', category: 'plumbing', rating: 4.9, reviews: 40, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'pvc-waste-pipes', name: 'PVC Waste Pipes 6 Inches', price: 3500.00, images: ['/PVC Waste Pipes 6 In .jpg'], description: '6-inch PVC pipes for waste management.', longDescription: 'Durable 6-inch PVC pipes designed for waste and drainage systems. Resistant to chemicals and corrosion.', category: 'plumbing', rating: 4.6, reviews: 70, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'danco-hosepipe', name: 'Danco Hosepipe', price: 2000.00, images: ['/Danco Hosepipe.jpg'], description: 'A flexible and durable Danco hosepipe.', longDescription: 'A high-quality hosepipe from Danco, perfect for gardening and other outdoor uses. Kink-resistant and built to last.', category: 'plumbing', rating: 4.5, reviews: 85, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'pillar-water-tap', name: 'Pillar Water tap', price: 1500.00, images: ['/Pillar taps.jpg'], description: 'A classic pillar water tap.', longDescription: 'A classic and elegant pillar tap with a chrome finish. Easy to install and use, suitable for any bathroom or kitchen.', category: 'plumbing', rating: 4.7, reviews: 110, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'sensor-taps', name: 'Sensor taps with On Off touchpad', price: 8000.00, images: ['/Sensor taps with On Off touchpad.Jpg'], description: 'Modern sensor taps with a touchpad.', longDescription: 'A touchless sensor tap for improved hygiene. Features a convenient on/off touchpad for manual operation.', category: 'plumbing', rating: 4.9, reviews: 55, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'bathroom-accessory', name: 'Bathroom wall decor and accessory', price: 560.00, images: ['/Bathroom wall decor and accessory.jpg'], description: 'Stylish bathroom wall accessory.', longDescription: 'A stylish and functional accessory for your bathroom wall, perfect for holding towels or other items.', category: 'plumbing', rating: 4.4, reviews: 130, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'plumbing-soap-dish', name: 'soap dish', price: 500.00, images: ['/soap dish.png'], description: 'A simple and elegant soap dish.', longDescription: 'A clean and minimalist soap dish that keeps your soap dry and your sink area tidy.', category: 'plumbing', rating: 4.5, reviews: 180, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'standing-sink', name: 'standing Sink', price: 5800.00, images: ['/standing Sink.png'], description: 'A modern freestanding sink.', longDescription: 'A stylish freestanding sink that makes a statement in any bathroom. Made from high-quality ceramic.', category: 'plumbing', rating: 4.7, reviews: 65, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'square-sink', name: 'Square sink', price: 6500.00, images: ['/Square sink.jpg'], description: 'A geometric square sink.', longDescription: 'A modern sink with a sharp, geometric design. Perfect for contemporary bathrooms.', category: 'plumbing', rating: 4.8, reviews: 75, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'grey-sink', name: 'grey sink', price: 4500.00, images: ['/grey sink.png'], description: 'A stylish sink in a grey finish.', longDescription: 'A chic and modern sink in a trendy grey finish. We also offer installation services for an additional fee.', category: 'plumbing', rating: 4.6, reviews: 90, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'plumbing-square-toilet', name: 'square toilet', price: 29000.00, images: ['/square toilet.jpg'], description: 'A modern, geometric square toilet.', longDescription: 'This toilet features a bold, geometric square design for a distinctly modern bathroom. Includes a soft-close seat and efficient dual-flush system.', category: 'plumbing', rating: 4.9, reviews: 45, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'plumbing-oval-toilet', name: 'oval toilet', price: 29000.00, images: ['/oval toilet.jpg'], description: 'A classic and comfortable oval toilet.', longDescription: 'A classic oval toilet that combines timeless design with modern water-saving technology.', category: 'plumbing', rating: 4.8, reviews: 50, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'plumbing-pink-toilet', name: 'PinkOval Frencia toilet', price: 29000.00, images: ['/PinkOval Frencia toilet.jpg'], description: 'A unique pink oval frencia toilet.', longDescription: 'Add a splash of color and unique style to your bathroom with this pink oval frencia toilet.', category: 'plumbing', rating: 4.7, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'toilet-designs', name: 'toilet designs', price: 2500.00, images: ['/toilet designs.jpg'], description: 'Decorative toilet seat designs.', longDescription: 'A variety of decorative toilet seat designs to add a personal touch to your bathroom.', category: 'plumbing', rating: 4.5, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'black-shower-head', name: 'Black round shower head', price: 7500.00, images: ['/Black round shower head.jpg'], description: 'A sleek black round shower head.', longDescription: 'A modern, oversized round shower head in a matte black finish for a luxurious shower experience.', category: 'plumbing', rating: 4.9, reviews: 88, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'black-n-type-tap', name: 'Black n-type WaterTap', price: 6500.00, images: ['/Black n-type tap.jpg'], description: 'An elegant black n-type water tap.', longDescription: 'An elegant water tap with a unique N-type design and a stylish matte black finish.', category: 'plumbing', rating: 4.8, reviews: 92, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'black-elegant-tap', name: 'Black elegant watertap', price: 2500.00, images: ['/Black elegant watertap.jpg'], description: 'A stylish and elegant black water tap.', longDescription: 'A sleek and minimalist water tap in matte black, perfect for modern kitchens and bathrooms.', category: 'plumbing', rating: 4.7, reviews: 115, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'double-sink', name: 'Double sink with tap', price: 11000.00, images: ['/Double sink with tap.jpg'], description: 'A practical double sink with a tap.', longDescription: 'A spacious and practical double sink for your kitchen, complete with a modern tap. Made from durable stainless steel.', category: 'plumbing', rating: 4.8, reviews: 105, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { id: 'ppr-male-adaptor', name: 'PPR MALE ADAPTOR 50MM (half inch)', price: 280.00, images: ['/PPR MALE ADAPTOR 50MM (half inche).jpg'], description: 'A 50mm (half inch) PPR male adaptor.', longDescription: 'A high-quality 50mm (half inch) PPR male adaptor for connecting pipes to threaded fittings.', category: 'plumbing', rating: 5.0, reviews: 300, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-
-  // Legacy Products
-  {
-    id: '1',
-    name: 'Advanced Drone',
-    description: 'High-performance drone with 4K camera and 30-min flight time.',
-    longDescription: 'Capture stunning aerial footage with this professional-grade drone. Features include a 4K UHD camera, 3-axis gimbal stabilization, 30-minute flight time per battery, and intelligent flight modes like object tracking and waypoint navigation. Ideal for both hobbyists and professional photographers.',
-    price: 799.99,
-    images: ['https://placehold.co/600x600', 'https://placehold.co/600x600', 'https://placehold.co/600x600'],
-    category: 'electronics',
-    rating: 4.8,
-    reviews: 125,
-    seller: { name: 'TechFly Inc.', id: 'seller-1' },
-    colors: ['Black', 'White'],
-  },
+  { name: 'Plumbing Pipe', price: 2000.00, images: ['/ppr pipes.png'], description: 'High-quality plumbing pipes.', longDescription: 'Durable and reliable plumbing pipes suitable for a variety of residential and commercial applications. Available in multiple sizes.', category: 'plumbing', rating: 4.8, reviews: 80, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'PPR elbows', price: 100.00, images: ['/pipe elbows.png'], description: 'Durable PPR elbows for pipe fitting.', longDescription: 'High-quality PPR elbows for changing pipe direction. Designed for a secure, leak-proof fit.', category: 'plumbing', rating: 4.9, reviews: 150, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Tee PPR connector', price: 50.00, images: ['/Tee PPR connector.png'], description: 'A reliable Tee PPR connector.', longDescription: 'A T-shaped connector for joining three pipes. Made from high-grade PPR for durability and heat resistance.', category: 'plumbing', rating: 4.9, reviews: 200, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Plumbing Valve', price: 1500.00, images: ['/ppr pipe fittings.png'], description: 'A robust valve for plumbing systems.', longDescription: 'A durable plumbing valve to control water flow. Features easy operation and a long service life.', category: 'plumbing', rating: 4.7, reviews: 95, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'PPR pipe roll', price: 8000.00, images: ['/100m PPR roll.png'], description: 'A 100m roll of PPR pipe.', longDescription: 'A 100-meter roll of flexible and durable PPR pipe, suitable for large-scale plumbing installations.', category: 'plumbing', rating: 4.8, reviews: 60, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'HDPE 100M PIPE PN6 50mm', price: 12000.00, images: ['/HDPE 100M PIPE.jpg'], description: '100m of 50mm HDPE pipe.', longDescription: 'High-density polyethylene pipe, 100 meters long and 50mm in diameter, suitable for high-pressure applications.', category: 'plumbing', rating: 4.9, reviews: 40, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'PVC Waste Pipes 6 Inches', price: 3500.00, images: ['/PVC Waste Pipes 6 In .jpg'], description: '6-inch PVC pipes for waste management.', longDescription: 'Durable 6-inch PVC pipes designed for waste and drainage systems. Resistant to chemicals and corrosion.', category: 'plumbing', rating: 4.6, reviews: 70, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Danco Hosepipe', price: 2000.00, images: ['/Danco Hosepipe.jpg'], description: 'A flexible and durable Danco hosepipe.', longDescription: 'A high-quality hosepipe from Danco, perfect for gardening and other outdoor uses. Kink-resistant and built to last.', category: 'plumbing', rating: 4.5, reviews: 85, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Pillar Water tap', price: 1500.00, images: ['/Pillar taps.jpg'], description: 'A classic pillar water tap.', longDescription: 'A classic and elegant pillar tap with a chrome finish. Easy to install and use, suitable for any bathroom or kitchen.', category: 'plumbing', rating: 4.7, reviews: 110, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Sensor taps with On Off touchpad', price: 8000.00, images: ['/Sensor taps with On Off touchpad.Jpg'], description: 'Modern sensor taps with a touchpad.', longDescription: 'A touchless sensor tap for improved hygiene. Features a convenient on/off touchpad for manual operation.', category: 'plumbing', rating: 4.9, reviews: 55, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Bathroom wall decor and accessory', price: 560.00, images: ['/Bathroom wall decor and accessory.jpg'], description: 'Stylish bathroom wall accessory.', longDescription: 'A stylish and functional accessory for your bathroom wall, perfect for holding towels or other items.', category: 'plumbing', rating: 4.4, reviews: 130, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'soap dish', price: 500.00, images: ['/soap dish.png'], description: 'A simple and elegant soap dish.', longDescription: 'A clean and minimalist soap dish that keeps your soap dry and your sink area tidy.', category: 'plumbing', rating: 4.5, reviews: 180, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'standing Sink', price: 5800.00, images: ['/standing Sink.png'], description: 'A modern freestanding sink.', longDescription: 'A stylish freestanding sink that makes a statement in any bathroom. Made from high-quality ceramic.', category: 'plumbing', rating: 4.7, reviews: 65, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Square sink', price: 6500.00, images: ['/Square sink.jpg'], description: 'A geometric square sink.', longDescription: 'A modern sink with a sharp, geometric design. Perfect for contemporary bathrooms.', category: 'plumbing', rating: 4.8, reviews: 75, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'grey sink', price: 4500.00, images: ['/grey sink.png'], description: 'A stylish sink in a grey finish.', longDescription: 'A chic and modern sink in a trendy grey finish. We also offer installation services for an additional fee.', category: 'plumbing', rating: 4.6, reviews: 90, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'square toilet', price: 29000.00, images: ['/square toilet.jpg'], description: 'A modern, geometric square toilet.', longDescription: 'This toilet features a bold, geometric square design for a distinctly modern bathroom. Includes a soft-close seat and efficient dual-flush system.', category: 'plumbing', rating: 4.9, reviews: 45, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'oval toilet', price: 29000.00, images: ['/oval toilet.jpg'], description: 'A classic and comfortable oval toilet.', longDescription: 'A classic oval toilet that combines timeless design with modern water-saving technology.', category: 'plumbing', rating: 4.8, reviews: 50, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'PinkOval Frencia toilet', price: 29000.00, images: ['/PinkOval Frencia toilet.jpg'], description: 'A unique pink oval frencia toilet.', longDescription: 'Add a splash of color and unique style to your bathroom with this pink oval frencia toilet.', category: 'plumbing', rating: 4.7, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'toilet designs', price: 2500.00, images: ['/toilet designs.jpg'], description: 'Decorative toilet seat designs.', longDescription: 'A variety of decorative toilet seat designs to add a personal touch to your bathroom.', category: 'plumbing', rating: 4.5, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Black round shower head', price: 7500.00, images: ['/Black round shower head.jpg'], description: 'A sleek black round shower head.', longDescription: 'A modern, oversized round shower head in a matte black finish for a luxurious shower experience.', category: 'plumbing', rating: 4.9, reviews: 88, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Black n-type WaterTap', price: 6500.00, images: ['/Black n-type tap.jpg'], description: 'An elegant black n-type water tap.', longDescription: 'An elegant water tap with a unique N-type design and a stylish matte black finish.', category: 'plumbing', rating: 4.8, reviews: 92, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Black elegant watertap', price: 2500.00, images: ['/Black elegant watertap.jpg'], description: 'A stylish and elegant black water tap.', longDescription: 'A sleek and minimalist water tap in matte black, perfect for modern kitchens and bathrooms.', category: 'plumbing', rating: 4.7, reviews: 115, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Double sink with tap', price: 11000.00, images: ['/Double sink with tap.jpg'], description: 'A practical double sink with a tap.', longDescription: 'A spacious and practical double sink for your kitchen, complete with a modern tap. Made from durable stainless steel.', category: 'plumbing', rating: 4.8, reviews: 105, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'PPR MALE ADAPTOR 50MM (half inch)', price: 280.00, images: ['/PPR MALE ADAPTOR 50MM (half inche).jpg'], description: 'A 50mm (half inch) PPR male adaptor.', longDescription: 'A high-quality 50mm (half inch) PPR male adaptor for connecting pipes to threaded fittings.', category: 'plumbing', rating: 5.0, reviews: 300, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
 ];
 
 
@@ -621,6 +561,29 @@ const transactions: Transaction[] = [
   { id: 'txn-5', customerName: 'Valued Customer', email: 'customer@example.com', amount: 30, date: '2024-07-18T14:20:00Z', status: 'Completed', productName: 'PPR Pipe Fittings' },
 ];
 
+
+/**
+ * Seeds the Firestore database with initial product data if the products collection is empty.
+ * This is a one-time operation.
+ */
+export async function seedProducts() {
+    const productsRef = collection(db, 'products');
+    const snapshot = await getDocs(productsRef);
+    if (snapshot.empty) {
+        console.log('No products found in Firestore. Seeding initial data...');
+        const batch = writeBatch(db);
+        allProductsData.forEach((productData) => {
+            const docRef = doc(collection(db, 'products')); // Auto-generates an ID
+            batch.set(docRef, productData);
+        });
+        await batch.commit();
+        console.log('Seeding complete.');
+    } else {
+        console.log('Products already exist in Firestore. Skipping seed.');
+    }
+}
+
+
 export async function getHomePageCategories(): Promise<HomePageCategory[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return homePageCategories;
@@ -631,19 +594,20 @@ export async function getCarouselCategories(): Promise<CarouselCategory[]> {
     return carouselCategories;
 }
 
-export async function getFeaturedProducts(): Promise<Product[]> {
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return allProductsData.filter(p => p.isFeatured);
-}
-
 export async function getProducts(): Promise<Product[]> {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return allProductsData;
+    const productsCollection = collection(db, "products");
+    const productsSnapshot = await getDocs(productsCollection);
+    const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return productList;
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-  await new Promise(resolve => setTimeout(resolve, 200));
-  return allProductsData.find(p => p.id === id);
+  const productDoc = doc(db, "products", id);
+  const productSnapshot = await getDoc(productDoc);
+  if (productSnapshot.exists()) {
+    return { id: productSnapshot.id, ...productSnapshot.data() } as Product;
+  }
+  return undefined;
 }
 
 export async function getCategories(): Promise<Category[]> {
@@ -652,18 +616,18 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getTankProducts(): Promise<Product[]> {
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return allProductsData.filter(p => p.category === 'tanks');
+  const allProducts = await getProducts();
+  return allProducts.filter(p => p.category === 'tanks');
 }
 
 export async function getDecorProducts(): Promise<Product[]> {
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return allProductsData.filter(p => p.category === 'decor');
+  const allProducts = await getProducts();
+  return allProducts.filter(p => p.category === 'decor');
 }
 
 export async function getPlumbingProducts(): Promise<Product[]> {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    return allProductsData.filter(p => p.category === 'plumbing');
+    const allProducts = await getProducts();
+    return allProducts.filter(p => p.category === 'plumbing');
 }
 
 export async function getUsers(): Promise<MockUser[]> {
@@ -691,8 +655,6 @@ export async function signUpUser(newUser: Omit<MockUser, 'id' | 'signedUp' | 'la
         orders: 0,
         visitDuration: 0,
     };
-    // In a real app, you'd save this to a database.
-    // For this mock, we'll just add it to the session's array.
     users.push(createdUser);
     return createdUser;
 }

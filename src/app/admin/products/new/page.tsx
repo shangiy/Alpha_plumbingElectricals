@@ -168,8 +168,8 @@ export default function AddProductPage() {
         }
     };
 
-    function onSubmit(data: ProductFormValues) {
-        addProduct(data);
+    async function onSubmit(data: ProductFormValues) {
+        await addProduct(data);
         toast({
             title: "Product Created!",
             description: `${data.name} has been added to the store.`,
@@ -401,7 +401,7 @@ export default function AddProductPage() {
                             <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
-                           <Button type="submit">Save Product</Button>
+                           <Button type="submit" disabled={form.formState.isSubmitting}>Save Product</Button>
                            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
                         </div>
                     </form>

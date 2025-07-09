@@ -181,9 +181,9 @@ export default function EditProductPage() {
         }
     };
 
-    function onSubmit(data: ProductFormValues) {
+    async function onSubmit(data: ProductFormValues) {
         if (!productId) return;
-        updateProduct(productId, data);
+        await updateProduct(productId, data);
         toast({
             title: "Product Updated!",
             description: `${data.name} has been updated.`,
