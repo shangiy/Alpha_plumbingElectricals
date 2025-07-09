@@ -95,7 +95,12 @@ export default function AddProductPage() {
         setIsGenerating(true);
         try {
             const images = form.getValues("images");
-            const firstImage = images && images.length > 0 ? images[0] : undefined;
+            let firstImage: string | undefined = images && images.length > 0 ? images[0] : undefined;
+            
+            // Ensure we only send a data URI to the AI flow
+            if (firstImage && !firstImage.startsWith('data:image')) {
+                firstImage = undefined;
+            }
 
             const result = await generateProductDescription({ 
                 productTitle: productName,
