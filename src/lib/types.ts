@@ -45,3 +45,13 @@ export interface MockUser {
   orders: number;
   visitDuration: number; // in minutes
 }
+
+export interface Transaction {
+  id: string;
+  customerName: string;
+  email: string;
+  amount: number;
+  date: string;
+  status: 'Completed' | 'Pending' | 'Failed';
+  productName: string;
+}

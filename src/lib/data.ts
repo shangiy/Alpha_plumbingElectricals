@@ -1,4 +1,4 @@
-import type { Product, Category, HomePageCategory, CarouselCategory, MockUser } from './types';
+import type { Product, Category, HomePageCategory, CarouselCategory, MockUser, Transaction } from './types';
 
 const homePageCategories: HomePageCategory[] = [
     { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
@@ -609,6 +609,14 @@ const users: MockUser[] = [
     { id: 'user-4', name: 'John Smith', email: 'john.smith@example.com', password: 'password123', role: 'user', signedUp: '2024-05-12T11:00:00Z', lastSeen: '2024-07-19T08:05:00Z', orders: 0, visitDuration: 5 },
 ];
 
+const transactions: Transaction[] = [
+  { id: 'txn-1', customerName: 'Valued Customer', email: 'customer@example.com', amount: 9500, date: '2024-07-20T11:00:00Z', status: 'Completed', productName: 'Oval Toilet & Ample Light' },
+  { id: 'txn-2', customerName: 'Jane Doe', email: 'jane.doe@example.com', amount: 12000, date: '2024-07-19T15:30:00Z', status: 'Completed', productName: 'Solar Heater' },
+  { id: 'txn-3', customerName: 'John Smith', email: 'john.smith@example.com', amount: 3300, date: '2024-07-21T09:05:00Z', status: 'Pending', productName: 'Artistic Lights' },
+  { id: 'txn-4', customerName: 'New Shopper', email: 'shopper@example.com', amount: 7500, date: '2024-07-21T10:45:00Z', status: 'Failed', productName: 'Kentank 2000L' },
+  { id: 'txn-5', customerName: 'Valued Customer', email: 'customer@example.com', amount: 30, date: '2024-07-18T14:20:00Z', status: 'Completed', productName: 'PPR Pipe Fittings' },
+];
+
 export async function getHomePageCategories(): Promise<HomePageCategory[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return homePageCategories;
@@ -664,4 +672,9 @@ export async function getUserByEmail(email: string): Promise<MockUser | undefine
     // In a real app, you would query your database.
     // For now, we'll check our mock user list.
     return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+}
+
+export async function getTransactions(): Promise<Transaction[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return transactions;
 }
