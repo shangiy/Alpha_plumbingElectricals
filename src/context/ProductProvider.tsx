@@ -1,7 +1,7 @@
 
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Product } from '@/lib/types';
 import { getProducts as fetchProducts } from '@/lib/data';
 
@@ -42,6 +42,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     async function loadProducts() {
+      setLoading(true);
       const fetchedProducts = await fetchProducts();
       setProducts(fetchedProducts);
       setLoading(false);
@@ -49,34 +50,36 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     loadProducts();
   }, []);
 
-  const addProduct = (productData: ProductFormData) => {
+  const addProduct = useCallback((productData: ProductFormData) => {
     const newProduct: Product = {
       ...productData,
       id: generateId(),
-      rating: 0,
-      reviews: 0,
+      rating: Math.floor(Math.random() * 2) + 3.5, // 3.5 to 4.5
+      reviews: Math.floor(Math.random() * 100),
       seller: { name: 'Alpha Electricals', id: 'seller-alpha' },
       longDescription: productData.description,
       isFeatured: productData.isFeatured || false,
     };
     setProducts(prevProducts => [newProduct, ...prevProducts]);
-  };
+  }, []);
 
-  const updateProduct = (productId: string, productData: ProductFormData) => {
+  const updateProduct = useCallback((productId: string, productData: ProductFormData) => {
     setProducts(prevProducts =>
       prevProducts.map(p =>
-        p.id === productId ? { 
+        p.id === productId 
+        ? { 
             ...p,
             ...productData,
-            longDescription: productData.description,
-        } : p
+            longDescription: productData.description, // ensure long description is also updated
+          } 
+        : p
       )
     );
-  };
+  }, []);
 
-  const getProductById = (productId: string): Product | undefined => {
+  const getProductById = useCallback((productId: string): Product | undefined => {
       return products.find(p => p.id === productId);
-  }
+  }, [products]);
 
   const value = {
     products,

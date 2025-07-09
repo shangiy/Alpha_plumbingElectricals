@@ -10,11 +10,12 @@ import CategoryCarousel from '@/components/common/CategoryCarousel';
 import ConnectWithUs from '@/components/common/ConnectWithUs';
 import ImpactSection from '@/components/common/ImpactSection';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useMemo } from 'react';
 
 export default function Home() {
   const { products, loading } = useProducts();
   
-  const featuredProducts = products.filter(p => p.isFeatured);
+  const featuredProducts = useMemo(() => products.filter(p => p.isFeatured), [products]);
 
   const ProductListSkeleton = () => (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, notFound, useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getCategories } from '@/lib/data';
 import type { Product, Category } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -70,7 +70,8 @@ export default function EditProductPage() {
     });
 
      useEffect(() => {
-        if (!productId) return;
+        if (!productId || productsLoading) return;
+        
         async function loadData() {
             const fetchedProduct = getProductById(productId);
 
@@ -88,12 +89,12 @@ export default function EditProductPage() {
                     colors: fetchedProduct.colors || [],
                     isFeatured: fetchedProduct.isFeatured || false,
                 });
-            } else if (!productsLoading) {
-                setProduct(undefined);
+            } else {
+                setProduct(undefined); // Not found
             }
         }
         loadData();
-    }, [productId, form, getProductById, productsLoading]);
+    }, [productId, getProductById, productsLoading, form]);
 
     const handleGenerateDescription = async () => {
         const productName = form.getValues("name");
@@ -111,7 +112,6 @@ export default function EditProductPage() {
             const images = form.getValues("images");
             let firstImage: string | undefined = images && images.length > 0 ? images[0] : undefined;
 
-            // Ensure we only send a data URI to the AI flow
             if (firstImage && !firstImage.startsWith('data:image')) {
                 firstImage = undefined;
             }
@@ -153,7 +153,7 @@ export default function EditProductPage() {
             reader.onloadend = () => {
                 const dataUrl = reader.result as string;
                 const latestImages = form.getValues('images');
-                const emptyIndex = latestImages.findIndex(img => img === '');
+                const emptyIndex = latestImages.findIndex(img => !img || img === '');
                 if (emptyIndex !== -1) {
                     form.setValue(`images.${emptyIndex}`, dataUrl, { shouldValidate: true });
                 } else if (latestImages.length < 7) {
@@ -191,7 +191,7 @@ export default function EditProductPage() {
         router.push('/admin/products');
     }
 
-    if (product === null) {
+    if (productsLoading || product === null) {
         return (
              <Card className="max-w-3xl mx-auto">
                 <CardHeader>
