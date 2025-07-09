@@ -28,6 +28,7 @@ import Image from 'next/image';
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { useProducts } from '@/context/ProductProvider';
 
 const productFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -35,7 +36,7 @@ const productFormSchema = z.object({
   price: z.coerce.number().min(0, 'Price must be a positive number.'),
   category: z.string({ required_error: "Please select a category."}).min(1, 'Category is required.'),
   barcode: z.string().optional(),
-  images: z.array(z.string().min(1, { message: "Image URL or data cannot be empty." })).min(1, "At least one image is required."),
+  images: z.array(z.string().min(1, { message: "Image URL or data cannot be empty." })).min(1, "At least one image is required.").max(7, "You can upload a maximum of 7 images."),
   colors: z.array(z.string()).optional(),
 });
 
@@ -49,6 +50,7 @@ export default function AddProductPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const { addProduct } = useProducts();
 
     useEffect(() => {
         async function loadCategories() {
@@ -114,48 +116,52 @@ export default function AddProductPage() {
         }
     };
 
-    const handleFile = (file: File) => {
-        if (file && file.type.startsWith('image/')) {
+    const handleFiles = (files: FileList) => {
+        const filesToProcess = Array.from(files).filter(f => f.type.startsWith('image/'));
+        if (filesToProcess.length === 0) return;
+
+        const currentImages = form.getValues('images').filter(img => img && img.trim() !== '');
+
+        if (currentImages.length + filesToProcess.length > 7) {
+            toast({ variant: "destructive", title: "Too Many Images", description: "You can upload a maximum of 7 images.", });
+            return;
+        }
+
+        filesToProcess.forEach(file => {
             const reader = new FileReader();
             reader.onloadend = () => {
-                const base64String = reader.result as string;
-                const images = form.getValues('images');
-                if (images.length === 1 && images[0] === '') {
-                    form.setValue('images.0', base64String, { shouldValidate: true });
-                } else {
-                    append(base64String);
+                const dataUrl = reader.result as string;
+                const latestImages = form.getValues('images');
+                const emptyIndex = latestImages.findIndex(img => img === '');
+                if (emptyIndex !== -1) {
+                    form.setValue(`images.${emptyIndex}`, dataUrl, { shouldValidate: true });
+                } else if (latestImages.length < 7) {
+                    append(dataUrl);
                 }
             };
             reader.readAsDataURL(file);
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Invalid File Type",
-                description: "Please drop or paste an image file.",
-            });
-        }
+        });
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            handleFile(e.dataTransfer.files[0]);
+        if (e.dataTransfer.files) {
+            handleFiles(e.dataTransfer.files);
             e.dataTransfer.clearData();
         }
     };
     
     const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-        if (e.clipboardData.files && e.clipboardData.files.length > 0) {
+        if (e.clipboardData.files) {
             e.preventDefault();
-            handleFile(e.clipboardData.files[0]);
+            handleFiles(e.clipboardData.files);
         }
     };
 
     function onSubmit(data: ProductFormValues) {
-        // In a real app, you would send this data to your API to create a new product.
-        console.log(data);
+        addProduct(data);
         toast({
             title: "Product Created!",
             description: `${data.name} has been added to the store.`,
@@ -309,7 +315,7 @@ export default function AddProductPage() {
                                 <CardContent className={cn("p-4 relative", isDragging && "border-2 border-dashed border-primary bg-primary/10")}>
                                     {isDragging && (
                                         <div className="absolute inset-0 flex items-center justify-center text-primary font-semibold z-10">
-                                            <Upload className="mr-2 h-5 w-5" /> Drop image here
+                                            <Upload className="mr-2 h-5 w-5" /> Drop image(s) here
                                         </div>
                                     )}
                                     <div className={cn("space-y-4", isDragging && "opacity-50")}>
@@ -347,22 +353,24 @@ export default function AddProductPage() {
                                             </div>
                                         ))}
                                     </div>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        className="mt-4"
-                                        onClick={() => append("")}
-                                    >
-                                        <PlusCircle className="mr-2 h-4 w-4" />
-                                        Add Image URL
-                                    </Button>
+                                    {fields.length < 7 && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-4"
+                                            onClick={() => append("")}
+                                        >
+                                            <PlusCircle className="mr-2 h-4 w-4" />
+                                            Add Image URL
+                                        </Button>
+                                    )}
                                 </CardContent>
                             </Card>
                             <FormDescription>
-                               Add URLs for your product images, or drag and drop/paste an image file into the box. The first image will be the main one.
+                               Add URLs for your product images, or drag and drop/paste an image file into the box. The first image will be the main one. Max 7 images.
                             </FormDescription>
-                            <FormMessage className="text-destructive">{form.formState.errors.images?.message}</FormMessage>
+                            <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
                            <Button type="submit">Save Product</Button>

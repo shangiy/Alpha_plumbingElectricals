@@ -1,7 +1,6 @@
 
 'use client';
 
-import { getProducts } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import {
   Table,
@@ -25,23 +24,13 @@ import {
     DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu"
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthProvider';
+import { useProducts } from '@/context/ProductProvider';
 
 
 export default function AdminProductsPage() {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { products, loading } = useProducts();
     const { user } = useAuth();
-
-    useEffect(() => {
-        async function loadProducts() {
-            const fetchedProducts = await getProducts();
-            setProducts(fetchedProducts);
-            setLoading(false);
-        }
-        loadProducts();
-    }, []);
     
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('en-KE', {
