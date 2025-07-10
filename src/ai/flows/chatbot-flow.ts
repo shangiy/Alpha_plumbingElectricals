@@ -9,7 +9,7 @@
  */
 
 import {z} from 'zod';
-import {ai} from '@/ai/genkit';
+import {ai, productSearchTool} from '@/ai/genkit';
 
 const ChatbotInputSchema = z.string().describe("The user's message to the chatbot.");
 export type ChatbotInput = z.infer<typeof ChatbotInputSchema>;
@@ -25,6 +25,8 @@ const chatbotPrompt = ai.definePrompt({
     name: 'chatbotPrompt',
     input: { schema: ChatbotInputSchema },
     output: { schema: ChatbotOutputSchema },
+    // 3. Make the tool available to this specific prompt.
+    tools: [productSearchTool],
     system: `You are a helpful and friendly e-commerce assistant for a store called "Alpha Electricals & Plumbing Ltd".
     Your goal is to answer user questions accurately and concisely.
     - If the user asks about products, use the productSearchTool to find relevant items in the catalog.
