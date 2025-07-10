@@ -82,7 +82,6 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Square sink', price: 6500, images: ['/Square sink.jpg'], description: 'A geometric square sink.', longDescription: 'A modern sink with a sharp, geometric design. Perfect for contemporary bathrooms.', category: 'plumbing', rating: 4.8, reviews: 75, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'grey sink', price: 4500, images: ['/grey sink.png'], description: 'A stylish sink in a grey finish.', longDescription: 'A chic and modern sink in a trendy grey finish. We also offer installation services for an additional fee.', category: 'plumbing', rating: 4.6, reviews: 90, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'square toilet', price: 29000, images: ['/square toilet.jpg'], description: 'A modern, geometric square toilet.', longDescription: 'This toilet features a bold, geometric square design for a distinctly modern bathroom. Includes a soft-close seat and efficient dual-flush system.', category: 'plumbing', rating: 4.9, reviews: 45, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'oval toilet', price: 7500, images: ['/oval toilet.jpg'], description: 'A classic and comfortable oval toilet.', longDescription: 'A classic oval toilet that combines timeless design with modern water-saving technology.', category: 'plumbing', rating: 4.8, reviews: 50, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'PinkOval Frencia toilet', price: 29000, images: ['/PinkOval Frencia toilet.jpg'], description: 'A unique pink oval frencia toilet.', longDescription: 'Add a splash of color and unique style to your bathroom with this pink oval frencia toilet.', category: 'plumbing', rating: 4.7, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'toilet designs', price: 2500, images: ['/toilet designs.jpg'], description: 'Decorative toilet seat designs.', longDescription: 'A variety of decorative toilet seat designs to add a personal touch to your bathroom.', category: 'plumbing', rating: 4.5, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Black round shower head', price: 7500, images: ['/Black round shower head.jpg'], description: 'A sleek black round shower head.', longDescription: 'A modern, oversized round shower head in a matte black finish for a luxurious shower experience.', category: 'plumbing', rating: 4.9, reviews: 88, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
@@ -90,6 +89,12 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Black elegant watertap', price: 2500, images: ['/Black elegant watertap.jpg'], description: 'A stylish and elegant black water tap.', longDescription: 'A sleek and minimalist water tap in matte black, perfect for modern kitchens and bathrooms.', category: 'plumbing', rating: 4.7, reviews: 115, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Double sink with tap', price: 11000, images: ['/Double sink with tap.jpg'], description: 'A practical double sink with a tap.', longDescription: 'A spacious and practical double sink for your kitchen, complete with a modern tap. Made from durable stainless steel.', category: 'plumbing', rating: 4.8, reviews: 105, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'PPR MALE ADAPTOR 50MM (half inch)', price: 280, images: ['/PPR MALE ADAPTOR 50MM (half inche).jpg'], description: 'A 50mm (half inch) PPR male adaptor.', longDescription: 'A high-quality 50mm (half inch) PPR male adaptor for connecting pipes to threaded fittings.', category: 'plumbing', rating: 5, reviews: 300, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  // Roofing Products
+  { name: 'Ironsheet Mabati', price: 1200, images: ['/Ironsheet mabati.png'], description: 'Durable ironsheet mabati for roofing.', longDescription: 'High-quality, galvanized ironsheet mabati designed to withstand harsh weather conditions. Available per meter.', category: 'roofing', rating: 4.8, reviews: 150, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Roofing Nails', price: 300, images: ['/Roofing Nails.png'], description: 'Pack of galvanized roofing nails.', longDescription: 'A pack of high-quality, galvanized roofing nails with a waterproof seal to ensure a secure and long-lasting roof.', category: 'roofing', rating: 4.9, reviews: 250, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Roof Ridges', price: 800, images: ['/Roof ridges.png'], description: 'Protective ridges for roofing.', longDescription: 'Protective roof ridges to cover the apex of the roof, preventing water leakage and providing a finished look.', category: 'roofing', rating: 4.7, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'MDF & Chipboard', price: 5400, images: ['/MDF & chipboard.png'], description: 'Versatile MDF and chipboard sheets.', longDescription: 'High-quality MDF and chipboard sheets suitable for a variety of construction and furniture-making applications.', category: 'roofing', rating: 4.6, reviews: 95, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Welding Rods', price: 2500, images: ['/welding rods.png'], description: 'A bundle of all-purpose welding rods.', longDescription: 'A bundle of high-quality, all-purpose welding rods designed for strong and reliable welds in various construction projects.', category: 'roofing', rating: 4.8, reviews: 180, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
 ];
 
 
@@ -218,6 +223,11 @@ export async function getDecorProducts(): Promise<Product[]> {
 export async function getPlumbingProducts(): Promise<Product[]> {
     return getProductsByCategory('plumbing');
 }
+
+export async function getRoofingProducts(): Promise<Product[]> {
+    return getProductsByCategory('roofing');
+}
+
 
 export async function getUsers(): Promise<MockUser[]> {
     await new Promise(resolve => setTimeout(resolve, 300));

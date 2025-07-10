@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -37,7 +38,7 @@ const productCategories = [
     icon: '/decor lighting design.png',
   },
   { name: 'Home & Décor', href: '/decor', icon: '/square lights.png' },
-  { name: 'Roofing & Construction', href: '#', icon: '/roof 2.png' },
+  { name: 'Roofing & Construction', href: '/roofing', icon: '/roof 2.png' },
 ];
 
 export default function Header() {
