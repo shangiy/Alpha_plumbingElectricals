@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input';
 
 export default function Footer() {
   const socialLinks = [
-    { name: 'Facebook', href: '#' },
-    { name: 'Twitter', href: '#' },
+    { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing' },
+    { name: 'Twitter', href: 'https://www.x.com/@patrickshangst1' },
     { name: 'Instagram', href: '#' },
     { name: 'LinkedIn', href: '#' },
   ];
@@ -32,7 +32,7 @@ export default function Footer() {
     {
       title: 'Legal',
       links: [
-        { name: 'Terms of Service', href: '#' },
+        { name: 'Terms of Service', href: '/terms' },
         { name: 'Privacy Policy', href: '#' },
         { name: 'Cookie Policy', href: '#' },
       ],
