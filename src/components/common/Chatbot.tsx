@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -9,14 +10,19 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { chat } from '@/ai/flows/chatbot-flow';
+import type { ChatInput } from '@/ai/flows/chatbot-types';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
 
-export default function Chatbot() {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatbotProps {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+}
+
+export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,7 +41,6 @@ export default function Chatbot() {
   }, [isOpen]);
 
   useEffect(() => {
-    // Auto-scroll to the bottom when new messages are added
     if (scrollAreaRef.current) {
         const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
         if (viewport) {
@@ -50,11 +55,13 @@ export default function Chatbot() {
 
     const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
+    
+    const chatInput: ChatInput = { message: input };
     setInput('');
     setLoading(true);
 
     try {
-      const response = await chat({ message: input });
+      const response = await chat(chatInput);
       const assistantMessage: Message = { role: 'assistant', content: response.response };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
@@ -70,10 +77,9 @@ export default function Chatbot() {
   };
 
   return (
-    <>
       <div
         className={cn(
-          'fixed bottom-[calc(4rem+1.5rem)] right-6 z-50 w-80 rounded-lg shadow-xl transition-all duration-300 ease-in-out sm:w-96',
+          'fixed bottom-[calc(4rem+1.5rem)] right-6 z-40 w-80 rounded-lg shadow-xl transition-all duration-300 ease-in-out sm:w-96',
           isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         )}
       >
@@ -155,17 +161,5 @@ export default function Chatbot() {
           </form>
         </Card>
       </div>
-
-      <div className="fixed bottom-6 right-[calc(4rem+1.5rem)] z-50">
-        <Button
-          size="icon"
-          className="bg-[#0b748a] hover:bg-[#0b748a]/90 rounded-full h-14 w-14 shadow-lg flex items-center justify-center"
-          aria-label="Open AI Chat"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X className="h-7 w-7" /> : <Bot className="h-7 w-7" />}
-        </Button>
-      </div>
-    </>
   );
 }

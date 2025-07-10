@@ -1,3 +1,6 @@
+
+'use client';
+
 import type { Metadata } from 'next';
 import { Poppins, PT_Sans } from 'next/font/google';
 import './globals.css';
@@ -11,11 +14,9 @@ import WhatsAppButton from '@/components/common/WhatsAppButton';
 import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 import { ProductProvider } from '@/context/ProductProvider';
 import Chatbot from '@/components/common/Chatbot';
-
-export const metadata: Metadata = {
-  title: 'Alpha Electricals & Plumbing Ltd',
-  description: 'Your partner for electrical and plumbing supplies.',
-};
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Bot, X } from 'lucide-react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -36,6 +37,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -53,9 +56,17 @@ export default function RootLayout({
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>
-              <Chatbot />
+              <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
               <WhatsAppButton />
               <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
+                 <Button
+                    size="icon"
+                    className="bg-[#0b748a] hover:bg-[#0b748a]/90 rounded-full h-14 w-14 shadow-lg flex items-center justify-center"
+                    aria-label="Open AI Chat"
+                    onClick={() => setIsChatbotOpen(!isChatbotOpen)}
+                  >
+                    {isChatbotOpen ? <X className="h-7 w-7" /> : <Bot className="h-7 w-7" />}
+                  </Button>
                 <ScrollToTopButton />
               </div>
               <Toaster />
