@@ -184,6 +184,7 @@ export default function EditProductPage() {
 
     async function onSubmit(data: ProductFormValues) {
         if (!productId) return;
+        
         try {
             await updateProduct(productId, data);
             toast({
@@ -458,3 +459,5 @@ export default function EditProductPage() {
         </Card>
     );
 }
+
+    
