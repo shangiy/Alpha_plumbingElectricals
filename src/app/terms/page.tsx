@@ -120,7 +120,8 @@ export default function TermsPage() {
                 <strong>Alpha Electricals & Plumbing Ltd</strong><br />
                 Email: <a href="mailto:Aplhaltd@gmail.com" className="text-primary hover:underline">Aplhaltd@gmail.com</a><br />
                 Phone: <a href="tel:+254117484887" className="text-primary hover:underline">0117 484887</a><br />
-                Address: Nandi Arcade, Eldoret, Kenya
+                Address 1: Nandi Arcade, Eldoret, Kenya<br />
+                Address 2: Kisumu Ndogo (Opp. Naivas), Elgon View Mall, Eldoret City
               </address>
             </div>
           </CardContent>
