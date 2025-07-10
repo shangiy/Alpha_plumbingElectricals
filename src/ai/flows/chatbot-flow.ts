@@ -23,8 +23,6 @@ export async function chatbot(input: ChatbotInput): Promise<ChatbotOutput> {
 
 const chatbotPrompt = ai.definePrompt({
     name: 'chatbotPrompt',
-    input: { schema: ChatbotInputSchema },
-    output: { schema: ChatbotOutputSchema },
     // 3. Make the tool available to this specific prompt.
     tools: [productSearchTool],
     system: `You are a helpful and friendly e-commerce assistant for a store called "Alpha Electricals & Plumbing Ltd".
