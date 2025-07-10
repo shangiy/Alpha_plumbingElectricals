@@ -10,6 +10,7 @@
 
 import {z} from 'zod';
 import {ai} from '@/ai/genkit';
+import { productSearchTool } from '@/ai/tools/product-catalog';
 
 const ChatbotInputSchema = z.string().describe("The user's message to the chatbot.");
 export type ChatbotInput = z.infer<typeof ChatbotInputSchema>;
@@ -21,6 +22,22 @@ export async function chatbot(input: ChatbotInput): Promise<ChatbotOutput> {
   return chatbotFlow(input);
 }
 
+const chatbotPrompt = ai.definePrompt({
+    name: 'chatbotPrompt',
+    input: { schema: ChatbotInputSchema },
+    output: { schema: ChatbotOutputSchema },
+    tools: [productSearchTool],
+    system: `You are a helpful and friendly e-commerce assistant for a store called "Alpha Electricals & Plumbing Ltd".
+    Your goal is to answer user questions accurately and concisely.
+    - If the user asks about products, use the productSearchTool to find relevant items in the catalog.
+    - When presenting product information, list the product name and its price.
+    - If no relevant products are found, say that you couldn't find any products matching their query.
+    - For questions about the company, our services, or anything not related to products, answer based on your general knowledge.
+    - Keep your responses brief and to the point.
+    `,
+});
+
+
 const chatbotFlow = ai.defineFlow(
   {
     name: 'chatbotFlow',
@@ -28,40 +45,15 @@ const chatbotFlow = ai.defineFlow(
     outputSchema: ChatbotOutputSchema,
   },
   async (message) => {
-    const chatbotApiUrl = process.env.REPLIT_CHATBOT_URL;
-
-    if (!chatbotApiUrl) {
-      console.error('REPLIT_CHATBOT_URL is not defined in the environment variables.');
-      return "I'm sorry, but I'm not configured correctly at the moment. Please contact support.";
-    }
-
     try {
-      const response = await fetch(chatbotApiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: message }),
-      });
-
-      if (!response.ok) {
-        console.error('Chatbot API returned an error:', response.status, await response.text());
-        return "I'm sorry, I'm having trouble connecting to my brain. Please try again later.";
-      }
-
-      const data = await response.json();
-      
-      // Assuming the Replit API returns a JSON object with a 'response' key
-      if (data && data.response) {
-        return data.response;
-      } else {
-        console.error('Unexpected response format from chatbot API:', data);
-        return "I received a response I didn't understand. Could you try rephrasing?";
-      }
-
+        const { output } = await chatbotPrompt(message);
+        if (output) {
+            return output;
+        }
+        return "I'm sorry, I don't have an answer for that right now. Is there anything else I can help with?";
     } catch (error) {
-      console.error('Error calling the chatbot API:', error);
-      return "I'm sorry, an unexpected error occurred while I was thinking. Could you please try again?";
+        console.error('Error in chatbotFlow:', error);
+        return "I'm sorry, an unexpected error occurred while I was thinking. Could you please try again?";
     }
   }
 );
