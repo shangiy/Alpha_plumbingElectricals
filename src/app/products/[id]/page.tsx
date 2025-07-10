@@ -1,3 +1,4 @@
+
 import { getProductById } from '@/lib/data';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -9,7 +10,9 @@ import { ShieldCheck } from 'lucide-react';
 import AddToCartButton from '@/components/products/AddToCartButton';
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = await getProductById(params.id);
+  // Directly access the id from params as recommended for Server Components
+  const productId = params.id;
+  const product = await getProductById(productId);
 
   if (!product) {
     notFound();
