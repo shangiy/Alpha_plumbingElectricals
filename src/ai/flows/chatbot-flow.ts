@@ -8,67 +8,18 @@
  * - ChatbotOutput - The return type for the chatbot function.
  */
 
-import {ai} from '@/ai/genkit';
 import {z} from 'zod';
+import {ai} from '@/ai/genkit';
 
-const ChatbotInputSchema = z.string().describe('The user\'s message to the chatbot.');
+const ChatbotInputSchema = z.string().describe("The user's message to the chatbot.");
 export type ChatbotInput = z.infer<typeof ChatbotInputSchema>;
 
-const ChatbotOutputSchema = z.string().describe('The chatbot\'s response.');
+const ChatbotOutputSchema = z.string().describe("The chatbot's response.");
 export type ChatbotOutput = z.infer<typeof ChatbotOutputSchema>;
 
 export async function chatbot(input: ChatbotInput): Promise<ChatbotOutput> {
   return chatbotFlow(input);
 }
-
-const prompt = ai.definePrompt({
-  name: 'chatbotPrompt',
-  input: {schema: ChatbotInputSchema},
-  output: {schema: ChatbotOutputSchema},
-  prompt: `You are Alpha AI, a friendly and helpful assistant for the Alpha Electricals & Plumbing Ltd e-commerce website.
-
-Your primary goal is to assist users with their questions about products, categories, and the company. You are also able to answer general knowledge questions and perform simple mathematical calculations. For example, if a user asks "what is 2+2?", you should respond with "The answer is 4."
-
-You have knowledge of the following product categories:
-- Tanks (water tanks, septic tanks)
-- Plumbing Equipment (pipes, fittings, taps, toilets, sinks, shower heads)
-- Lighting & Electrical (chandeliers, wall lights, LED lights, cables)
-- Home & Decor (decorative lights, mirrors, bathroom accessories)
-- Roofing & Construction
-
-Key Information about the company:
-- Name: Alpha Electricals & Plumbing Ltd
-- Services: Sells a wide range of electrical and plumbing supplies, offers delivery services.
-- Contact: Can be reached via the contact page, phone, or WhatsApp.
-- Locations: Two branches in Eldoret - Nandi Arcade and Kisumu Ndogo.
-
-IMPORTANT: You are a public-facing assistant and CANNOT access any private user data. You do not know what is in a user's cart, their order history, or their personal account details. If a user asks about any of this private information, you MUST politely explain that you cannot access personal data for privacy reasons. Then, suggest they check their account page or contact customer support for assistance with personal information.
-
-Keep your answers concise and friendly.
-
-User's message: {{{prompt}}}
-`,
-  config: {
-    safetySettings: [
-      {
-        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_HATE_SPEECH',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_HARASSMENT',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-        threshold: 'BLOCK_NONE',
-      },
-    ],
-  },
-});
 
 const chatbotFlow = ai.defineFlow(
   {
@@ -76,20 +27,40 @@ const chatbotFlow = ai.defineFlow(
     inputSchema: ChatbotInputSchema,
     outputSchema: ChatbotOutputSchema,
   },
-  async (input) => {
+  async (message) => {
+    const chatbotApiUrl = process.env.REPLIT_CHATBOT_URL;
+
+    if (!chatbotApiUrl) {
+      console.error('REPLIT_CHATBOT_URL is not defined in the environment variables.');
+      return "I'm sorry, but I'm not configured correctly at the moment. Please contact support.";
+    }
+
     try {
-      const {output} = await prompt(input);
-      if (!output) {
-        return "I'm sorry, I was unable to generate a response. Please try rephrasing your question.";
+      const response = await fetch(chatbotApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message }),
+      });
+
+      if (!response.ok) {
+        console.error('Chatbot API returned an error:', response.status, await response.text());
+        return "I'm sorry, I'm having trouble connecting to my brain. Please try again later.";
       }
-      return output;
-    } catch (e: any) {
-      console.error('Error in chatbotFlow:', e);
-      // Check for specific error types, like safety blocks.
-      if (e.finishReason === 'blocked' || e.message?.includes('blocked by safety policy')) {
-        return "I'm sorry, but I can't respond to that. The topic may be sensitive. Please try another question.";
+
+      const data = await response.json();
+      
+      // Assuming the Replit API returns a JSON object with a 'response' key
+      if (data && data.response) {
+        return data.response;
+      } else {
+        console.error('Unexpected response format from chatbot API:', data);
+        return "I received a response I didn't understand. Could you try rephrasing?";
       }
-      // For other errors, return a more informative generic message from the backend.
+
+    } catch (error) {
+      console.error('Error calling the chatbot API:', error);
       return "I'm sorry, an unexpected error occurred while I was thinking. Could you please try again?";
     }
   }
