@@ -9,7 +9,6 @@ import { CartProvider } from '@/context/CartProvider';
 import { AuthProvider } from '@/context/AuthProvider';
 import WhatsAppButton from '@/components/common/WhatsAppButton';
 import ScrollToTopButton from '@/components/common/ScrollToTopButton';
-import Chatbot from '@/components/common/Chatbot';
 import { ProductProvider } from '@/context/ProductProvider';
 
 export const metadata: Metadata = {
@@ -55,7 +54,6 @@ export default function RootLayout({
               </div>
               <WhatsAppButton />
               <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
-                <Chatbot />
                 <ScrollToTopButton />
               </div>
               <Toaster />
