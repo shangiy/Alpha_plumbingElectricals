@@ -52,13 +52,13 @@ export default function EditProductPage() {
     const { toast } = useToast();
     const router = useRouter();
     const params = useParams();
-    const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+    const productId = params.id as string;
 
     const [product, setProduct] = useState<Product | null | undefined>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const { getProductById, updateProduct, loading: productsLoading } = useProducts();
+    const { getProductById, updateProduct, loading: productsLoading, submitting } = useProducts();
     
     const form = useForm<ProductFormValues>({
         resolver: zodResolver(productFormSchema),
@@ -447,8 +447,8 @@ export default function EditProductPage() {
                              <FormMessage className="text-destructive">{form.formState.errors.images?.root?.message || form.formState.errors.images?.message}</FormMessage>
                         </FormItem>
                         <div className="flex gap-2">
-                           <Button type="submit" disabled={form.formState.isSubmitting}>
-                                {form.formState.isSubmitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                           <Button type="submit" disabled={submitting}>
+                                {submitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
                                 Save Changes
                             </Button>
                            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
@@ -459,5 +459,3 @@ export default function EditProductPage() {
         </Card>
     );
 }
-
-    

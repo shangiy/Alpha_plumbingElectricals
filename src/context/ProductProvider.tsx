@@ -5,7 +5,7 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback 
 import type { Product } from '@/lib/types';
 import { seedProducts } from '@/lib/data';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, onSnapshot, getDocs } from 'firebase/firestore';
 
 
 export interface ProductFormData {
@@ -22,6 +22,7 @@ export interface ProductFormData {
 interface ProductContextType {
   products: Product[];
   loading: boolean;
+  submitting: boolean;
   addProduct: (productData: ProductFormData) => Promise<void>;
   updateProduct: (productId: string, productData: Partial<ProductFormData>) => Promise<void>;
   getProductById: (productId: string) => Product | undefined;
@@ -40,26 +41,51 @@ export function useProducts() {
 export function ProductProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // Seed the database on first load if it's empty
-    seedProducts();
-
+    
     const productsCollection = collection(db, "products");
-    const unsubscribe = onSnapshot(productsCollection, (snapshot) => {
-        const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-        setProducts(productList);
-        setLoading(false);
-    }, (error) => {
-        console.error("Error fetching products from Firestore: ", error);
-        setLoading(false);
-    });
+    
+    const unsubscribe = onSnapshot(productsCollection, 
+        (snapshot) => {
+            const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+            setProducts(productList);
+            if(loading) setLoading(false);
+        }, 
+        (error) => {
+            console.error("Error fetching products from Firestore: ", error);
+            setLoading(false);
+        }
+    );
+
+    // Initial check for seeding
+    const checkAndSeed = async () => {
+        try {
+            const snapshot = await getDocs(productsCollection);
+            if (snapshot.empty) {
+                console.log('No products found in Firestore. Seeding initial data...');
+                await seedProducts();
+                 // The onSnapshot listener will pick up the changes, no need to set state here.
+            } else {
+                 // Data already exists, onSnapshot has already set it.
+                 // We can turn off loading here if not already off.
+                 setLoading(false);
+            }
+        } catch (error) {
+            console.error("Error checking or seeding products:", error);
+            setLoading(false);
+        }
+    };
+    
+    checkAndSeed();
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [loading]);
 
   const addProduct = useCallback(async (productData: ProductFormData) => {
+    setSubmitting(true);
     try {
         const newProductDocument: Omit<Product, 'id'> = {
             ...productData,
@@ -73,11 +99,14 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         // Real-time listener will update the state, no need to manually setProducts
     } catch (error) {
         console.error("Error adding product:", error);
-        throw error;
+        throw error; // Re-throw to be caught in the form
+    } finally {
+        setSubmitting(false);
     }
   }, []);
 
   const updateProduct = useCallback(async (productId: string, productData: Partial<ProductFormData>) => {
+    setSubmitting(true);
     try {
         const productRef = doc(db, "products", productId);
         
@@ -90,7 +119,9 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         // Real-time listener will update the state
     } catch (error) {
         console.error("Error updating product:", error);
-        throw error;
+        throw error; // Re-throw to be caught in the form
+    } finally {
+        setSubmitting(false);
     }
   }, []);
 
@@ -101,6 +132,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const value = {
     products,
     loading,
+    submitting,
     addProduct,
     updateProduct,
     getProductById
