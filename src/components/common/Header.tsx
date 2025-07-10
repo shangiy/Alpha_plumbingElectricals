@@ -34,7 +34,7 @@ const productCategories = [
   { name: 'Plumbing Equipment', href: '/plumbing', icon: '/ppr pipes.png' },
   {
     name: 'Lighting & Electrical',
-    href: '#',
+    href: '/lighting',
     icon: '/decor lighting design.png',
   },
   { name: 'Home & Décor', href: '/decor', icon: '/square lights.png' },
