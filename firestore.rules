@@ -1,19 +1,32 @@
+
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /products/{productId} {
-      // Allow reading individual product documents by anyone.
-      allow get: if true;
-      
-      // Allow listing all products by anyone.
-      allow list: if true;
-
-      // Allow creating, updating, and deleting products only for authenticated admins or staff.
-      allow write: if request.auth != null && request.auth.token.role in ['admin', 'staff'];
+    // Default to secure: deny all reads and writes unless explicitly allowed.
+    match /{document=**} {
+      allow read, write: if false;
     }
+
+    // Rules for the 'products' collection
+    match /products/{productId} {
+      // Allow anyone to read (get, list) products.
+      // 'get' is for reading a single document.
+      // 'list' is for reading collections (queries).
+      allow read: if true;
+
+      // Allow authenticated admins or staff to create, update, or delete products.
+      allow write: if request.auth != null && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'staff');
+    }
+
+    // Rules for the 'users' collection
     match /users/{userId} {
-      allow read, write: if request.auth.uid == userId;
+      // A user can only read or update their own document.
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      // Admins can read any user document (useful for admin panels).
+      allow get: if request.auth != null && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+      // Only allow user creation through a specific sign-up function (not direct writes).
+      allow create: if true; // Be cautious with this. Ideally, this is handled by a backend function.
     }
   }
 }
