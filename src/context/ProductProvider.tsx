@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Product } from '@/lib/types';
-import { seedProducts } from '@/lib/data';
+import { allProductsData as initialProductsData, seedProducts } from '@/lib/data'; // Import initial data
 import { db } from '@/lib/firebase';
 import { collection, addDoc, doc, updateDoc, onSnapshot, getDocs } from 'firebase/firestore';
 
@@ -38,8 +38,16 @@ export function useProducts() {
   return context;
 }
 
+// Transform initial data into the Product type format for immediate use
+const getInitialProducts = (): Product[] => {
+    return initialProductsData.map((p, index) => ({
+        ...p,
+        id: `local-${index}`,
+    }));
+};
+
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(getInitialProducts());
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -47,18 +55,6 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     
     const productsCollection = collection(db, "products");
     
-    const unsubscribe = onSnapshot(productsCollection, 
-        (snapshot) => {
-            const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-            setProducts(productList);
-            if(loading) setLoading(false);
-        }, 
-        (error) => {
-            console.error("Error fetching products from Firestore: ", error);
-            setLoading(false);
-        }
-    );
-
     // Initial check for seeding
     const checkAndSeed = async () => {
         try {
@@ -66,23 +62,32 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             if (snapshot.empty) {
                 console.log('No products found in Firestore. Seeding initial data...');
                 await seedProducts();
-                 // The onSnapshot listener will pick up the changes, no need to set state here.
-            } else {
-                 // Data already exists, onSnapshot has already set it.
-                 // We can turn off loading here if not already off.
-                 setLoading(false);
             }
         } catch (error) {
-            console.error("Error checking or seeding products:", error);
-            setLoading(false);
+            console.error("Error checking or seeding products. This may be due to Firestore security rules.", error);
         }
     };
     
     checkAndSeed();
 
+    const unsubscribe = onSnapshot(productsCollection, 
+        (snapshot) => {
+            if (!snapshot.empty) {
+                const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+                setProducts(productList);
+            }
+            setLoading(false);
+        }, 
+        (error) => {
+            console.error("Error fetching products from Firestore. Displaying local data. This is likely a security rules issue.", error);
+            // We are already displaying local data, so we just stop loading.
+            setLoading(false);
+        }
+    );
+
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [loading]);
+  }, []);
 
   const addProduct = useCallback(async (productData: ProductFormData) => {
     setSubmitting(true);
@@ -96,7 +101,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             isFeatured: productData.isFeatured || false,
         };
         await addDoc(collection(db, "products"), newProductDocument);
-        // Real-time listener will update the state, no need to manually setProducts
+        // Real-time listener will update the state
     } catch (error) {
         console.error("Error adding product:", error);
         throw error; // Re-throw to be caught in the form

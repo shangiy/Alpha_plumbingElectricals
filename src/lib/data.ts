@@ -25,7 +25,7 @@ const carouselCategories: CarouselCategory[] = [
   { id: 'lighting-3', name: 'Lighting & Electrical', image: '/classic chandelier.png', href: '#' },
 ];
 
-const allProductsData: Omit<Product, 'id'>[] = [
+export const allProductsData: Omit<Product, 'id'>[] = [
   // This is the initial data for seeding only. The app will read from Firestore.
   { name: 'Ample Light', price: 2500, images: ['/Ample Light.png'], description: 'A beautiful and bright ample light.', longDescription: 'A beautiful and bright ample light, perfect for any room in your house.', category: 'lighting-electrical', rating: 4.5, reviews: 10, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, barcode: 'ALPHA-ELEC-001', colors: ['White', 'Silver'], isFeatured: true },
   { name: 'Oval Toilet', price: 7500, images: ['/Oval Toilet.png'], description: 'A modern and efficient oval toilet.', longDescription: 'A modern and efficient oval toilet that saves water and adds a touch of class to your bathroom.', category: 'plumbing', rating: 4.8, reviews: 25, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, barcode: 'ALPHA-PLUMB-002', colors: ['White'], isFeatured: true },
@@ -157,18 +157,36 @@ export async function getCarouselCategories(): Promise<CarouselCategory[]> {
 
 export async function getProducts(): Promise<Product[]> {
     const productsCollection = collection(db, "products");
-    const productsSnapshot = await getDocs(productsCollection);
-    const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-    return productList;
+    try {
+        const productsSnapshot = await getDocs(productsCollection);
+        if (productsSnapshot.empty) {
+             return allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
+        }
+        const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        return productList;
+    } catch (e) {
+        console.error("Firestore fetch failed, returning local data:", e);
+        return allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
+    }
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-  const productDoc = doc(db, "products", id);
-  const productSnapshot = await getDoc(productDoc);
-  if (productSnapshot.exists()) {
-    return { id: productSnapshot.id, ...productSnapshot.data() } as Product;
+  // First, try fetching from Firestore
+  if (!id.startsWith('local-')) {
+    try {
+        const productDoc = doc(db, "products", id);
+        const productSnapshot = await getDoc(productDoc);
+        if (productSnapshot.exists()) {
+            return { id: productSnapshot.id, ...productSnapshot.data() } as Product;
+        }
+    } catch (e) {
+        console.error(`Firestore fetch for product ${id} failed, falling back to local data:`, e);
+    }
   }
-  return undefined;
+  
+  // Fallback to local data if Firestore fails or if it's a local ID
+  const allLocalProducts = allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
+  return allLocalProducts.find(p => p.id === id);
 }
 
 export async function getCategories(): Promise<Category[]> {
@@ -177,11 +195,19 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 async function getProductsByCategory(category: string): Promise<Product[]> {
-    const productsCollection = collection(db, 'products');
-    const q = query(productsCollection, where('category', '==', category));
-    const productsSnapshot = await getDocs(q);
-    const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-    return productList;
+    try {
+        const productsCollection = collection(db, 'products');
+        const q = query(productsCollection, where('category', '==', category));
+        const productsSnapshot = await getDocs(q);
+        if (productsSnapshot.empty) {
+             return allProductsData.filter(p => p.category === category).map((p, index) => ({...p, id: `local-cat-${category}-${index}`}));
+        }
+        const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        return productList;
+    } catch (e) {
+        console.error(`Firestore query for category ${category} failed, returning local data:`, e);
+        return allProductsData.filter(p => p.category === category).map((p, index) => ({...p, id: `local-cat-${category}-${index}`}));
+    }
 }
 
 export async function getTankProducts(): Promise<Product[]> {
