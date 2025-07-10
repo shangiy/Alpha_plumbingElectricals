@@ -3,23 +3,11 @@
  * @fileOverview A conversational AI agent for Alpha Electricals & Plumbing Ltd.
  *
  * - chat - A function that handles the conversational chat process.
- * - ChatInput - The input type for the chat function.
- * - ChatOutput - The return type for the chat function.
  */
 
 import {ai} from '@/ai/genkit';
 import {productSearchTool} from '@/ai/tools/product-catalog';
-import {z} from 'genkit';
-
-export const ChatInputSchema = z.object({
-  message: z.string().describe('The user\'s message to the chatbot.'),
-});
-export type ChatInput = z.infer<typeof ChatInputSchema>;
-
-export const ChatOutputSchema = z.object({
-  response: z.string().describe('The chatbot\'s response to the user.'),
-});
-export type ChatOutput = z.infer<typeof ChatOutputSchema>;
+import type {ChatInput, ChatOutput} from './chatbot-types';
 
 export async function chat(input: ChatInput): Promise<ChatOutput> {
   const llmResponse = await ai.generate({
