@@ -1,14 +1,19 @@
-
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Allow public read access to products, but only allow authenticated
-    // admins or staff to write them.
     match /products/{productId} {
-      allow read: if true;
+      // Allow reading individual product documents by anyone.
+      allow get: if true;
+      
+      // Allow listing all products by anyone.
+      allow list: if true;
+
+      // Allow creating, updating, and deleting products only for authenticated admins or staff.
       allow write: if request.auth != null && request.auth.token.role in ['admin', 'staff'];
+    }
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
     }
   }
 }
