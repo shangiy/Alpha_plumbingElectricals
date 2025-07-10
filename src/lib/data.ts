@@ -1,6 +1,6 @@
 import type { Product, Category, HomePageCategory, CarouselCategory, MockUser, Transaction } from './types';
 import { db } from './firebase';
-import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, writeBatch, query, where } from 'firebase/firestore';
 
 const homePageCategories: HomePageCategory[] = [
     { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
@@ -176,19 +176,24 @@ export async function getCategories(): Promise<Category[]> {
   return categories;
 }
 
+async function getProductsByCategory(category: string): Promise<Product[]> {
+    const productsCollection = collection(db, 'products');
+    const q = query(productsCollection, where('category', '==', category));
+    const productsSnapshot = await getDocs(q);
+    const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return productList;
+}
+
 export async function getTankProducts(): Promise<Product[]> {
-  const allProducts = await getProducts();
-  return allProducts.filter(p => p.category === 'tanks');
+    return getProductsByCategory('tanks');
 }
 
 export async function getDecorProducts(): Promise<Product[]> {
-  const allProducts = await getProducts();
-  return allProducts.filter(p => p.category === 'decor');
+    return getProductsByCategory('decor');
 }
 
 export async function getPlumbingProducts(): Promise<Product[]> {
-    const allProducts = await getProducts();
-    return allProducts.filter(p => p.category === 'plumbing');
+    return getProductsByCategory('plumbing');
 }
 
 export async function getUsers(): Promise<MockUser[]> {
