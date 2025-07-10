@@ -3,30 +3,22 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default to secure: deny all reads and writes unless explicitly allowed.
-    match /{document=**} {
-      allow read, write: if false;
-    }
-
-    // Rules for the 'products' collection
-    match /products/{productId} {
-      // Allow anyone to read (get, list) products.
-      // 'get' is for reading a single document.
-      // 'list' is for reading collections (queries).
+    // Allow public read access for the entire products collection and individual documents.
+    // This allows listing products on category/search pages and viewing product details.
+    match /products/{productId=**} {
       allow read: if true;
-
-      // Allow authenticated admins or staff to create, update, or delete products.
-      allow write: if request.auth != null && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'staff');
     }
 
-    // Rules for the 'users' collection
+    // Secure write access (create, update, delete) to the products collection.
+    // Only authenticated users with the role of 'admin' or 'staff' can modify products.
+    // Note: This rule is separate to avoid granting write access to the entire collection path.
+    match /products/{productId} {
+      allow write: if request.auth != null && request.auth.token.role in ['admin', 'staff'];
+    }
+
+    // Secure user data. Users can only access their own document.
     match /users/{userId} {
-      // A user can only read or update their own document.
-      allow read, update: if request.auth != null && request.auth.uid == userId;
-      // Admins can read any user document (useful for admin panels).
-      allow get: if request.auth != null && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
-      // Only allow user creation through a specific sign-up function (not direct writes).
-      allow create: if true; // Be cautious with this. Ideally, this is handled by a backend function.
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
 }
