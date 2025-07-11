@@ -31,6 +31,13 @@ async function searchProducts(
   input: z.infer<typeof ProductSearchInputSchema>
 ): Promise<z.infer<typeof ProductSearchOutputSchema>> {
   console.log('Searching for products with query:', input.query);
+
+  // Handle cases where the query might be missing
+  if (!input.query) {
+    console.log('No query provided, returning empty product list.');
+    return { products: [] };
+  }
+  
   const allProducts = await getProducts();
   const lowerCaseQuery = input.query.toLowerCase();
 
