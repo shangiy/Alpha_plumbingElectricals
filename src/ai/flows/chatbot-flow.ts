@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A conversational AI agent for Alpha Electricals & Plumbing Ltd.
@@ -48,20 +49,23 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 
     const textResponse = llmResponse.text;
 
-    if (!textResponse) {
-      // Check if a tool was called. If so, provide a generic but helpful response.
-      if (llmResponse.toolRequest) {
-        return {
-          response:
-            "I've looked up that information for you. What else can I help with?",
-        };
-      }
-      return {
-        response: "Sorry, I'm having trouble understanding. Could you rephrase?",
-      };
+    if (textResponse) {
+      return {response: textResponse};
     }
 
-    return {response: textResponse};
+    // Check if a tool was called. If so, provide a generic but helpful response.
+    if (llmResponse.toolRequest) {
+      return {
+        response:
+          "I've looked up that information for you. What else can I help with?",
+      };
+    }
+    
+    // Fallback for any other case
+    return {
+      response: "Sorry, I'm having trouble understanding. Could you rephrase?",
+    };
+
   } catch (error) {
     console.error('[Chatbot Error] Failed to generate response:', error);
     return {
