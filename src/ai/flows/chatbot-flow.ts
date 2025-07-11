@@ -7,36 +7,23 @@
 
 import {ai} from '@/ai/genkit';
 import {productSearchTool} from '@/ai/tools/product-catalog';
-import {getCartContents, getUserOrders, getWishlistContents} from '@/ai/tools/user-data';
+import {
+  getCartContents,
+  getUserOrders,
+  getWishlistContents,
+} from '@/ai/tools/user-data';
 import type {ChatInput, ChatOutput} from './chatbot-types';
 
 export async function chat(input: ChatInput): Promise<ChatOutput> {
   const llmResponse = await ai.generate({
     model: 'googleai/gemini-1.5-flash',
-    tools: [productSearchTool, getCartContents, getWishlistContents, getUserOrders],
-    prompt: [
-        {
-          toolRequest: {
-            name: 'getCartContents',
-            input: {}
-          }
-        },
-        {
-          toolRequest: {
-            name: 'getWishlistContents',
-            input: {}
-          }
-        },
-        {
-          toolRequest: {
-            name: 'getUserOrders',
-            input: {}
-          }
-        },
-        {
-          text: input.message
-        }
+    tools: [
+      productSearchTool,
+      getCartContents,
+      getWishlistContents,
+      getUserOrders,
     ],
+    prompt: input.message,
     system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
 - Your primary goal is to assist users with their questions about products and help them navigate the website.
@@ -59,15 +46,19 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
   });
 
   const textResponse = llmResponse.text;
-  
+
   if (!textResponse) {
-    // Check if a tool was called
-    const toolResponse = llmResponse.toolRequest?.name;
-    if (toolResponse) {
-        return { response: "I've looked up that information for you. What else can I help with?" };
+    // Check if a tool was called. If so, provide a generic but helpful response.
+    if (llmResponse.toolRequest) {
+      return {
+        response:
+          "I've looked up that information for you. What else can I help with?",
+      };
     }
-    return { response: "Sorry, I'm having trouble understanding. Could you rephrase?" };
+    return {
+      response: "Sorry, I'm having trouble understanding. Could you rephrase?",
+    };
   }
 
-  return { response: textResponse };
+  return {response: textResponse};
 }
