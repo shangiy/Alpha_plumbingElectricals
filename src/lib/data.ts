@@ -1,7 +1,6 @@
-
 import type { Product, Category, HomePageCategory, CarouselCategory, MockUser, Transaction } from './types';
 import { db } from './firebase';
-import { collection, getDocs, doc, getDoc, writeBatch, query, where } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
 
 const homePageCategories: HomePageCategory[] = [
     { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
@@ -14,16 +13,16 @@ const homePageCategories: HomePageCategory[] = [
 ];
 
 const carouselCategories: CarouselCategory[] = [
-  { id: 'lighting-1', name: 'Lighting & Electrical', image: '/aesthetic Light.png', href: '#' },
+  { id: 'lighting-1', name: 'Lighting & Electrical', image: '/aesthetic Light.png', href: '/lighting' },
   { id: 'plumbing-1', name: 'Plumbing Equipment', image: '/ppr joints.png', href: '/plumbing' },
   { id: 'tanks-1', name: 'Tanks', image: '/kentank 2000l.png', href: '/tanks' },
   { id: 'decor-1', name: 'Home & Decor', image: '/birds lights.png', href: '/decor' },
   { id: 'roofing-1', name: 'Roofing & Fencing', image: '/roof 2.png', href: '/roofing' },
-  { id: 'lighting-2', name: 'Lighting & Electrical', image: '/Electric cable per roll.jpg', href: '#' },
+  { id: 'lighting-2', name: 'Lighting & Electrical', image: '/Electric cable per roll.jpg', href: '/lighting' },
   { id: 'decor-2', name: 'Home & Decor', image: '/crystall chanderlier.png', href: '/decor' },
   { id: 'roofing-2', name: 'Roofing & Fencing', image: '/roof 3.png', href: '/roofing' },
   { id: 'decor-3', name: 'Home & Decor', image: '/MDF & chipboard.png', href: '/decor' },
-  { id: 'lighting-3', name: 'Lighting & Electrical', image: '/classic chandelier.png', href: '#' },
+  { id: 'lighting-3', name: 'Lighting & Electrical', image: '/classic chandelier.png', href: '/lighting' },
 ];
 
 export const allProductsData: Omit<Product, 'id'>[] = [
@@ -193,40 +192,29 @@ export async function getCategories(): Promise<Category[]> {
   return categories;
 }
 
-async function getProductsByCategory(category: string): Promise<Product[]> {
-    try {
-        const productsCollection = collection(db, 'products');
-        const q = query(productsCollection, where('category', '==', category));
-        const productsSnapshot = await getDocs(q);
-        if (productsSnapshot.empty) {
-             return allProductsData.filter(p => p.category === category).map((p, index) => ({...p, id: `local-cat-${category}-${index}`}));
-        }
-        const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-        return productList;
-    } catch (e) {
-        console.error(`Firestore query for category ${category} failed, returning local data:`, e);
-        return allProductsData.filter(p => p.category === category).map((p, index) => ({...p, id: `local-cat-${category}-${index}`}));
-    }
-}
-
 export async function getTankProducts(): Promise<Product[]> {
-    return getProductsByCategory('tanks');
+    const allProducts = await getProducts();
+    return allProducts.filter(p => p.category === 'tanks');
 }
 
 export async function getDecorProducts(): Promise<Product[]> {
-    return getProductsByCategory('decor');
+    const allProducts = await getProducts();
+    return allProducts.filter(p => p.category === 'decor');
 }
 
 export async function getPlumbingProducts(): Promise<Product[]> {
-    return getProductsByCategory('plumbing');
+    const allProducts = await getProducts();
+    return allProducts.filter(p => p.category === 'plumbing');
 }
 
 export async function getRoofingProducts(): Promise<Product[]> {
-    return getProductsByCategory('roofing');
+    const allProducts = await getProducts();
+    return allProducts.filter(p => p.category === 'roofing');
 }
 
 export async function getLightingProducts(): Promise<Product[]> {
-    return getProductsByCategory('lighting-electrical');
+    const allProducts = await getProducts();
+    return allProducts.filter(p => p.category === 'lighting-electrical');
 }
 
 
@@ -263,5 +251,3 @@ export async function getTransactions(): Promise<Transaction[]> {
     await new Promise(resolve => setTimeout(resolve, 300));
     return transactions;
 }
-
-    

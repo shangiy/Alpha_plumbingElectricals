@@ -1,14 +1,32 @@
-import { getRoofingProducts } from '@/lib/data';
-import ProductCard from '@/components/products/ProductCard';
+'use client';
 
-export default async function RoofingPage() {
-  const roofingProducts = await getRoofingProducts();
+import { getProducts } from '@/lib/data';
+import ProductCard from '@/components/products/ProductCard';
+import { useState, useEffect } from 'react';
+import type { Product } from '@/lib/types';
+
+export default function RoofingPage() {
+  const [roofingProducts, setRoofingProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProducts() {
+      const allProducts = await getProducts();
+      const filtered = allProducts.filter(p => p.category === 'roofing');
+      setRoofingProducts(filtered);
+      setLoading(false);
+    }
+    loadProducts();
+  }, []);
+
 
   return (
     <section className="bg-secondary py-12 md:py-20">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold font-headline mb-8 text-center text-primary">Roofing & Construction Collection</h2>
-        {roofingProducts.length > 0 ? (
+        {loading ? (
+          <p>Loading products...</p>
+        ) : roofingProducts.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {roofingProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

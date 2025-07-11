@@ -1,11 +1,10 @@
-
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Product } from '@/lib/types';
-import { allProductsData as initialProductsData, seedProducts } from '@/lib/data'; // Import initial data
+import { allProductsData as initialProductsData, seedProducts, getProducts } from '@/lib/data';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, doc, updateDoc, onSnapshot, getDocs } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 
 export interface ProductFormData {
@@ -38,49 +37,32 @@ export function useProducts() {
   return context;
 }
 
-// Transform initial data into the Product type format for immediate use
-const getInitialProducts = (): Product[] => {
-    return initialProductsData.map((p, index) => ({
-        ...p,
-        id: `local-${index}`,
-    }));
-};
-
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [products, setProducts] = useState<Product[]>(getInitialProducts());
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    
-    const productsCollection = collection(db, "products");
-    
-    // Initial check for seeding
-    const checkAndSeed = async () => {
-        try {
-            const snapshot = await getDocs(productsCollection);
-            if (snapshot.empty) {
-                console.log('No products found in Firestore. Seeding initial data...');
-                await seedProducts();
-            }
-        } catch (error) {
-            console.error("Error checking or seeding products. This may be due to Firestore security rules.", error);
-        }
-    };
-    
-    checkAndSeed();
+    // Immediately seed if necessary
+    seedProducts();
 
+    // Set up the real-time listener
+    const productsCollection = collection(db, "products");
     const unsubscribe = onSnapshot(productsCollection, 
         (snapshot) => {
             if (!snapshot.empty) {
                 const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
                 setProducts(productList);
+            } else {
+                // If firestore is empty after trying to fetch, use local data
+                setProducts(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
             }
             setLoading(false);
         }, 
         (error) => {
-            console.error("Error fetching products from Firestore. Displaying local data. This is likely a security rules issue.", error);
-            // We are already displaying local data, so we just stop loading.
+            console.error("Firestore error. Falling back to local data. This may be due to security rules.", error);
+            // On error, explicitly load local data
+            setProducts(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
             setLoading(false);
         }
     );
