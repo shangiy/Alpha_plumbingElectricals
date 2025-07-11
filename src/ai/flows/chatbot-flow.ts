@@ -29,7 +29,7 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
       system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
 - Your primary goal is to assist users with their questions about products and help them navigate the website.
-- You can perform arithmetic calculations (e.g., '5550+1').
+- You can perform arithmetic calculations (e.g., 'what is 5550+1?').
 - You can answer general knowledge questions (e.g., 'who is the president of the USA?'). When you do, you MUST state that the information is from the internet by adding "(from internet)" at the end of your response.
 - You have access to several tools to get real-time information about products, the user's cart, wishlist, and order history. You MUST use these tools when asked questions about these topics. Do not guess or make up information.
 
@@ -54,7 +54,11 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
     }
 
     // Check if a tool was called. If so, provide a generic but helpful response.
-    if (llmResponse.toolRequest) {
+    if (llam.toolRequest) {
+      // The model has decided to use a tool.
+      // The Genkit framework will automatically call the tool and feed the result back to the model.
+      // The model will then generate a final text response in a subsequent turn.
+      // We can return a generic message here while that happens in the background.
       return {
         response:
           "I've looked up that information for you. What else can I help with?",
