@@ -12,7 +12,7 @@ const homePageCategories: HomePageCategory[] = [
     { id: 'lighting-2', name: 'Lighting & Electrical', image: '/artistic lights.png' }
 ];
 
-const carouselCategories: CarouselCategory[] = [
+export const carouselCategories: CarouselCategory[] = [
   { id: 'lighting-1', name: 'Lighting & Electrical', image: '/aesthetic Light.png', href: '/lighting' },
   { id: 'plumbing-1', name: 'Plumbing Equipment', image: '/ppr joints.png', href: '/plumbing' },
   { id: 'tanks-1', name: 'Tanks', image: '/kentank 2000l.png', href: '/tanks' },
@@ -122,161 +122,150 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: '300W Optonica Silver Streetlight', price: 8970, images: ['/300W Optonica Silver Street.jpg'], description: 'A 300W silver streetlight from Optonica.', longDescription: 'A durable and efficient 300W streetlight from Optonica with a sleek silver finish.', category: 'lighting-electrical', rating: 4.9, reviews: 65, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
 ];
 
+let productsCollection: Product[] = allProductsData.map((p, index) => ({
+  ...p,
+  id: `prod-${index}`,
+  rating: p.rating || Math.floor(Math.random() * 3) + 3,
+  reviews: p.reviews || Math.floor(Math.random() * 100),
+}));
 
-const categories: Category[] = [
-  { id: 'lighting-electrical', name: 'Lighting & Electrical' },
-  { id: 'plumbing', name: 'Plumbing' },
-  { id: 'decor', name: 'Home & Decor' },
-  { id: 'roofing', name: 'Roofing & Fencing' },
+// This is a simplified in-memory cache. In a real app, this would be backed by a database.
+let allProducts: Product[] = [...productsCollection];
+let allCategories: Category[] = [
   { id: 'tanks', name: 'Tanks' },
-  { id: 'electronics', name: 'Electronics' },
+  { id: 'plumbing', name: 'Plumbing' },
+  { id: 'lighting-electrical', name: 'Lighting & Electrical' },
+  { id: 'decor', name: 'Home & Decor' },
+  { id: 'roofing', name: 'Roofing & Construction' },
 ];
 
-const users: MockUser[] = [
-    { id: 'user-1', name: 'Valued Customer', username: 'valued_customer', email: 'customer@example.com', password: 'password123', role: 'user', signedUp: '2024-05-01T10:30:00Z', lastSeen: '2024-07-20T14:00:00Z', orders: 3, visitDuration: 15 },
-    { id: 'user-2', name: 'Admin User', username: 'admin_user', email: 'admin@example.com', password: 'adminpassword', role: 'admin', signedUp: '2024-04-15T09:00:00Z', lastSeen: '2024-07-21T11:20:00Z', orders: 1, visitDuration: 45 },
-    { id: 'user-3', name: 'Jane Doe', username: 'jane_doe', email: 'jane.doe@example.com', password: 'password123', role: 'staff', signedUp: '2024-05-10T18:45:00Z', lastSeen: '2024-07-18T20:10:00Z', orders: 5, visitDuration: 25 },
-    { id: 'user-4', name: 'John Smith', username: 'john_smith', email: 'john.smith@example.com', password: 'password123', role: 'user', signedUp: '2024-05-12T11:00:00Z', lastSeen: '2024-07-19T08:05:00Z', orders: 0, visitDuration: 5 },
-];
+// Helper to simulate database calls
+const simulateDB = <T>(data: T, delay = 50): Promise<T> =>
+  new Promise(resolve => setTimeout(() => resolve(data), delay));
 
-const transactions: Transaction[] = [
-  { id: 'txn-1', customerName: 'Valued Customer', email: 'customer@example.com', amount: 9500, date: '2024-07-20T11:00:00Z', status: 'Completed', productName: 'Oval Toilet & Ample Light' },
-  { id: 'txn-2', customerName: 'Jane Doe', email: 'jane.doe@example.com', amount: 12000, date: '2024-07-19T15:30:00Z', status: 'Completed', productName: 'Solar Heater' },
-  { id: 'txn-3', customerName: 'John Smith', email: 'john.smith@example.com', amount: 3300, date: '2024-07-21T09:05:00Z', status: 'Pending', productName: 'Artistic Lights' },
-  { id: 'txn-4', customerName: 'New Shopper', email: 'shopper@example.com', amount: 7500, date: '2024-07-21T10:45:00Z', status: 'Failed', productName: 'Kentank 2000L' },
-  { id: 'txn-5', customerName: 'Valued Customer', email: 'customer@example.com', amount: 30, date: '2024-07-18T14:20:00Z', status: 'Completed', productName: 'PPR Pipe Fittings' },
-];
-
-
-/**
- * Seeds the Firestore database with initial product data if the products collection is empty.
- * This is a one-time operation.
- */
-export async function seedProducts() {
-    const productsRef = collection(db, 'products');
-    try {
-        const snapshot = await getDocs(productsRef);
-        if (snapshot.empty) {
-            console.log('No products found in Firestore. Seeding initial data...');
-            const batch = writeBatch(db);
-            allProductsData.forEach((productData) => {
-                const docRef = doc(collection(db, 'products')); // Auto-generates an ID
-                batch.set(docRef, productData);
-            });
-            await batch.commit();
-            console.log('Seeding complete.');
-        }
-    } catch (error) {
-        console.error("Error seeding products:", error);
-    }
-}
-
-
-export async function getHomePageCategories(): Promise<HomePageCategory[]> {
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return homePageCategories;
-}
-
-export async function getCarouselCategories(): Promise<CarouselCategory[]> {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    return carouselCategories;
-}
 
 export async function getProducts(): Promise<Product[]> {
-    const productsCollection = collection(db, "products");
     try {
-        const productsSnapshot = await getDocs(productsCollection);
-        if (productsSnapshot.empty) {
-             return allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
+        const productsCollection = collection(db, "products");
+        const productSnapshot = await getDocs(productsCollection);
+        if (productSnapshot.empty) {
+            console.log('No products found in Firestore, using local data.');
+            await seedProducts(); // Seed the data if the collection is empty
+            const seededProducts = await getDocs(productsCollection);
+            allProducts = seededProducts.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+            return allProducts;
         }
-        const productList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-        return productList;
-    } catch (e) {
-        console.error("Firestore fetch failed, returning local data:", e);
+        allProducts = productSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        return allProducts;
+    } catch (error) {
+        console.error("Firestore error, falling back to local data:", error);
         return allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
     }
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-  // First, try fetching from Firestore
-  if (!id.startsWith('local-')) {
     try {
-        const productDoc = doc(db, "products", id);
-        const productSnapshot = await getDoc(productDoc);
-        if (productSnapshot.exists()) {
-            return { id: productSnapshot.id, ...productSnapshot.data() } as Product;
+        const productRef = doc(db, 'products', id);
+        const productSnap = await getDoc(productRef);
+
+        if (productSnap.exists()) {
+            return { id: productSnap.id, ...productSnap.data() } as Product;
+        } else {
+            console.warn(`Product with id ${id} not found in Firestore. Trying local data.`);
+            return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
         }
-    } catch (e) {
-        console.error(`Firestore fetch for product ${id} failed, falling back to local data:`, e);
+    } catch (error) {
+        console.error(`Firestore error fetching product ${id}, falling back to local data:`, error);
+        return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
     }
-  }
-  
-  // Fallback to local data if Firestore fails or if it's a local ID
-  const allLocalProducts = allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
-  return allLocalProducts.find(p => p.id === id);
 }
 
 export async function getCategories(): Promise<Category[]> {
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return categories;
+  return simulateDB(allCategories);
 }
 
-export async function getTankProducts(): Promise<Product[]> {
-    const allProducts = await getProducts();
-    return allProducts.filter(p => p.category === 'tanks');
+export async function getHomePageCategories(): Promise<HomePageCategory[]> {
+    return simulateDB(homePageCategories);
 }
 
-export async function getDecorProducts(): Promise<Product[]> {
-    const allProducts = await getProducts();
-    return allProducts.filter(p => p.category === 'decor');
+export async function getCarouselCategories(): Promise<CarouselCategory[]> {
+    return simulateDB(carouselCategories);
 }
 
-export async function getPlumbingProducts(): Promise<Product[]> {
-    const allProducts = await getProducts();
-    return allProducts.filter(p => p.category === 'plumbing');
+// Functions to modify data (for admin panel)
+export async function addProduct(productData: Omit<Product, 'id' | 'rating' | 'reviews'>): Promise<Product> {
+  const newProduct: Product = {
+    ...productData,
+    id: `prod-${Date.now()}`,
+    rating: Math.floor(Math.random() * 2) + 3.5, // 3.5 to 4.5
+    reviews: Math.floor(Math.random() * 100),
+  };
+  allProducts.push(newProduct);
+  return simulateDB(newProduct);
 }
 
-export async function getRoofingProducts(): Promise<Product[]> {
-    const allProducts = await getProducts();
-    return allProducts.filter(p => p.category === 'roofing');
+export async function updateProduct(productId: string, productData: Partial<Product>): Promise<Product | undefined> {
+    allProducts = allProducts.map(p => p.id === productId ? { ...p, ...productData } : p);
+    const updatedProduct = allProducts.find(p => p.id === productId);
+    return simulateDB(updatedProduct);
 }
+// Get users, transactions - simplified for now
+const mockUsers: MockUser[] = [
+    { id: 'user-1', name: 'John Doe', username: 'johndoe', email: 'john.doe@example.com', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-07-10T14:30:00Z', orders: 5, visitDuration: 15 },
+    { id: 'user-2', name: 'Jane Smith', username: 'janesmith', email: 'jane.smith@example.com', role: 'staff', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-07-11T09:00:00Z', orders: 2, visitDuration: 8 },
+    { id: 'user-3', name: 'Alice Johnson', username: 'alicej', email: 'alice.j@example.com', role: 'user', signedUp: '2023-03-10T08:00:00Z', lastSeen: '2023-07-09T18:45:00Z', orders: 10, visitDuration: 25 },
+    { id: 'user-4', name: 'Bob Brown', username: 'bobb', email: 'bob.b@example.com', role: 'user', signedUp: '2023-06-01T18:00:00Z', lastSeen: '2023-07-11T11:10:00Z', orders: 0, visitDuration: 5 },
+];
 
-export async function getLightingProducts(): Promise<Product[]> {
-    const allProducts = await getProducts();
-    return allProducts.filter(p => p.category === 'lighting-electrical');
-}
-
+const mockTransactions: Transaction[] = [
+    { id: 'txn-1', customerName: 'Alice Johnson', email: 'alice.j@example.com', amount: 15000, date: '2023-07-08T10:30:00Z', status: 'Completed', productName: 'Kentank 2000L' },
+    { id: 'txn-2', customerName: 'John Doe', email: 'john.doe@example.com', amount: 2500, date: '2023-07-10T11:00:00Z', status: 'Completed', productName: 'Ample Light' },
+    { id: 'txn-3', customerName: 'Jane Smith', email: 'jane.smith@example.com', amount: 3300, date: '2023-07-11T09:05:00Z', status: 'Pending', productName: 'Artistic Lights' },
+    { id: 'txn-4', customerName: 'Michael Lee', email: 'michael.l@example.com', amount: 1900, date: '2023-07-11T12:00:00Z', status: 'Failed', productName: 'WarmLight wall bracket' },
+];
 
 export async function getUsers(): Promise<MockUser[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return users;
-}
-
-export async function getUserByEmail(email: string): Promise<MockUser | undefined> {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    return users.find(u => u.email.toLowerCase() === email.toLowerCase());
-}
-
-export async function signUpUser(newUser: Omit<MockUser, 'id' | 'signedUp' | 'lastSeen' | 'orders' | 'visitDuration' | 'role'>): Promise<MockUser> {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    const userExists = users.some(u => u.email.toLowerCase() === newUser.email.toLowerCase());
-    if (userExists) {
-        throw new Error('User with this email already exists.');
-    }
-    const createdUser: MockUser = {
-        ...newUser,
-        id: `user-${Date.now()}`,
-        role: 'user',
-        signedUp: new Date().toISOString(),
-        lastSeen: new Date().toISOString(),
-        orders: 0,
-        visitDuration: 0,
-    };
-    users.push(createdUser);
-    return createdUser;
+    return simulateDB(mockUsers);
 }
 
 export async function getTransactions(): Promise<Transaction[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return transactions;
+    return simulateDB(mockTransactions);
 }
+export async function signUpUser(userData: Partial<MockUser>): Promise<MockUser> {
+  const newUser: MockUser = {
+    id: `user-${Date.now()}`,
+    name: userData.name || '',
+    username: userData.username || '',
+    email: userData.email || '',
+    role: 'user',
+    signedUp: new Date().toISOString(),
+    lastSeen: new Date().toISOString(),
+    orders: 0,
+    visitDuration: 0,
+  };
+  mockUsers.push(newUser);
+  return simulateDB(newUser);
+}
+
+export async function getUserByEmail(email: string): Promise<MockUser | undefined> {
+    const user = mockUsers.find(u => u.email === email);
+    return simulateDB(user);
+}
+
+// Function to seed initial data into Firestore
+export async function seedProducts() {
+    const productsCollectionRef = collection(db, "products");
+    const snapshot = await getDocs(productsCollectionRef);
+    if (snapshot.empty) {
+      console.log('Seeding products into Firestore...');
+      const batch = writeBatch(db);
+      allProductsData.forEach((product) => {
+        const docRef = doc(productsCollectionRef);
+        batch.set(docRef, product);
+      });
+      await batch.commit();
+      console.log('Seeding complete.');
+    } else {
+      console.log('Products collection is not empty, skipping seed.');
+    }
+  }

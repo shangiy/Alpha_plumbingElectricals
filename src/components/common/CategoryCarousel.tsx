@@ -1,9 +1,10 @@
+
 'use client';
 
 import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getCarouselCategories } from '@/lib/data';
+import { carouselCategories } from '@/lib/data';
 import type { CarouselCategory } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '../ui/skeleton';
@@ -13,12 +14,9 @@ export default function CategoryCarousel() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchCategories = async () => {
-      const fetchedCategories = await getCarouselCategories();
-      setCategories(fetchedCategories);
-      setLoading(false);
-    };
-    fetchCategories();
+    // In a real app, this might be an async fetch. For now, we use the imported constant.
+    setCategories(carouselCategories);
+    setLoading(false);
   }, []);
 
   // Duplicate categories for a seamless looping effect
