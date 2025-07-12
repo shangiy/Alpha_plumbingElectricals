@@ -16,7 +16,7 @@ import { ProductProvider } from '@/context/ProductProvider';
 import Chatbot from '@/components/common/Chatbot';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bot, X } from 'lucide-react';
+import { Bot, MessageSquare, X } from 'lucide-react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -56,19 +56,30 @@ export default function RootLayout({
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>
+              
+              {/* Chatbot and its trigger */}
               <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
-              <WhatsAppButton />
-              <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
+              
+              <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
                  <Button
-                    size="icon"
-                    className="bg-[#0b748a] hover:bg-[#0b748a]/90 rounded-full h-14 w-14 shadow-lg flex items-center justify-center"
-                    aria-label="Open AI Chat"
                     onClick={() => setIsChatbotOpen(!isChatbotOpen)}
+                    className="h-auto rounded-full bg-[#007bff] px-4 py-2 text-base font-semibold text-white shadow-lg hover:bg-[#0056b3]"
+                    aria-label="Toggle Chatbot"
                   >
-                    {isChatbotOpen ? <X className="h-7 w-7" /> : <Bot className="h-7 w-7" />}
+                    {isChatbotOpen ? (
+                        <X className="h-5 w-5" />
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <MessageSquare className="h-5 w-5" />
+                            <span>Alpha AI</span>
+                        </div>
+                    )}
                   </Button>
                 <ScrollToTopButton />
               </div>
+
+              {/* Other floating buttons */}
+              <WhatsAppButton />
               <Toaster />
             </CartProvider>
           </ProductProvider>

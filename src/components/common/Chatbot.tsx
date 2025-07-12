@@ -5,10 +5,9 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Bot, LoaderCircle, Send, User, X } from 'lucide-react';
+import { LoaderCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '../ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { chat } from '@/ai/flows/chatbot-flow';
 import type { ChatInput } from '@/ai/flows/chatbot-types';
 
@@ -30,15 +29,15 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && messages.length === 0) {
       setMessages([
         {
           role: 'assistant',
-          content: "Hello! I'm Alpha AI. How can I help you find the perfect product today?",
+          content: "Welcome to Alpha Electricals & Plumbing. How can I help you today?",
         },
       ]);
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -83,80 +82,44 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
           isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         )}
       >
-        <Card className="flex h-[32rem] flex-col bg-secondary">
-          <CardHeader className="flex flex-row items-center justify-between p-3 bg-primary text-primary-foreground rounded-t-lg">
-            <div className="flex items-center gap-3">
-              <Avatar>
-                <AvatarImage src="/logo Alpha.png" alt="Alpha AI" />
-                <AvatarFallback>AA</AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className="font-semibold">Alpha AI</h3>
-                <p className="text-xs">Your personal assistant</p>
-              </div>
-            </div>
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-primary-foreground hover:bg-primary/80" onClick={() => setIsOpen(false)}>
+        <Card className="flex h-[28rem] flex-col bg-white">
+          <CardHeader className="flex flex-row items-center justify-between p-2 bg-[#007bff] text-white rounded-t-lg">
+             <h3 className="font-semibold pl-2">Alpha AI_chatbot</h3>
+            <Button variant="ghost" size="icon" className="h-7 w-7 text-white hover:bg-blue-500/80" onClick={() => setIsOpen(false)}>
               <X className="h-5 w-5" />
             </Button>
           </CardHeader>
           
-          <ScrollArea className="flex-1" ref={scrollAreaRef}>
-            <CardContent className="p-4 space-y-4">
+          <ScrollArea className="flex-1 bg-white" ref={scrollAreaRef}>
+            <CardContent className="p-3 space-y-2 text-sm">
               {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    'flex items-end gap-2',
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  )}
-                >
-                  {message.role === 'assistant' && (
-                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="/logo Alpha.png" alt="Alpha AI" />
-                        <AvatarFallback>AA</AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div
-                    className={cn(
-                      'max-w-[80%] rounded-lg px-3 py-2 text-sm',
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-background text-foreground'
-                    )}
-                  >
-                    {message.content}
-                  </div>
-                   {message.role === 'user' && (
-                     <Avatar className="h-8 w-8">
-                       <AvatarFallback><User className="h-5 w-5" /></AvatarFallback>
-                    </Avatar>
+                <div key={index}>
+                  {message.role === 'user' ? (
+                    <span><strong>You:</strong> {message.content}</span>
+                  ) : (
+                    <span><strong>Alpha AI:</strong> {message.content}</span>
                   )}
                 </div>
               ))}
               {loading && (
-                <div className="flex items-end gap-2 justify-start">
-                  <Avatar className="h-8 w-8">
-                     <AvatarImage src="/logo Alpha.png" alt="Alpha AI" />
-                    <AvatarFallback>AA</AvatarFallback>
-                  </Avatar>
-                  <div className="max-w-[80%] rounded-lg px-3 py-2 text-sm bg-background text-foreground">
-                    <LoaderCircle className="h-5 w-5 animate-spin" />
-                  </div>
-                </div>
+                 <div className="flex items-center gap-2">
+                    <strong>Alpha AI:</strong>
+                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                 </div>
               )}
             </CardContent>
           </ScrollArea>
 
-          <form onSubmit={handleSubmit} className="flex items-center gap-2 p-3 border-t bg-background rounded-b-lg">
+          <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2 border-t bg-white rounded-b-lg">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about a product..."
+              placeholder="Ask me anything..."
               className="flex-1"
               disabled={loading}
             />
-            <Button type="submit" size="icon" disabled={loading}>
-              <Send className="h-5 w-5" />
+            <Button type="submit" disabled={loading} className="bg-[#007bff] hover:bg-[#0056b3]">
+              Send
             </Button>
           </form>
         </Card>
