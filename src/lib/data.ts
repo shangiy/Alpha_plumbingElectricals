@@ -110,162 +110,165 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: '3 Gang IFLUX Flour Series Switch', price: 360, images: ['/3 GANG IFLUX  FLOUR SERIES SWH3G2-14.png'], description: 'A 3-gang switch from the IFLUX Flour series.', longDescription: 'A stylish and durable 3-gang switch from the IFLUX Flour series, model SWH3G2-14.', category: 'lighting-electrical', rating: 4.8, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'IFLUX 2 Gang Switch', price: 250, images: ['/IFLUX 2 GANG SWITCH.png'], description: 'A 2-gang switch from IFLUX.', longDescription: 'A reliable and easy-to-install 2-gang switch from IFLUX.', category: 'lighting-electrical', rating: 4.8, reviews: 130, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: '45A IFLUX Water Heater Switch', price: 415, images: ['/45A IFLUX WATER HEATER SWITCH.png'], description: 'A 45A water heater switch.', longDescription: 'A standard 45A water heater switch from IFLUX, built for safety and durability.', category: 'lighting-electrical', rating: 4.9, reviews: 100, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'IFLUX 1 Gang Switch', price: 150, images: ['/IFLUX 1 GANG SWITCH.png'], description: 'A 1-gang switch from IFLUX.', longDescription: 'A simple and effective 1-gang switch from IFLUX.', category: 'lighting-electrical', rating: 4.8, reviews: 200, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Tronic 1 Gang Switch', price: 250, images: ['/Tronic 1gang switch.jpg'], description: 'A 1-gang switch from Tronic.', longDescription: 'A high-quality 1-gang switch from Tronic, known for its sleek design.', category: 'lighting-electrical', rating: 4.7, reviews: 180, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Tronic 2 Gang Switch', price: 360, images: ['/Tronic 2 gang switch.jpg'], description: 'A 2-gang switch from Tronic.', longDescription: 'A durable and stylish 2-gang switch from Tronic.', category: 'lighting-electrical', rating: 4.7, reviews: 160, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Tronic 3 Gang Switch', price: 450, images: ['/Tronic 3Gang switch.jpg'], description: 'A 3-gang switch from Tronic.', longDescription: 'A versatile 3-gang switch from Tronic, perfect for any room.', category: 'lighting-electrical', rating: 4.7, reviews: 140, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Tronic 4 Gang Switch', price: 150, images: ['/Tronic 4 gang switch.jpg'], description: 'A 4-gang switch from Tronic.', longDescription: 'A 4-gang switch from Tronic, offering control over multiple light sources.', category: 'lighting-electrical', rating: 4.7, reviews: 125, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: '4FT Earthrod', price: 280, images: ['/4FT EARTHROD.jpg'], description: 'A 4-foot copper earthrod.', longDescription: 'A 4-foot copper earthrod for effective electrical grounding.', category: 'lighting-electrical', rating: 4.9, reviews: 250, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Black IFLUX 3 Gang Switch', price: 360, images: ['/3 GANG IFLUX  FLOUR SERIES SWH3G2-14.jpg'], description: 'A 3-gang switch in black.', longDescription: 'A sleek, black 3-gang switch from the IFLUX Flour series.', category: 'lighting-electrical', rating: 4.8, reviews: 110, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: '300w New Streetlight 58300', price: 8000, images: ['/300w New Streetlight 58300 .jpg'], description: 'A 300W new model streetlight.', longDescription: 'A powerful 300W streetlight, model 58300, for excellent outdoor illumination.', category: 'lighting-electrical', rating: 4.9, reviews: 80, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: '300W Optonica Gold Streetlight', price: 8970, images: ['/300W Optonica Gold Street.jpg'], description: 'A 300W gold streetlight from Optonica.', longDescription: 'A high-performance 300W streetlight from Optonica with a stylish gold finish.', category: 'lighting-electrical', rating: 4.9, reviews: 70, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: '300W Optonica Silver Streetlight', price: 8970, images: ['/300W Optonica Silver Street.jpg'], description: 'A 300W silver streetlight from Optonica.', longDescription: 'A durable and efficient 300W streetlight from Optonica with a sleek silver finish.', category: 'lighting-electrical', rating: 4.9, reviews: 65, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'IFLUX 1 Gang Switch', price: 150, images: ['/IFLUX 1 GANG SWITCH.png'], description: 'A 1-gang switch from IFLUX.', longDescription: 'A simple and effective 1-gang switch from IFLUX.', category: 'lighting-electrical', rating: 4.8, reviews: 200, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: 'Tronic 1 Gang Switch', price: 250, images: ['/Tronic 1gang switch.jpg'], description: 'A 1-gang switch from Tronic.', longDescription: 'A high-quality 1-gang switch from Tronic, known for its sleek design.', category: 'lighting-electrical', rating: 4.7, reviews: 180, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: 'Tronic 2 Gang Switch', price: 360, images: ['/Tronic 2 gang switch.jpg'], description: 'A 2-gang switch from Tronic.', longDescription: 'A durable and stylish 2-gang switch from Tronic.', category: 'lighting-electrical', rating: 4.7, reviews: 160, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: 'Tronic 3 Gang Switch', price: 450, images: ['/Tronic 3Gang switch.jpg'], description: 'A 3-gang switch from Tronic.', longDescription: 'A versatile 3-gang switch from Tronic, perfect for any room.', category: 'lighting-electrical', rating: 4.7, reviews: 140, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: 'Tronic 4 Gang Switch', price: 150, images: ['/Tronic 4 gang switch.jpg'], description: 'A 4-gang switch from Tronic.', longDescription: 'A 4-gang switch from Tronic, offering control over multiple light sources.', category: 'lighting-electrical', rating: 4.7, reviews: 125, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: '4FT Earthrod', price: 280, images: ['/4FT EARTHROD.jpg'], description: 'A 4-foot copper earthrod.', longDescription: 'A 4-foot copper earthrod for effective electrical grounding.', category: 'lighting-electrical', rating: 4.9, reviews: 250, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: 'Black IFLUX 3 Gang Switch', price: 360, images: ['/3 GANG IFLUX  FLOUR SERIES SWH3G2-14.jpg'], description: 'A 3-gang switch in black.', longDescription: 'A sleek, black 3-gang switch from the IFLUX Flour series.', category: 'lighting-electrical', rating: 4.8, reviews: 110, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: '300w New Streetlight 58300', price: 8000, images: ['/300w New Streetlight 58300 .jpg'], description: 'A 300W new model streetlight.', longDescription: 'A powerful 300W streetlight, model 58300, for excellent outdoor illumination.', category: 'lighting-electrical', rating: 4.9, reviews: 80, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: '300W Optonica Gold Streetlight', price: 8970, images: ['/300W Optonica Gold Street.jpg'], description: 'A 300W gold streetlight from Optonica.', longDescription: 'A high-performance 300W streetlight from Optonica with a stylish gold finish.', category: 'lighting-electrical', rating: 4.9, reviews: 70, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
+  { name: '300W Optonica Silver Streetlight', price: 8970, images: ['/300W Optonica Silver Street.jpg'], description: 'A 300W silver streetlight from Optonica.', longDescription: 'A durable and efficient 300W streetlight from Optonica with a sleek silver finish.', category: 'lighting-electrical', rating: 4.9, reviews: 65, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
 ];
+let productsCache: Product[] | null = null;
+let seeded = false;
 
-let productsCollection: Product[] = allProductsData.map((p, index) => ({
-  ...p,
-  id: `prod-${index}`,
-  rating: p.rating || Math.floor(Math.random() * 3) + 3,
-  reviews: p.reviews || Math.floor(Math.random() * 100),
-}));
-
-// This is a simplified in-memory cache. In a real app, this would be backed by a database.
-let allProducts: Product[] = [...productsCollection];
-let allCategories: Category[] = [
-  { id: 'tanks', name: 'Tanks' },
-  { id: 'plumbing', name: 'Plumbing' },
-  { id: 'lighting-electrical', name: 'Lighting & Electrical' },
-  { id: 'decor', name: 'Home & Decor' },
-  { id: 'roofing', name: 'Roofing & Construction' },
-];
-
-// Helper to simulate database calls
-const simulateDB = <T>(data: T, delay = 50): Promise<T> =>
-  new Promise(resolve => setTimeout(() => resolve(data), delay));
-
-
-export async function getProducts(): Promise<Product[]> {
+// Function to seed products into Firestore
+export async function seedProducts() {
+    if (seeded) return;
     try {
         const productsCollection = collection(db, "products");
-        const productSnapshot = await getDocs(productsCollection);
-        if (productSnapshot.empty) {
-            console.log('No products found in Firestore, using local data.');
-            await seedProducts(); // Seed the data if the collection is empty
-            const seededProducts = await getDocs(productsCollection);
-            allProducts = seededProducts.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-            return allProducts;
+        const snapshot = await getDocs(productsCollection);
+        if (snapshot.empty) {
+            console.log("Seeding products into Firestore...");
+            const batch = writeBatch(db);
+            allProductsData.forEach(productData => {
+                const docRef = doc(productsCollection); // Automatically generate new ID
+                batch.set(docRef, productData);
+            });
+            await batch.commit();
+            console.log("Seeding complete.");
         }
-        allProducts = productSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-        return allProducts;
+        seeded = true;
     } catch (error) {
-        console.error("Firestore error, falling back to local data:", error);
-        return allProductsData.map((p, index) => ({...p, id: `local-${index}`}));
+        console.error("Error seeding products: ", error);
+        // This might happen due to security rules, we'll rely on local data.
+        seeded = true;
     }
 }
 
+// Function to get all products
+export async function getProducts(): Promise<Product[]> {
+  if (productsCache) {
+    return productsCache;
+  }
+  try {
+    await seedProducts(); // Ensure seeding has been attempted
+    const productsCollection = collection(db, "products");
+    const productSnapshot = await getDocs(productsCollection);
+    
+    if (productSnapshot.empty) {
+        // If Firestore is empty (e.g., due to security rules blocking reads), use local data
+        console.warn("Firestore is empty or inaccessible. Falling back to local product data.");
+        const localProducts = allProductsData.map((p, index) => ({ id: `local-${index}`, ...p }));
+        productsCache = localProducts;
+        return localProducts;
+    }
+
+    const productList = productSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Product[];
+    
+    productsCache = productList;
+    return productList;
+
+  } catch (error) {
+    console.error("Failed to fetch products from Firestore, falling back to local data.", error);
+    // Fallback to local data if there's any error
+    const localProducts = allProductsData.map((p, index) => ({ id: `local-${index}`, ...p }));
+    productsCache = localProducts;
+    return localProducts;
+  }
+}
+
+// Function to get a single product by ID
 export async function getProductById(id: string): Promise<Product | undefined> {
-    try {
-        const productRef = doc(db, 'products', id);
-        const productSnap = await getDoc(productRef);
+  // First, try to find it in the cached list of all products
+  const products = await getProducts();
+  const productFromCache = products.find(p => p.id === id);
+  if (productFromCache) {
+      return productFromCache;
+  }
 
-        if (productSnap.exists()) {
-            return { id: productSnap.id, ...productSnap.data() } as Product;
-        } else {
-            console.warn(`Product with id ${id} not found in Firestore. Trying local data.`);
-            return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
-        }
-    } catch (error) {
-        console.error(`Firestore error fetching product ${id}, falling back to local data:`, error);
-        return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
+  // If not in cache (e.g., it's a new product and cache isn't updated), try fetching directly
+  try {
+    const productRef = doc(db, "products", id);
+    const productSnap = await getDoc(productRef);
+    if (productSnap.exists()) {
+      return { id: productSnap.id, ...productSnap.data() } as Product;
+    } else {
+       // Final fallback to local data if direct fetch fails
+       return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
     }
+  } catch(error) {
+      console.error(`Failed to fetch product ${id} from Firestore, falling back to local data.`, error);
+      return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
+  }
 }
 
+// Function to get all categories
 export async function getCategories(): Promise<Category[]> {
-  return simulateDB(allCategories);
+  // This can be expanded to fetch from a 'categories' collection in Firestore
+  return [
+    { id: 'tanks', name: 'Tanks' },
+    { id: 'plumbing', name: 'Plumbing' },
+    { id: 'lighting-electrical', name: 'Lighting & Electrical' },
+    { id: 'decor', name: 'Home & Decor' },
+    { id: 'roofing', name: 'Roofing & Construction' },
+  ];
 }
 
-export async function getHomePageCategories(): Promise<HomePageCategory[]> {
-    return simulateDB(homePageCategories);
-}
 
-export async function getCarouselCategories(): Promise<CarouselCategory[]> {
-    return simulateDB(carouselCategories);
-}
-
-// Functions to modify data (for admin panel)
-export async function addProduct(productData: Omit<Product, 'id' | 'rating' | 'reviews'>): Promise<Product> {
-  const newProduct: Product = {
-    ...productData,
-    id: `prod-${Date.now()}`,
-    rating: Math.floor(Math.random() * 2) + 3.5, // 3.5 to 4.5
-    reviews: Math.floor(Math.random() * 100),
-  };
-  allProducts.push(newProduct);
-  return simulateDB(newProduct);
-}
-
-export async function updateProduct(productId: string, productData: Partial<Product>): Promise<Product | undefined> {
-    allProducts = allProducts.map(p => p.id === productId ? { ...p, ...productData } : p);
-    const updatedProduct = allProducts.find(p => p.id === productId);
-    return simulateDB(updatedProduct);
-}
-// Get users, transactions - simplified for now
+// --- Mock User and Transaction Data ---
 const mockUsers: MockUser[] = [
-    { id: 'user-1', name: 'John Doe', username: 'johndoe', email: 'john.doe@example.com', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-07-10T14:30:00Z', orders: 5, visitDuration: 15 },
-    { id: 'user-2', name: 'Jane Smith', username: 'janesmith', email: 'jane.smith@example.com', role: 'staff', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-07-11T09:00:00Z', orders: 2, visitDuration: 8 },
-    { id: 'user-3', name: 'Alice Johnson', username: 'alicej', email: 'alice.j@example.com', role: 'user', signedUp: '2023-03-10T08:00:00Z', lastSeen: '2023-07-09T18:45:00Z', orders: 10, visitDuration: 25 },
-    { id: 'user-4', name: 'Bob Brown', username: 'bobb', email: 'bob.b@example.com', role: 'user', signedUp: '2023-06-01T18:00:00Z', lastSeen: '2023-07-11T11:10:00Z', orders: 0, visitDuration: 5 },
+    { id: 'user-1', name: 'Alice Johnson', username: 'alicej', email: 'alice@example.com', password: 'password123', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-07-20T14:30:00Z', orders: 5, visitDuration: 15 },
+    { id: 'user-2', name: 'Bob Smith', username: 'bobsmith', email: 'bob@example.com', password: 'password123', role: 'staff', signedUp: '2023-02-20T11:00:00Z', lastSeen: '2023-07-21T09:00:00Z', orders: 2, visitDuration: 8 },
+    { id: 'user-3', name: 'Charlie Brown', username: 'charlieb', email: 'charlie@example.com', password: 'password123', role: 'user', signedUp: '2023-03-10T12:00:00Z', lastSeen: '2023-07-19T18:00:00Z', orders: 1, visitDuration: 25 },
+    { id: 'user-4', name: 'Diana Prince', username: 'dianap', email: 'diana@example.com', password: 'password123', role: 'user', signedUp: '2023-04-05T13:00:00Z', lastSeen: '2023-07-21T11:45:00Z', orders: 10, visitDuration: 12 },
+    { id: 'user-5', name: 'Eve Adams', username: 'evea', email: 'eve@example.com', password: 'password123', role: 'user', signedUp: '2023-05-25T14:00:00Z', lastSeen: '2023-07-18T20:15:00Z', orders: 0, visitDuration: 5 },
 ];
 
 const mockTransactions: Transaction[] = [
-    { id: 'txn-1', customerName: 'Alice Johnson', email: 'alice.j@example.com', amount: 15000, date: '2023-07-08T10:30:00Z', status: 'Completed', productName: 'Kentank 2000L' },
-    { id: 'txn-2', customerName: 'John Doe', email: 'john.doe@example.com', amount: 2500, date: '2023-07-10T11:00:00Z', status: 'Completed', productName: 'Ample Light' },
-    { id: 'txn-3', customerName: 'Jane Smith', email: 'jane.smith@example.com', amount: 3300, date: '2023-07-11T09:05:00Z', status: 'Pending', productName: 'Artistic Lights' },
-    { id: 'txn-4', customerName: 'Michael Lee', email: 'michael.l@example.com', amount: 1900, date: '2023-07-11T12:00:00Z', status: 'Failed', productName: 'WarmLight wall bracket' },
+    { id: 'txn-1', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 15000, date: '2023-07-18T10:30:00Z', status: 'Completed', productName: 'Kentank 2000L' },
+    { id: 'txn-2', customerName: 'Bob Smith', email: 'bob@example.com', amount: 3300, date: '2023-07-19T14:00:00Z', status: 'Completed', productName: 'Artistic Lights' },
+    { id: 'txn-3', customerName: 'Charlie Brown', email: 'charlie@example.com', amount: 8000, date: '2023-07-20T11:00:00Z', status: 'Pending', productName: 'Rainwater Harvesting Tank' },
+    { id: 'txn-4', customerName: 'Diana Prince', email: 'diana@example.com', amount: 1200, date: '2023-07-20T15:45:00Z', status: 'Completed', productName: 'Ironsheet Mabati' },
+    { id: 'txn-5', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 500, date: '2023-07-21T09:15:00Z', status: 'Failed', productName: 'Roofing Nails' },
 ];
 
 export async function getUsers(): Promise<MockUser[]> {
-    return simulateDB(mockUsers);
-}
-
-export async function getTransactions(): Promise<Transaction[]> {
-    return simulateDB(mockTransactions);
-}
-export async function signUpUser(userData: Partial<MockUser>): Promise<MockUser> {
-  const newUser: MockUser = {
-    id: `user-${Date.now()}`,
-    name: userData.name || '',
-    username: userData.username || '',
-    email: userData.email || '',
-    role: 'user',
-    signedUp: new Date().toISOString(),
-    lastSeen: new Date().toISOString(),
-    orders: 0,
-    visitDuration: 0,
-  };
-  mockUsers.push(newUser);
-  return simulateDB(newUser);
+    return new Promise(resolve => setTimeout(() => resolve(mockUsers), 500));
 }
 
 export async function getUserByEmail(email: string): Promise<MockUser | undefined> {
-    const user = mockUsers.find(u => u.email === email);
-    return simulateDB(user);
+    return new Promise(resolve => setTimeout(() => resolve(mockUsers.find(u => u.email === email)), 200));
 }
 
-// Function to seed initial data into Firestore
-export async function seedProducts() {
-    const productsCollectionRef = collection(db, "products");
-    const snapshot = await getDocs(productsCollectionRef);
-    if (snapshot.empty) {
-      console.log('Seeding products into Firestore...');
-      const batch = writeBatch(db);
-      allProductsData.forEach((product) => {
-        const docRef = doc(productsCollectionRef);
-        batch.set(docRef, product);
-      });
-      await batch.commit();
-      console.log('Seeding complete.');
-    } else {
-      console.log('Products collection is not empty, skipping seed.');
-    }
-  }
+export async function signUpUser(userData: Pick<MockUser, 'name' | 'username' | 'email' | 'password'>): Promise<MockUser> {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const existing = mockUsers.find(u => u.email === userData.email);
+            if (existing) {
+                reject(new Error("An account with this email already exists."));
+                return;
+            }
+            const newUser: MockUser = {
+                id: `user-${mockUsers.length + 1}`,
+                role: 'user',
+                signedUp: new Date().toISOString(),
+                lastSeen: new Date().toISOString(),
+                orders: 0,
+                visitDuration: 0,
+                ...userData,
+            };
+            mockUsers.push(newUser);
+            resolve(newUser);
+        }, 300);
+    });
+}
+
+export async function getTransactions(): Promise<Transaction[]> {
+    return new Promise(resolve => setTimeout(() => resolve(mockTransactions), 500));
+}
