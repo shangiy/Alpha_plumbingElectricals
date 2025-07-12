@@ -1,4 +1,3 @@
-// product-recommendations.ts
 'use server';
 /**
  * @fileOverview Provides product recommendations based on user search queries.
@@ -9,7 +8,7 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 
 const ProductRecommendationsInputSchema = z.object({
   searchQuery: z.string().describe('The user\'s search query.'),

@@ -6,9 +6,8 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import { getProducts, getTransactions } from '@/lib/data'; // Assuming these functions can be used to get mock data
-import type { Product, Transaction } from '@/lib/types';
 
 // Mock function to simulate fetching a user's cart
 export const getCartContents = ai.defineTool(

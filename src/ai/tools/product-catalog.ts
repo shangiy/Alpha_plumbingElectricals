@@ -5,8 +5,7 @@
 
 import {ai} from '@/ai/genkit';
 import {getProducts} from '@/lib/data';
-import type {Product} from '@/lib/types';
-import {z} from 'genkit';
+import {z} from 'zod';
 
 const ProductSearchInputSchema = z.object({
   query: z

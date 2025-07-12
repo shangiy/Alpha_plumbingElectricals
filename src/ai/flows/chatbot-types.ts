@@ -1,7 +1,7 @@
 /**
  * @fileOverview Types and schemas for the conversational AI agent.
  */
-import {z} from 'genkit';
+import {z} from 'zod';
 
 export const ChatInputSchema = z.object({
   message: z.string().describe("The user's message to the chatbot."),
