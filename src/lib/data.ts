@@ -1,29 +1,7 @@
-import type { Product, Category, HomePageCategory, CarouselCategory, MockUser, Transaction } from './types';
+
+import type { Product, Category, MockUser, Transaction } from './types';
 import { db } from './firebase';
 import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
-
-const homePageCategories: HomePageCategory[] = [
-    { id: 'decor', name: 'Home & Decor', image: '/decor.png' },
-    { id: 'roofing', name: 'Roofing & Fencing', image: '/roof 2.png' },
-    { id: 'lighting-electrical', name: 'Lighting & Electrical', image: '/electric cable.png' },
-    { id: 'home-decor-2', name: 'Home & Decor', image: '/decor lighting design.png' },
-    { id: 'roofing-2', name: 'Roofing & Fencing', image: '/roof 2.png' },
-    { id: 'home-decor-3', name: 'Home & Decor', image: '/floor tiles.png' },
-    { id: 'lighting-2', name: 'Lighting & Electrical', image: '/artistic lights.png' }
-];
-
-export const carouselCategories: CarouselCategory[] = [
-  { id: 'lighting-1', name: 'Lighting & Electrical', image: '/aesthetic Light.png', href: '/lighting' },
-  { id: 'plumbing-1', name: 'Plumbing Equipment', image: '/ppr joints.png', href: '/plumbing' },
-  { id: 'tanks-1', name: 'Tanks', image: '/kentank 2000l.png', href: '/tanks' },
-  { id: 'decor-1', name: 'Home & Decor', image: '/birds lights.png', href: '/decor' },
-  { id: 'roofing-1', name: 'Roofing & Fencing', image: '/roof 2.png', href: '/roofing' },
-  { id: 'lighting-2', name: 'Lighting & Electrical', image: '/Electric cable per roll.jpg', href: '/lighting' },
-  { id: 'decor-2', name: 'Home & Decor', image: '/crystall chanderlier.png', href: '/decor' },
-  { id: 'roofing-2', name: 'Roofing & Fencing', image: '/roof 3.png', href: '/roofing' },
-  { id: 'decor-3', name: 'Home & Decor', image: '/MDF & chipboard.png', href: '/decor' },
-  { id: 'lighting-3', name: 'Lighting & Electrical', image: '/classic chandelier.png', href: '/lighting' },
-];
 
 export const allProductsData: Omit<Product, 'id'>[] = [
   // This is the initial data for seeding only. The app will read from Firestore.
@@ -46,9 +24,9 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Pinkish Sink', price: 3000, images: ['/pinkish sink.png'], description: 'A chic and modern pinkish sink.', longDescription: 'Make a bold statement in your bathroom with this chic and modern pinkish sink. Made from high-quality ceramic, it is both durable and stylish.', category: 'decor', rating: 4.5, reviews: 15, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Bathroom Makeover Sink', price: 7500, images: ['/Bathroom makeOver Sink.png'], description: 'Complete sink unit for a bathroom makeover.', longDescription: 'A complete sink and vanity unit to instantly upgrade your bathroom. Includes a modern basin, faucet, and storage cabinet. Easy to install.', category: 'decor', rating: 4.8, reviews: 25, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Monkey Lights', price: 4000, images: ['/monkey lights.png'], description: 'Playful and unique monkey-themed lights.', longDescription: 'Bring a sense of fun and adventure to your decor with these playful monkey-themed lights. A great conversation starter and a unique piece of functional art.', category: 'decor', rating: 4.7, reviews: 18, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Golden Stripe Chandelier', price: 8000, images: ['/Golden stripe Chandelier.jpg'], description: 'A luxurious chandelier with golden stripes.', longDescription: 'This luxurious chandelier features a beautiful design with golden stripes, creating a stunning visual effect. It is the perfect centerpiece for a sophisticated room.', category: 'decor', rating: 4.9, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Golden Stripe Chandelier', price: 8000, images: ['/Golden stripe Chandelier.jpg'], description: 'A luxurious chandelier with golden stripes.', longDescription: 'This luxurious chandelier features a beautiful design with golden stripes, creating a stunning visual effect. It is the perfect centerpiece for a sophisticated room.', category: 'lighting-electrical', rating: 4.9, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'BlackMate Golden Chandelier', price: 8500, images: ['/BlackMate golden Chandelier.jpg'], description: 'Elegant black matte and golden chandelier.', longDescription: 'Combining black matte and golden finishes, this chandelier offers a contemporary and elegant look. Its high-quality construction ensures it will be a lasting addition to your home.', category: 'decor', rating: 4.8, reviews: 28, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Wall Lights', price: 2000, images: ['/Wall lights.jpg'], description: 'Stylish and modern wall lights for any room.', longDescription: 'These stylish and modern wall lights provide excellent ambient lighting and can complement a variety of decor styles. Energy-efficient and easy to install.', category: 'decor', rating: 4.6, reviews: 35, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Wall Lights', price: 2000, images: ['/Wall lights.jpg'], description: 'Stylish and modern wall lights for any room.', longDescription: 'These stylish and modern wall lights provide excellent ambient lighting and can complement a variety of decor styles. Energy-efficient and easy to install.', category: 'lighting-electrical', rating: 4.6, reviews: 35, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Modern Soap Dish', price: 1500, images: ['/soap dish.png'], description: 'A sleek and modern soap dish for your bathroom.', longDescription: 'Keep your soap dry and your counter clean with this sleek and modern soap dish. Its minimalist design fits perfectly in any contemporary bathroom.', category: 'decor', rating: 4.5, reviews: 50, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Round Brown Frencia Countertop', price: 5500, images: ['/Round brown frencia countertop.jpg'], description: 'A beautiful round brown frencia countertop sink.', longDescription: 'This countertop sink features a beautiful round brown frencia design, adding a touch of rustic elegance to your bathroom. Made from durable, high-quality material.', category: 'decor', rating: 4.7, reviews: 21, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Golden Layers Chandelier', price: 4000, images: ['/golden layers.jpg'], description: 'A stunning chandelier with golden layers.', longDescription: 'This stunning chandelier features multiple golden layers that create a captivating light effect. A perfect statement piece for modern and classic interiors.', category: 'decor', rating: 4.8, reviews: 19, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
@@ -58,11 +36,11 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Decor Large Chandelier', price: 14500, images: ['/Decor large Chandelier.jpg'], description: 'A large and impressive decorative chandelier.', longDescription: 'Make a grand statement with this large decorative chandelier. Its intricate design and impressive size are perfect for spaces with high ceilings.', category: 'decor', rating: 4.9, reviews: 20, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Classic Chandelier', price: 2500, images: ['/classic chandelier.png'], description: 'A timeless and classic chandelier.', longDescription: 'This timeless chandelier brings classic elegance to any home. Its graceful design and warm light create a welcoming atmosphere.', category: 'decor', rating: 4.6, reviews: 45, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Stylish Mirror', price: 2000, images: ['/Stylish mirror.jpg'], description: 'A stylish mirror to enhance your decor.', longDescription: 'Enhance your decor with this stylish mirror. Its modern frame and high-quality reflection make it a perfect addition to any room, from entryways to bathrooms.', category: 'decor', rating: 4.5, reviews: 33, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: '5-Lamp Chandelier General', price: 5100, images: ['/5 Lamp Chandelier General.png'], description: 'A general-purpose 5-lamp chandelier.', longDescription: 'A versatile 5-lamp chandelier that provides ample light and fits well in a variety of settings. A practical and stylish lighting solution.', category: 'decor', rating: 4.7, reviews: 28, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Hexagonal Decor Light', price: 3800, images: ['/hexagonal decor light.jpg'], description: 'A modern hexagonal decorative light fixture.', longDescription: 'This modern decorative light features a trendy hexagonal design. It can be used alone or grouped together to create a custom lighting installation.', category: 'decor', rating: 4.8, reviews: 15, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: '5-Lamp Chandelier General', price: 5100, images: ['/5 Lamp Chandelier General.png'], description: 'A general-purpose 5-lamp chandelier.', longDescription: 'A versatile 5-lamp chandelier that provides ample light and fits well in a variety of settings. A practical and stylish lighting solution.', category: 'lighting-electrical', rating: 4.7, reviews: 28, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Hexagonal Decor Light', price: 3800, images: ['/hexagonal decor light.jpg'], description: 'A modern hexagonal decorative light fixture.', longDescription: 'This modern decorative light features a trendy hexagonal design. It can be used alone or grouped together to create a custom lighting installation.', category: 'lighting-electrical', rating: 4.8, reviews: 15, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Round Smart Mirror', price: 4500, images: ['/Round smart mirror.jpg'], description: 'A round smart mirror with LED lighting.', longDescription: 'Upgrade your bathroom with this round smart mirror. It features integrated LED lighting with adjustable brightness and an anti-fog function.', category: 'decor', rating: 4.9, reviews: 25, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Stunning Mirror', price: 1000, images: ['/Stunning mirror.jpg'], description: 'A stunning mirror with a unique frame.', longDescription: 'This stunning mirror features a unique and eye-catching frame that makes it a piece of wall art. Perfect for adding a decorative touch to any space.', category: 'decor', rating: 4.7, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  { name: 'Ceiling 3-Mode Light', price: 6500, images: ['/Ceiling 3mode light.jpg'], description: 'A ceiling light with 3 different light modes.', longDescription: 'This versatile ceiling light offers three different light modes (e.g., warm, cool, and neutral) to suit any mood or occasion. Sleek, modern, and energy-efficient.', category: 'decor', rating: 4.8, reviews: 22, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { name: 'Ceiling 3-Mode Light', price: 6500, images: ['/Ceiling 3mode light.jpg'], description: 'A ceiling light with 3 different light modes.', longDescription: 'This versatile ceiling light offers three different light modes (e.g., warm, cool, and neutral) to suit any mood or occasion. Sleek, modern, and energy-efficient.', category: 'lighting-electrical', rating: 4.8, reviews: 22, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Square Toilet', price: 29000, images: ['/square toilet.jpg'], description: 'A modern, geometric square toilet.', longDescription: 'This toilet features a bold, geometric square design for a distinctly modern bathroom. Includes a soft-close seat and efficient dual-flush system.', category: 'decor', rating: 4.9, reviews: 10, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Designer Sink', price: 3500, images: ['/Designer sink.jpg'], description: 'A designer sink with a unique shape.', longDescription: 'This designer sink stands out with its unique shape and high-quality finish. It serves as a functional sculpture for your bathroom countertop.', category: 'decor', rating: 4.7, reviews: 18, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Plumbing Pipe', price: 200, images: ['/ppr pipes.png'], description: 'High-quality plumbing pipes.', longDescription: 'Durable and reliable plumbing pipes suitable for a variety of residential and commercial applications. Available in multiple sizes.', category: 'plumbing', rating: 4.8, reviews: 80, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
@@ -85,7 +63,6 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Black elegant watertap', price: 2500, images: ['/Black elegant watertap.jpg'], description: 'A stylish and elegant black water tap.', longDescription: 'A sleek and minimalist water tap in matte black, perfect for modern kitchens and bathrooms.', category: 'plumbing', rating: 4.7, reviews: 115, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Double sink with tap', price: 11000, images: ['/Double sink with tap.jpg'], description: 'A practical double sink with a tap.', longDescription: 'A spacious and practical double sink for your kitchen, complete with a modern tap. Made from durable stainless steel.', category: 'plumbing', rating: 4.8, reviews: 105, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'PPR MALE ADAPTOR 50MM (half inch)', price: 280, images: ['/PPR MALE ADAPTOR 50MM (half inche).jpg'], description: 'A 50mm (half inch) PPR male adaptor.', longDescription: 'A high-quality 50mm (half inch) PPR male adaptor for connecting pipes to threaded fittings.', category: 'plumbing', rating: 5, reviews: 300, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  // Roofing Products
   { name: 'Ironsheet Mabati', price: 1200, images: ['/Ironsheet mabati.png'], description: 'Durable ironsheet mabati for roofing.', longDescription: 'High-quality, galvanized ironsheet mabati designed to withstand harsh weather conditions. Available per meter.', category: 'roofing', rating: 4.8, reviews: 150, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Roofing Nails', price: 300, images: ['/Roofing Nails.png'], description: 'Pack of galvanized roofing nails.', longDescription: 'A pack of high-quality, galvanized roofing nails with a waterproof seal to ensure a secure and long-lasting roof.', category: 'roofing', rating: 4.9, reviews: 250, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Roof Ridges', price: 800, images: ['/Roof ridges.png'], description: 'Protective ridges for roofing.', longDescription: 'Protective roof ridges to cover the apex of the roof, preventing water leakage and providing a finished look.', category: 'roofing', rating: 4.7, reviews: 120, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
@@ -99,7 +76,6 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Durable Countertops', price: 2000, images: ['/durable countertops.png'], description: 'Highly durable countertops for various uses.', longDescription: 'Highly durable and scratch-resistant countertops, perfect for high-traffic areas like kitchens and workshops. Available per square meter.', category: 'roofing', rating: 4.8, reviews: 85, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Yale Door Locks 4L-22934', price: 9095, images: ['/yale door locks  4L-22934-LS.png'], description: 'High-security Yale door locks.', longDescription: 'Ensure your property is secure with this high-security Yale door lock, model 4L-22934. Known for its reliability and anti-pick features.', category: 'roofing', rating: 4.9, reviews: 130, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Union Locks 4L-22934-LS', price: 9095, images: ['/4L-22934-LS union.png'], description: 'Dependable Union brand door locks.', longDescription: 'A dependable and robust Union door lock, model 4L-22934-LS. Provides excellent security for residential and commercial properties.', category: 'roofing', rating: 4.9, reviews: 125, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
-  // Lighting & Electrical
   { name: 'Aesthetic Lights', price: 1200, images: ['/aesthetic Light.png'], description: 'Beautiful aesthetic lights.', longDescription: 'Beautiful aesthetic lights to create the perfect mood in any room.', category: 'lighting-electrical', rating: 4.7, reviews: 40, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Crystal Chandelier', price: 1500, images: ['/crystall chanderlier.png'], description: 'Elegant crystal chandelier.', longDescription: 'An elegant crystal chandelier that adds a touch of class to your home.', category: 'lighting-electrical', rating: 4.8, reviews: 35, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { name: 'Curvy Blue Light', price: 3500, images: ['/curvy blue light.jpg'], description: 'A modern ceiling light with a curvy design.', longDescription: 'A modern ceiling light with a unique curvy blue design.', category: 'lighting-electrical', rating: 4.6, reviews: 25, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
@@ -121,154 +97,158 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: '300W Optonica Gold Streetlight', price: 8970, images: ['/300W Optonica Gold Street.jpg'], description: 'A 300W gold streetlight from Optonica.', longDescription: 'A high-performance 300W streetlight from Optonica with a stylish gold finish.', category: 'lighting-electrical', rating: 4.9, reviews: 70, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
   { name: '300W Optonica Silver Streetlight', price: 8970, images: ['/300W Optonica Silver Street.jpg'], description: 'A 300W silver streetlight from Optonica.', longDescription: 'A durable and efficient 300W streetlight from Optonica with a sleek silver finish.', category: 'lighting-electrical', rating: 4.9, reviews: 65, seller: { name: 'Alpha Electricals', 'id': 'seller-alpha' } },
 ];
-let productsCache: Product[] | null = null;
-let seeded = false;
-
-// Function to seed products into Firestore
-export async function seedProducts() {
-    if (seeded) return;
-    try {
-        const productsCollection = collection(db, "products");
-        const snapshot = await getDocs(productsCollection);
-        if (snapshot.empty) {
-            console.log("Seeding products into Firestore...");
-            const batch = writeBatch(db);
-            allProductsData.forEach(productData => {
-                const docRef = doc(productsCollection); // Automatically generate new ID
-                batch.set(docRef, productData);
-            });
-            await batch.commit();
-            console.log("Seeding complete.");
-        }
-        seeded = true;
-    } catch (error) {
-        console.error("Error seeding products: ", error);
-        // This might happen due to security rules, we'll rely on local data.
-        seeded = true;
-    }
-}
-
-// Function to get all products
-export async function getProducts(): Promise<Product[]> {
-  if (productsCache) {
-    return productsCache;
-  }
-  try {
-    await seedProducts(); // Ensure seeding has been attempted
-    const productsCollection = collection(db, "products");
-    const productSnapshot = await getDocs(productsCollection);
-    
-    if (productSnapshot.empty) {
-        // If Firestore is empty (e.g., due to security rules blocking reads), use local data
-        console.warn("Firestore is empty or inaccessible. Falling back to local product data.");
-        const localProducts = allProductsData.map((p, index) => ({ id: `local-${index}`, ...p }));
-        productsCache = localProducts;
-        return localProducts;
-    }
-
-    const productList = productSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Product[];
-    
-    productsCache = productList;
-    return productList;
-
-  } catch (error) {
-    console.error("Failed to fetch products from Firestore, falling back to local data.", error);
-    // Fallback to local data if there's any error
-    const localProducts = allProductsData.map((p, index) => ({ id: `local-${index}`, ...p }));
-    productsCache = localProducts;
-    return localProducts;
-  }
-}
-
-// Function to get a single product by ID
-export async function getProductById(id: string): Promise<Product | undefined> {
-  // First, try to find it in the cached list of all products
-  const products = await getProducts();
-  const productFromCache = products.find(p => p.id === id);
-  if (productFromCache) {
-      return productFromCache;
-  }
-
-  // If not in cache (e.g., it's a new product and cache isn't updated), try fetching directly
-  try {
-    const productRef = doc(db, "products", id);
-    const productSnap = await getDoc(productRef);
-    if (productSnap.exists()) {
-      return { id: productSnap.id, ...productSnap.data() } as Product;
-    } else {
-       // Final fallback to local data if direct fetch fails
-       return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
-    }
-  } catch(error) {
-      console.error(`Failed to fetch product ${id} from Firestore, falling back to local data.`, error);
-      return allProductsData.map((p, index) => ({...p, id: `local-${index}`})).find(p => p.id === id);
-  }
-}
-
-// Function to get all categories
-export async function getCategories(): Promise<Category[]> {
-  // This can be expanded to fetch from a 'categories' collection in Firestore
-  return [
+  
+export const categories: Category[] = [
     { id: 'tanks', name: 'Tanks' },
     { id: 'plumbing', name: 'Plumbing' },
     { id: 'lighting-electrical', name: 'Lighting & Electrical' },
     { id: 'decor', name: 'Home & Decor' },
     { id: 'roofing', name: 'Roofing & Construction' },
-  ];
+];
+
+export const carouselCategories: CarouselCategory[] = [
+    { id: 'tanks', name: 'Tanks', href: '/tanks', image: '/kentank 2000l.png'},
+    { id: 'plumbing', name: 'Plumbing', href: '/plumbing', image: '/ppr pipes.png'},
+    { id: 'lighting', name: 'Lighting & Electrical', href: '/lighting', image: '/decor lighting design.png'},
+    { id: 'decor', name: 'Home & Decor', href: '/decor', image: '/square lights.png'},
+    { id: 'roofing', name: 'Roofing & Construction', href: '/roofing', image: '/roof 2.png'},
+];
+
+let allUsers: MockUser[] = [
+  { id: 'user-1', name: 'Alice Johnson', username: 'alicej', email: 'alice@example.com', password: 'password123', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-10-26T12:00:00Z', orders: 15, visitDuration: 25 },
+  { id: 'user-2', name: 'Bob Williams', username: 'bobw', email: 'bob@example.com', password: 'password123', role: 'staff', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-10-25T18:45:00Z', orders: 8, visitDuration: 15 },
+  { id: 'user-3', name: 'Charlie Brown', username: 'charlieb', email: 'charlie@example.com', password: 'password123', role: 'user', signedUp: '2023-03-10T09:00:00Z', lastSeen: '2023-10-26T09:30:00Z', orders: 3, visitDuration: 10 },
+  { id: 'user-4', name: 'Diana Miller', username: 'dianam', email: 'diana@example.com', password: 'password123', role: 'user', signedUp: '2023-04-05T14:00:00Z', lastSeen: '2023-10-26T14:20:00Z', orders: 0, visitDuration: 5 },
+  { id: 'user-5', name: 'Ethan Davis', username: 'ethand', email: 'ethan@example.com', password: 'password123', role: 'user', signedUp: '2023-05-22T16:00:00Z', lastSeen: '2023-10-22T10:10:00Z', orders: 20, visitDuration: 45 },
+];
+
+let allTransactions: Transaction[] = [
+  { id: 'txn-1', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 15000, date: '2023-10-25T14:48:00Z', status: 'Completed', productName: 'Kentank 2000L' },
+  { id: 'txn-2', customerName: 'Bob Williams', email: 'bob@example.com', amount: 3300, date: '2023-10-24T10:20:00Z', status: 'Completed', productName: 'Artistic Lights' },
+  { id: 'txn-3', customerName: 'Charlie Brown', email: 'charlie@example.com', amount: 7500, date: '2023-10-26T09:35:00Z', status: 'Pending', productName: 'Bathroom Makeover Sink' },
+  { id: 'txn-4', customerName: 'Ethan Davis', email: 'ethan@example.com', amount: 1200, date: '2023-10-21T11:00:00Z', status: 'Failed', productName: 'Ironsheet Mabati' },
+  { id: 'txn-5', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 8000, date: '2023-09-15T18:00:00Z', status: 'Completed', productName: 'Rainwater Harvesting Tank' },
+];
+
+
+let hasSeeded = false;
+
+export async function seedProducts() {
+  if (hasSeeded) return;
+
+  try {
+    const productsCollection = collection(db, "products");
+    const snapshot = await getDocs(productsCollection);
+    
+    if (snapshot.empty) {
+      console.log('Firestore is empty. Seeding initial products...');
+      const batch = writeBatch(db);
+      allProductsData.forEach((product) => {
+        const docRef = doc(productsCollection);
+        batch.set(docRef, product);
+      });
+      await batch.commit();
+      console.log('Seeding complete.');
+    } else {
+      console.log('Firestore already contains data. Skipping seed.');
+    }
+    hasSeeded = true;
+  } catch (error) {
+    console.error("Error seeding products (may be due to security rules, this is okay for local dev):", error);
+    hasSeeded = true;
+  }
+}
+
+// Private function to fetch from Firestore, used internally
+async function _fetchProductsFromFirestore(): Promise<Product[]> {
+    const productsCollection = collection(db, "products");
+    const snapshot = await getDocs(productsCollection);
+    if (snapshot.empty) {
+        return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
 }
 
 
-// --- Mock User and Transaction Data ---
-const mockUsers: MockUser[] = [
-    { id: 'user-1', name: 'Alice Johnson', username: 'alicej', email: 'alice@example.com', password: 'password123', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-07-20T14:30:00Z', orders: 5, visitDuration: 15 },
-    { id: 'user-2', name: 'Bob Smith', username: 'bobsmith', email: 'bob@example.com', password: 'password123', role: 'staff', signedUp: '2023-02-20T11:00:00Z', lastSeen: '2023-07-21T09:00:00Z', orders: 2, visitDuration: 8 },
-    { id: 'user-3', name: 'Charlie Brown', username: 'charlieb', email: 'charlie@example.com', password: 'password123', role: 'user', signedUp: '2023-03-10T12:00:00Z', lastSeen: '2023-07-19T18:00:00Z', orders: 1, visitDuration: 25 },
-    { id: 'user-4', name: 'Diana Prince', username: 'dianap', email: 'diana@example.com', password: 'password123', role: 'user', signedUp: '2023-04-05T13:00:00Z', lastSeen: '2023-07-21T11:45:00Z', orders: 10, visitDuration: 12 },
-    { id: 'user-5', name: 'Eve Adams', username: 'evea', email: 'eve@example.com', password: 'password123', role: 'user', signedUp: '2023-05-25T14:00:00Z', lastSeen: '2023-07-18T20:15:00Z', orders: 0, visitDuration: 5 },
-];
+// Public function to get all products with fallback
+export async function getProducts(): Promise<Product[]> {
+    try {
+        const firestoreProducts = await _fetchProductsFromFirestore();
+        if (firestoreProducts.length > 0) {
+            return firestoreProducts;
+        }
+        // If firestore is empty (or fails), fallback to local
+        throw new Error("Firestore is empty, using fallback.");
+    } catch (error) {
+        console.warn(`Could not fetch from Firestore, falling back to local data. Error: ${error}`);
+        // Add a unique ID to local data if it doesn't have one
+        return allProductsData.map((p, index) => ({
+            ...p,
+            id: `local-${p.name.replace(/\s+/g, '-')}-${index}`
+        }));
+    }
+}
 
-const mockTransactions: Transaction[] = [
-    { id: 'txn-1', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 15000, date: '2023-07-18T10:30:00Z', status: 'Completed', productName: 'Kentank 2000L' },
-    { id: 'txn-2', customerName: 'Bob Smith', email: 'bob@example.com', amount: 3300, date: '2023-07-19T14:00:00Z', status: 'Completed', productName: 'Artistic Lights' },
-    { id: 'txn-3', customerName: 'Charlie Brown', email: 'charlie@example.com', amount: 8000, date: '2023-07-20T11:00:00Z', status: 'Pending', productName: 'Rainwater Harvesting Tank' },
-    { id: 'txn-4', customerName: 'Diana Prince', email: 'diana@example.com', amount: 1200, date: '2023-07-20T15:45:00Z', status: 'Completed', productName: 'Ironsheet Mabati' },
-    { id: 'txn-5', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 500, date: '2023-07-21T09:15:00Z', status: 'Failed', productName: 'Roofing Nails' },
-];
+
+// Public function to get a single product by ID with fallback
+export async function getProductById(id: string): Promise<Product | undefined> {
+    try {
+        const docRef = doc(db, "products", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return { id: docSnap.id, ...docSnap.data() } as Product;
+        } else {
+             throw new Error(`Product with ID ${id} not found in Firestore.`);
+        }
+    } catch (error) {
+        console.warn(`Could not fetch product ${id} from Firestore, falling back to local data. Error: ${error}`);
+        const localProducts = await getProducts();
+        return localProducts.find(p => p.id === id);
+    }
+}
+
+
+// ---- Mock Data Functions ----
+// These functions simulate database interactions for users and transactions.
+
+export async function getCategories(): Promise<Category[]> {
+    // In a real app, this might be fetched from a 'categories' collection in Firestore
+    return Promise.resolve(categories);
+}
 
 export async function getUsers(): Promise<MockUser[]> {
-    return new Promise(resolve => setTimeout(() => resolve(mockUsers), 500));
+  return Promise.resolve(allUsers);
 }
 
 export async function getUserByEmail(email: string): Promise<MockUser | undefined> {
-    return new Promise(resolve => setTimeout(() => resolve(mockUsers.find(u => u.email === email)), 200));
+  return Promise.resolve(allUsers.find(user => user.email === email));
 }
 
-export async function signUpUser(userData: Pick<MockUser, 'name' | 'username' | 'email' | 'password'>): Promise<MockUser> {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const existing = mockUsers.find(u => u.email === userData.email);
-            if (existing) {
-                reject(new Error("An account with this email already exists."));
-                return;
-            }
-            const newUser: MockUser = {
-                id: `user-${mockUsers.length + 1}`,
-                role: 'user',
-                signedUp: new Date().toISOString(),
-                lastSeen: new Date().toISOString(),
-                orders: 0,
-                visitDuration: 0,
-                ...userData,
-            };
-            mockUsers.push(newUser);
-            resolve(newUser);
-        }, 300);
-    });
+export async function signUpUser(userData: { name: string; username: string; email: string; password?: string }): Promise<MockUser> {
+    const existingUser = allUsers.find(u => u.email === userData.email);
+    if (existingUser) {
+        throw new Error("User with this email already exists.");
+    }
+    
+    const newUser: MockUser = {
+        id: `user-${allUsers.length + 1}`,
+        ...userData,
+        role: 'user', // default role
+        signedUp: new Date().toISOString(),
+        lastSeen: new Date().toISOString(),
+        orders: 0,
+        visitDuration: 0,
+    };
+    allUsers.push(newUser);
+    return Promise.resolve(newUser);
 }
+
 
 export async function getTransactions(): Promise<Transaction[]> {
-    return new Promise(resolve => setTimeout(() => resolve(mockTransactions), 500));
+  return Promise.resolve(allTransactions);
+}
+
+export function getLightingProducts() {
+  return allProductsData.filter(product => product.category === 'lighting-electrical');
 }
