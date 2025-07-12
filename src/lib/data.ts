@@ -192,6 +192,10 @@ export async function getProducts(): Promise<Product[]> {
 
 // Public function to get a single product by ID with fallback
 export async function getProductById(id: string): Promise<Product | undefined> {
+    if (id.startsWith('local-')) {
+        const localProducts = await getProducts();
+        return localProducts.find(p => p.id === id);
+    }
     try {
         const docRef = doc(db, "products", id);
         const docSnap = await getDoc(docRef);
@@ -204,7 +208,8 @@ export async function getProductById(id: string): Promise<Product | undefined> {
     } catch (error) {
         console.warn(`Could not fetch product ${id} from Firestore, falling back to local data. Error: ${error}`);
         const localProducts = await getProducts();
-        return localProducts.find(p => p.id === id);
+        // This fallback might not find the product if the ID is a firestore ID, but it's the best we can do.
+        return localProducts.find(p => p.name.replace(/\s+/g, '-') === id.split('-').slice(1, -1).join('-'));
     }
 }
 
@@ -213,8 +218,14 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 // These functions simulate database interactions for users and transactions.
 
 export async function getCategories(): Promise<Category[]> {
+  try {
     // In a real app, this might be fetched from a 'categories' collection in Firestore
+    // For now, we will simulate this with a small delay and fallback
     return Promise.resolve(categories);
+  } catch (error) {
+    console.warn('Could not fetch categories, falling back to local definition.');
+    return Promise.resolve(categories);
+  }
 }
 
 export async function getUsers(): Promise<MockUser[]> {
@@ -252,3 +263,4 @@ export async function getTransactions(): Promise<Transaction[]> {
 export function getLightingProducts() {
   return allProductsData.filter(product => product.category === 'lighting-electrical');
 }
+
