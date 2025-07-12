@@ -91,20 +91,27 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
           </CardHeader>
           
           <ScrollArea className="flex-1 bg-white" ref={scrollAreaRef}>
-            <CardContent className="p-3 space-y-2 text-sm">
+            <CardContent className="p-3 space-y-4 text-sm">
               {messages.map((message, index) => (
-                <div key={index}>
-                  {message.role === 'user' ? (
-                    <span><strong>You:</strong> {message.content}</span>
-                  ) : (
-                    <span><strong>Alpha AI:</strong> {message.content}</span>
-                  )}
+                <div key={index} className={cn(
+                    'flex items-end gap-2',
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                )}>
+                   <div className={cn(
+                       'max-w-[80%] rounded-lg p-2',
+                       message.role === 'user' 
+                         ? 'bg-blue-500 text-white' 
+                         : 'bg-muted text-muted-foreground'
+                   )}>
+                       <p className="whitespace-pre-wrap">{message.content}</p>
+                   </div>
                 </div>
               ))}
               {loading && (
-                 <div className="flex items-center gap-2">
-                    <strong>Alpha AI:</strong>
-                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                 <div className="flex items-end gap-2 justify-start">
+                    <div className="max-w-[80%] rounded-lg p-2 bg-muted text-muted-foreground">
+                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                    </div>
                  </div>
               )}
             </CardContent>
