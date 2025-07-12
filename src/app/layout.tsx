@@ -67,7 +67,10 @@ export default function RootLayout({
                     aria-label="Toggle Chatbot"
                   >
                     {isChatbotOpen ? (
-                        <X className="h-5 w-5" />
+                        <div className="flex items-center gap-2">
+                           <X className="h-5 w-5" />
+                           <span>Close</span>
+                        </div>
                     ) : (
                         <div className="flex items-center gap-2">
                             <MessageSquare className="h-5 w-5" />
