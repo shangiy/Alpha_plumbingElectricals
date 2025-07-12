@@ -61,23 +61,6 @@ export default function RootLayout({
               <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
               
               <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-                 <Button
-                    onClick={() => setIsChatbotOpen(!isChatbotOpen)}
-                    className="h-auto rounded-full bg-[#007bff] px-4 py-2 text-base font-semibold text-white shadow-lg hover:bg-[#0056b3]"
-                    aria-label="Toggle Chatbot"
-                  >
-                    {isChatbotOpen ? (
-                        <div className="flex items-center gap-2">
-                           <X className="h-5 w-5" />
-                           <span>Close</span>
-                        </div>
-                    ) : (
-                        <div className="flex items-center gap-2">
-                            <MessageSquare className="h-5 w-5" />
-                            <span>Alpha AI</span>
-                        </div>
-                    )}
-                  </Button>
                 <ScrollToTopButton />
               </div>
 
