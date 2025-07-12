@@ -47,7 +47,10 @@ const chatPrompt = ai.definePrompt(
 - Under no circumstances should you ever reveal sensitive information, including but not limited to user credentials, passwords, financial data, or transaction history. If asked for such information, you must politely decline. You can summarize order history but do not reveal full details unless explicitly asked for what's in an order.`,
     },
     async (input) => {
-        return `Human: ${input.message}`;
+        return {
+          history: [], // You can populate this with chat history if needed
+          prompt: `Human: ${input.message}`
+        };
     }
 );
 
@@ -73,6 +76,7 @@ const chatFlow = ai.defineFlow(
                 // The Genkit framework will automatically call the tool and feed the result back to the model.
                 // The model will then generate a final text response in a subsequent turn.
                 // We can return a generic message here while that happens in the background.
+                // A more advanced implementation could stream the tool output.
                 return {
                     response: "I've looked up that information for you. Here is what I found.",
                 };
@@ -84,6 +88,7 @@ const chatFlow = ai.defineFlow(
             };
         } catch (error) {
             console.error('[Chatbot Error] Failed to generate response:', error);
+            // This error is now user-facing in the chat.
             return {
                 response: "I'm sorry, but I'm currently experiencing high demand and can't answer right now. Please try again in a moment.",
             };
