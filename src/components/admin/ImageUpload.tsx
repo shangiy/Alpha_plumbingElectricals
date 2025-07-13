@@ -5,11 +5,12 @@ import { useState, useRef, type ChangeEvent } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { X, UploadCloud, GripVertical, Loader2 } from 'lucide-react';
+import { X, UploadCloud, GripVertical, Loader2, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { uploadImage } from '@/lib/storage';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 interface ImageUploadProps {
   value: string[];
@@ -21,6 +22,7 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
   const { toast } = useToast();
   const [newUrl, setNewUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
 
@@ -48,13 +50,16 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
     }
     
     setIsUploading(true);
+    setUploadError(null);
     try {
         const downloadURL = await uploadImage(file);
         onChange([...value, downloadURL]);
         toast({ description: 'Image uploaded successfully.' });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
         console.error("Upload error in component:", error);
-        toast({ variant: 'destructive', description: 'Image upload failed. Please try again.' });
+        setUploadError(`Upload failed: ${errorMessage}. Please check storage rules and try again.`);
+        toast({ variant: 'destructive', title: 'Upload Failed', description: errorMessage });
     } finally {
         setIsUploading(false);
     }
@@ -173,6 +178,14 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
           )}
         </div>
 
+        {uploadError && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Upload Error</AlertTitle>
+            <AlertDescription>{uploadError}</AlertDescription>
+          </Alert>
+        )}
+
         <div className="relative">
             <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -189,8 +202,9 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAddUrl()}
+                disabled={isUploading}
             />
-            <Button onClick={handleAddUrl} type="button" variant="outline">Add URL</Button>
+            <Button onClick={handleAddUrl} type="button" variant="outline" disabled={isUploading}>Add URL</Button>
         </div>
       </CardContent>
     </Card>
