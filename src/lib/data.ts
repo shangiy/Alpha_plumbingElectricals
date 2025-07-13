@@ -159,61 +159,24 @@ export async function seedProducts() {
   }
 }
 
-// Private function to fetch from Firestore, used internally
-async function _fetchProductsFromFirestore(): Promise<Product[]> {
+// Public function to get all products. Now handled by ProductProvider.
+// Kept for other potential uses, but pages should use the provider.
+export async function getProducts(): Promise<Product[]> {
+  try {
     const productsCollection = collection(db, "products");
     const snapshot = await getDocs(productsCollection);
-    if (snapshot.empty) {
-        return [];
+    if (!snapshot.empty) {
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
     }
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-}
-
-// Private function to fetch a single product from Firestore
-async function _fetchProductByIdFromFirestore(id: string): Promise<Product | undefined> {
-  const docRef = doc(db, 'products', id);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return { id: docSnap.id, ...docSnap.data() } as Product;
+  } catch (error) {
+    console.warn(`Could not fetch from Firestore, falling back to local data. Error: ${error}`);
   }
-  return undefined;
-}
-
-
-// Public function to get all products with fallback
-export async function getProducts(): Promise<Product[]> {
-    try {
-        const firestoreProducts = await _fetchProductsFromFirestore();
-        if (firestoreProducts.length > 0) {
-            return firestoreProducts;
-        }
-        // If firestore is empty (or fails), fallback to local
-        throw new Error("Firestore is empty, using fallback.");
-    } catch (error) {
-        console.warn(`Could not fetch from Firestore, falling back to local data. Error: ${error}`);
-        // Add a unique ID to local data if it doesn't have one
-        return allProductsData.map((p, index) => ({
-            ...p,
-            id: `local-${p.name.replace(/\s+/g, '-')}-${index}`
-        }));
-    }
-}
-
-
-// Public function to get a single product by ID with fallback
-export async function getProductById(id: string): Promise<Product | undefined> {
-    try {
-        const firestoreProduct = await _fetchProductByIdFromFirestore(id);
-        if (firestoreProduct) {
-            return firestoreProduct;
-        }
-        throw new Error(`Product with ID ${id} not found in Firestore.`);
-    } catch (error) {
-        console.warn(`Could not fetch product ${id} from Firestore, falling back to local data. Error: ${error}`);
-        const localProducts = await getProducts();
-        // Find by matching the potentially generated local ID
-        return localProducts.find(p => p.id === id);
-    }
+  
+  // Fallback to local data
+  return allProductsData.map((p, index) => ({
+      ...p,
+      id: `local-${p.name.replace(/\s+/g, '-')}-${index}`
+  }));
 }
 
 
@@ -221,15 +184,9 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 // These functions simulate database interactions for users and transactions.
 
 export async function getCategories(): Promise<Category[]> {
-  try {
-    // In a real app, this might be fetched from a 'categories' collection in Firestore
-    await getDocs(collection(db, 'categories')); // This is just to trigger a potential error
-    // If we had a categories collection, we'd fetch and return it here.
-    return Promise.resolve(categories);
-  } catch (error) {
-    console.warn('Could not fetch categories, falling back to local definition.');
-    return Promise.resolve(categories);
-  }
+  // In a real app, this might be fetched from a 'categories' collection in Firestore
+  // For now, we return the local constant.
+  return Promise.resolve(categories);
 }
 
 export async function getUsers(): Promise<MockUser[]> {

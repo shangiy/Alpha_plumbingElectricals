@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import type { Product } from '@/lib/types';
-import { allProductsData as initialProductsData, seedProducts, getProducts } from '@/lib/data';
+import { allProductsData as initialProductsData, seedProducts } from '@/lib/data';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 
@@ -56,6 +56,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
                 setProducts(productList);
             } else {
                 // If firestore is empty after trying to fetch, use local data
+                console.log("Firestore is empty, using local fallback data.");
                 setProducts(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
             }
             setLoading(false);

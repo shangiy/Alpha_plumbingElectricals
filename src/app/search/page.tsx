@@ -1,17 +1,37 @@
-import { getProducts, getCategories } from '@/lib/data';
-import ProductList from '@/components/products/ProductList';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function SearchPage() {
-  const products = await getProducts();
-  const categories = await getCategories();
+'use client';
+import { useProducts } from '@/context/ProductProvider';
+import { getCategories } from '@/lib/data';
+import ProductList from '@/components/products/ProductList';
+import { Suspense, useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import type { Category } from '@/lib/types';
+
+export default function SearchPage() {
+  const { products, loading: productsLoading } = useProducts();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCategories() {
+      const fetchedCategories = await getCategories();
+      setCategories(fetchedCategories);
+      setCategoriesLoading(false);
+    }
+    loadCategories();
+  }, []);
+
+  const isLoading = productsLoading || categoriesLoading;
 
   return (
     <div className="bg-secondary">
       <div className="container mx-auto px-4 py-12">
         <Suspense fallback={<ProductListSkeleton />}>
-          <ProductList products={products} categories={categories} />
+          {isLoading ? (
+            <ProductListSkeleton />
+          ) : (
+            <ProductList products={products} categories={categories} />
+          )}
         </Suspense>
       </div>
     </div>
