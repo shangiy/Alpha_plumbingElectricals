@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useCallback, useRef, type ChangeEvent } from 'react';
+import { useState, useRef, type ChangeEvent } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -53,6 +53,7 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
         onChange([...value, downloadURL]);
         toast({ description: 'Image uploaded successfully.' });
     } catch (error) {
+        console.error("Upload error in component:", error);
         toast({ variant: 'destructive', description: 'Image upload failed. Please try again.' });
     } finally {
         setIsUploading(false);
