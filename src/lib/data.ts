@@ -211,13 +211,8 @@ export async function getProductById(id: string): Promise<Product | undefined> {
     } catch (error) {
         console.warn(`Could not fetch product ${id} from Firestore, falling back to local data. Error: ${error}`);
         const localProducts = await getProducts();
-        // This fallback might not find the product if the ID is a firestore ID, but it's the best we can do.
-        // It tries to find by the original local ID format as well.
-        return localProducts.find(p => {
-          if (p.id === id) return true;
-          const localId = `local-${p.name.replace(/\s+/g, '-')}-${allProductsData.findIndex(item => item.name === p.name)}`;
-          return localId === id;
-        });
+        // Find by matching the potentially generated local ID
+        return localProducts.find(p => p.id === id);
     }
 }
 
@@ -228,7 +223,8 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 export async function getCategories(): Promise<Category[]> {
   try {
     // In a real app, this might be fetched from a 'categories' collection in Firestore
-    // For now, we will simulate this with a small delay and fallback
+    await getDocs(collection(db, 'categories')); // This is just to trigger a potential error
+    // If we had a categories collection, we'd fetch and return it here.
     return Promise.resolve(categories);
   } catch (error) {
     console.warn('Could not fetch categories, falling back to local definition.');
