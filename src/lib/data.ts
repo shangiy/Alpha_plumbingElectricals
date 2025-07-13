@@ -212,7 +212,12 @@ export async function getProductById(id: string): Promise<Product | undefined> {
         console.warn(`Could not fetch product ${id} from Firestore, falling back to local data. Error: ${error}`);
         const localProducts = await getProducts();
         // This fallback might not find the product if the ID is a firestore ID, but it's the best we can do.
-        return localProducts.find(p => p.id === id || p.name.replace(/\s+/g, '-') === id.split('-').slice(1, -1).join('-'));
+        // It tries to find by the original local ID format as well.
+        return localProducts.find(p => {
+          if (p.id === id) return true;
+          const localId = `local-${p.name.replace(/\s+/g, '-')}-${allProductsData.findIndex(item => item.name === p.name)}`;
+          return localId === id;
+        });
     }
 }
 
