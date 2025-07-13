@@ -34,7 +34,7 @@ import { useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { Loader2 } from 'lucide-react';
-import { generateProductDescription } from '@/ai/flows/product-description-generator';
+import { generateProductDescription, GenerateProductDescriptionInput } from '@/ai/flows/product-description-generator';
 
 
 const productFormSchema = z.object({
@@ -97,10 +97,19 @@ export default function ProductForm({ product }: ProductFormProps) {
         
         setIsGenerating(true);
         try {
-            const result = await generateProductDescription({
+            const aiInput: GenerateProductDescriptionInput = {
                 productTitle: productName,
-                productImageDataUri: productImages.length > 0 ? productImages[0] : undefined,
-            });
+            };
+
+            const imageUrl = productImages.length > 0 ? productImages[0] : undefined;
+
+            // Only pass the image if it's a full, valid data URI.
+            // This prevents crashes from local paths or placeholders.
+            if (imageUrl && imageUrl.startsWith('data:image')) {
+                aiInput.productImageDataUri = imageUrl;
+            }
+
+            const result = await generateProductDescription(aiInput);
             form.setValue('description', result.productDescription.replace(/\\n/g, '\n'), { shouldValidate: true });
             toast({
                 title: 'Description Generated!',
@@ -333,4 +342,5 @@ export default function ProductForm({ product }: ProductFormProps) {
             </form>
        </Form>
     );
-}
+
+    
