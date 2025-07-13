@@ -94,11 +94,16 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateProduct = useCallback(async (productId: string, productData: Partial<ProductFormData>) => {
+    if (productId.startsWith('local-')) {
+        console.error("Cannot update a local fallback product.");
+        setSubmitting(false);
+        throw new Error("This product is from local data and cannot be updated.");
+    }
     setSubmitting(true);
     try {
         const productRef = doc(db, "products", productId);
         
-        const updateData: Partial<Product> = { ...productData };
+        const updateData: { [key: string]: any } = { ...productData };
         if (productData.description) {
             updateData.longDescription = productData.description;
         }

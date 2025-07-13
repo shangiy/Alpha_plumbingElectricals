@@ -5,10 +5,11 @@ import { useState, useCallback, useRef, type ChangeEvent } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { X, UploadCloud, GripVertical } from 'lucide-react';
+import { X, UploadCloud, GripVertical, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { uploadImage } from '@/lib/storage';
 
 interface ImageUploadProps {
   value: string[];
@@ -19,6 +20,7 @@ interface ImageUploadProps {
 export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUploadProps) {
   const { toast } = useToast();
   const [newUrl, setNewUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
 
@@ -39,18 +41,32 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
     onChange(value.filter((_, i) => i !== index));
   };
   
-  const onFilePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+  const handleFileUpload = async (file: File) => {
     if (value.length >= maxImages) {
-        toast({ variant: 'destructive', description: `You can only add up to ${maxImages} images.` });
-        return;
+      toast({ variant: 'destructive', description: `You can only add up to ${maxImages} images.` });
+      return;
     }
+    
+    setIsUploading(true);
+    try {
+        const downloadURL = await uploadImage(file);
+        onChange([...value, downloadURL]);
+        toast({ description: 'Image uploaded successfully.' });
+    } catch (error) {
+        toast({ variant: 'destructive', description: 'Image upload failed. Please try again.' });
+    } finally {
+        setIsUploading(false);
+    }
+  };
+  
+  const onFilePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
     const items = e.clipboardData.items;
     for (let i = 0; i < items.length; i++) {
         if (items[i].type.indexOf('image') !== -1) {
             const file = items[i].getAsFile();
             if(file) {
-                 handleFile(file);
-                 e.preventDefault(); // Prevent pasting text
+                 handleFileUpload(file);
+                 e.preventDefault();
                  break;
             }
         }
@@ -59,37 +75,15 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
 
   const onFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (value.length >= maxImages) {
-        toast({ variant: 'destructive', description: `You can only add up to ${maxImages} images.` });
-        return;
-    }
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
-      handleFile(files[0]);
+      handleFileUpload(files[0]);
     }
   };
   
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) handleFile(file);
-  }
-
-  const handleFile = (file: File) => {
-    if (file.size > 2 * 1024 * 1024) { // 2MB limit
-      toast({ variant: 'destructive', description: 'File size should not exceed 2MB.' });
-      return;
-    }
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-            onChange([...value, reader.result]);
-            toast({ description: 'Image uploaded successfully.' });
-        }
-    };
-    reader.onerror = () => {
-        toast({ variant: 'destructive', description: 'Failed to read file.' });
-    };
-    reader.readAsDataURL(file);
+    if (file) handleFileUpload(file);
   }
   
   const handleDragSort = () => {
@@ -110,7 +104,7 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
         onPaste={onFilePaste} 
         onDrop={onFileDrop} 
         onDragOver={(e) => e.preventDefault()}
-        className="border-dashed"
+        className={cn("border-dashed", isUploading && "pointer-events-none opacity-60")}
     >
       <CardContent className="p-4 space-y-4">
         <div className="space-y-2">
@@ -157,16 +151,25 @@ export default function ImageUpload({ value, onChange, maxImages = 7 }: ImageUpl
                 value.length > 0 && "mt-4"
             )}
         >
-          <UploadCloud className="mx-auto h-10 w-10 text-muted-foreground" />
-          <p className="mt-2 text-sm text-muted-foreground">
-            Drag & drop, paste, or{' '}
-            <label htmlFor="file-upload" className="text-primary font-semibold cursor-pointer hover:underline">
-              upload an image
-            </label>
-            .
-            <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/*"/>
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">Max 7 images. The first image is the main one.</p>
+          {isUploading ? (
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="mx-auto h-10 w-10 text-muted-foreground animate-spin" />
+              <p className="text-sm text-muted-foreground">Uploading image...</p>
+            </div>
+          ) : (
+            <>
+              <UploadCloud className="mx-auto h-10 w-10 text-muted-foreground" />
+              <p className="mt-2 text-sm text-muted-foreground">
+                Drag & drop, paste, or{' '}
+                <label htmlFor="file-upload" className="text-primary font-semibold cursor-pointer hover:underline">
+                  upload an image
+                </label>
+                .
+                <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/*"/>
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">Max 7 images. The first image is the main one.</p>
+            </>
+          )}
         </div>
 
         <div className="relative">
