@@ -62,7 +62,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             setLoading(false);
         }, 
         (error) => {
-            console.error("Firestore error. Falling back to local data. This may be due to security rules.", error);
+            console.error("Firestore snapshot error. Falling back to local data.", error);
             // On error, explicitly load local data
             setProducts(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
             setLoading(false);
