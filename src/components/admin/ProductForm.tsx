@@ -103,9 +103,9 @@ export default function ProductForm({ product }: ProductFormProps) {
 
             const imageUrl = productImages.length > 0 ? productImages[0] : undefined;
 
-            // Only pass the image if it's a full, valid data URI.
+            // Only pass the image if it's a full, valid web URL or a data URI.
             // This prevents crashes from local paths or placeholders.
-            if (imageUrl && imageUrl.startsWith('data:image')) {
+            if (imageUrl && (imageUrl.startsWith('data:image') || imageUrl.startsWith('http'))) {
                 aiInput.productImageDataUri = imageUrl;
             }
 
