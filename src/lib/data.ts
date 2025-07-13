@@ -1,5 +1,5 @@
 
-import type { Product, Category, MockUser, Transaction } from './types';
+import type { Product, Category, MockUser, Transaction, CarouselCategory } from './types';
 import { db } from './firebase';
 import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
 
@@ -115,19 +115,19 @@ export const carouselCategories: CarouselCategory[] = [
 ];
 
 let allUsers: MockUser[] = [
-  { id: 'user-1', name: 'Alice Johnson', username: 'alicej', email: 'alice@example.com', password: 'password123', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-10-26T12:00:00Z', orders: 15, visitDuration: 25 },
-  { id: 'user-2', name: 'Bob Williams', username: 'bobw', email: 'bob@example.com', password: 'password123', role: 'staff', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-10-25T18:45:00Z', orders: 8, visitDuration: 15 },
+  { id: 'user-1', name: 'Admin User', username: 'admin', email: 'admin@example.com', password: 'adminpassword', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-10-26T12:00:00Z', orders: 15, visitDuration: 25 },
+  { id: 'user-2', name: 'Staff User', username: 'staff', email: 'staff@example.com', password: 'staffpassword', role: 'staff', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-10-25T18:45:00Z', orders: 8, visitDuration: 15 },
   { id: 'user-3', name: 'Charlie Brown', username: 'charlieb', email: 'charlie@example.com', password: 'password123', role: 'user', signedUp: '2023-03-10T09:00:00Z', lastSeen: '2023-10-26T09:30:00Z', orders: 3, visitDuration: 10 },
   { id: 'user-4', name: 'Diana Miller', username: 'dianam', email: 'diana@example.com', password: 'password123', role: 'user', signedUp: '2023-04-05T14:00:00Z', lastSeen: '2023-10-26T14:20:00Z', orders: 0, visitDuration: 5 },
   { id: 'user-5', name: 'Ethan Davis', username: 'ethand', email: 'ethan@example.com', password: 'password123', role: 'user', signedUp: '2023-05-22T16:00:00Z', lastSeen: '2023-10-22T10:10:00Z', orders: 20, visitDuration: 45 },
 ];
 
 let allTransactions: Transaction[] = [
-  { id: 'txn-1', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 15000, date: '2023-10-25T14:48:00Z', status: 'Completed', productName: 'Kentank 2000L' },
-  { id: 'txn-2', customerName: 'Bob Williams', email: 'bob@example.com', amount: 3300, date: '2023-10-24T10:20:00Z', status: 'Completed', productName: 'Artistic Lights' },
+  { id: 'txn-1', customerName: 'Admin User', email: 'admin@example.com', amount: 15000, date: '2023-10-25T14:48:00Z', status: 'Completed', productName: 'Kentank 2000L' },
+  { id: 'txn-2', customerName: 'Staff User', email: 'staff@example.com', amount: 3300, date: '2023-10-24T10:20:00Z', status: 'Completed', productName: 'Artistic Lights' },
   { id: 'txn-3', customerName: 'Charlie Brown', email: 'charlie@example.com', amount: 7500, date: '2023-10-26T09:35:00Z', status: 'Pending', productName: 'Bathroom Makeover Sink' },
   { id: 'txn-4', customerName: 'Ethan Davis', email: 'ethan@example.com', amount: 1200, date: '2023-10-21T11:00:00Z', status: 'Failed', productName: 'Ironsheet Mabati' },
-  { id: 'txn-5', customerName: 'Alice Johnson', email: 'alice@example.com', amount: 8000, date: '2023-09-15T18:00:00Z', status: 'Completed', productName: 'Rainwater Harvesting Tank' },
+  { id: 'txn-5', customerName: 'Admin User', email: 'admin@example.com', amount: 8000, date: '2023-09-15T18:00:00Z', status: 'Completed', productName: 'Rainwater Harvesting Tank' },
 ];
 
 
@@ -169,6 +169,16 @@ async function _fetchProductsFromFirestore(): Promise<Product[]> {
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
 }
 
+// Private function to fetch a single product from Firestore
+async function _fetchProductByIdFromFirestore(id: string): Promise<Product | undefined> {
+  const docRef = doc(db, 'products', id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() } as Product;
+  }
+  return undefined;
+}
+
 
 // Public function to get all products with fallback
 export async function getProducts(): Promise<Product[]> {
@@ -192,24 +202,17 @@ export async function getProducts(): Promise<Product[]> {
 
 // Public function to get a single product by ID with fallback
 export async function getProductById(id: string): Promise<Product | undefined> {
-    if (id.startsWith('local-')) {
-        const localProducts = await getProducts();
-        return localProducts.find(p => p.id === id);
-    }
     try {
-        const docRef = doc(db, "products", id);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            return { id: docSnap.id, ...docSnap.data() } as Product;
-        } else {
-             throw new Error(`Product with ID ${id} not found in Firestore.`);
+        const firestoreProduct = await _fetchProductByIdFromFirestore(id);
+        if (firestoreProduct) {
+            return firestoreProduct;
         }
+        throw new Error(`Product with ID ${id} not found in Firestore.`);
     } catch (error) {
         console.warn(`Could not fetch product ${id} from Firestore, falling back to local data. Error: ${error}`);
         const localProducts = await getProducts();
         // This fallback might not find the product if the ID is a firestore ID, but it's the best we can do.
-        return localProducts.find(p => p.name.replace(/\s+/g, '-') === id.split('-').slice(1, -1).join('-'));
+        return localProducts.find(p => p.id === id || p.name.replace(/\s+/g, '-') === id.split('-').slice(1, -1).join('-'));
     }
 }
 
@@ -263,4 +266,3 @@ export async function getTransactions(): Promise<Transaction[]> {
 export function getLightingProducts() {
   return allProductsData.filter(product => product.category === 'lighting-electrical');
 }
-
