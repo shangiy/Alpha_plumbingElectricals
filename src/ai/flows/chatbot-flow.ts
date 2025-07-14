@@ -13,6 +13,7 @@ import {
   getUserOrders,
   getWishlistContents,
 } from '@/ai/tools/user-data';
+import {z} from 'zod';
 import {ChatInputSchema, ChatOutputSchema, type ChatInput, type ChatOutput} from './chatbot-types';
 
 const chatPrompt = ai.definePrompt(
@@ -24,6 +25,12 @@ const chatPrompt = ai.definePrompt(
             getWishlistContents,
             getUserOrders,
         ],
+        input: {
+          schema: z.object({
+            history: z.array(z.any()).optional(),
+            prompt: z.string(),
+          }),
+        },
         system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
 - Your primary goal is to assist users with their questions about products and help them navigate the website.
@@ -55,19 +62,19 @@ const chatFlow = ai.defineFlow(
     },
     async (input) => {
         try {
-            const llmResponse = await chatPrompt( {
-                history: [], // You can populate this with chat history if needed
-                prompt: `Human: ${input.message}`
+            const llmResponse = await chatPrompt({
+                prompt: input.message,
+                history: [], // For now, we are not preserving history between calls
             });
             const textResponse = llmResponse.text;
-
+            
             if (textResponse) {
                 return { response: textResponse };
             }
             
-            // Fallback for any other case
+            // Fallback for any other case, like if a tool was called but produced no text output
             return {
-                response: "Sorry, I'm having trouble understanding. Could you rephrase?",
+                response: "I've processed your request. What else can I help with?",
             };
         } catch (error) {
             console.error('[Chatbot Error] Failed to generate response:', error);
