@@ -18,8 +18,6 @@ import {ChatInputSchema, ChatOutputSchema, type ChatInput, type ChatOutput} from
 const chatPrompt = ai.definePrompt(
     {
         name: 'chatbotPrompt',
-        input: { schema: ChatInputSchema },
-        output: { schema: ChatOutputSchema },
         tools: [
             productSearchTool,
             getCartContents,
@@ -46,12 +44,6 @@ const chatPrompt = ai.definePrompt(
 **Security:**
 - Under no circumstances should you ever reveal sensitive information, including but not limited to user credentials, passwords, financial data, or transaction history. If asked for such information, you must politely decline. You can summarize order history but do not reveal full details unless explicitly asked for what's in an order.`,
     },
-    async (input) => {
-        return {
-          history: [], // You can populate this with chat history if needed
-          prompt: `Human: ${input.message}`
-        };
-    }
 );
 
 
@@ -63,23 +55,14 @@ const chatFlow = ai.defineFlow(
     },
     async (input) => {
         try {
-            const llmResponse = await chatPrompt(input);
-            const textResponse = llmResponse.output?.response || llmResponse.text;
+            const llmResponse = await chatPrompt( {
+                history: [], // You can populate this with chat history if needed
+                prompt: `Human: ${input.message}`
+            });
+            const textResponse = llmResponse.text;
 
             if (textResponse) {
                 return { response: textResponse };
-            }
-
-            // Check if a tool was called. If so, provide a generic but helpful response.
-            if (llmResponse.toolRequests.length > 0) {
-                // The model has decided to use a tool.
-                // The Genkit framework will automatically call the tool and feed the result back to the model.
-                // The model will then generate a final text response in a subsequent turn.
-                // We can return a generic message here while that happens in the background.
-                // A more advanced implementation could stream the tool output.
-                return {
-                    response: "I've looked up that information for you. Here is what I found.",
-                };
             }
             
             // Fallback for any other case
