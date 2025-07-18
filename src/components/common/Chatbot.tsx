@@ -51,11 +51,13 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     
+    // The chat function expects an object with a 'messages' property
     const chatInput: ChatHistory = { messages: newMessages };
     setInput('');
     setLoading(true);
 
     try {
+      // Pass the entire history object to the chat function
       const response = await chat(chatInput);
       const assistantMessage: ChatMessage = { role: 'model', content: response.response };
       setMessages(prev => [...prev, assistantMessage]);
