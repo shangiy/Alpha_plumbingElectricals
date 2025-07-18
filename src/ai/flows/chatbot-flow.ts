@@ -14,8 +14,9 @@ import {
   getWishlistContents,
 } from '@/ai/tools/user-data';
 import {z} from 'zod';
-import {ChatHistorySchema, ChatOutputSchema, type ChatHistory, type ChatOutput} from './chatbot-types';
+import {ChatMessageSchema, ChatHistorySchema, ChatOutputSchema, type ChatHistory, type ChatOutput} from './chatbot-types';
 
+// The prompt now expects an array of messages directly.
 const chatPrompt = ai.definePrompt(
     {
         name: 'chatbotPrompt',
@@ -26,7 +27,7 @@ const chatPrompt = ai.definePrompt(
             getUserOrders,
         ],
         input: {
-          schema: ChatHistorySchema,
+          schema: z.array(ChatMessageSchema),
         },
         system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
@@ -51,7 +52,7 @@ const chatPrompt = ai.definePrompt(
 );
 
 
-const chatFlow = ai.defineFlow(
+const chatbotFlow = ai.defineFlow(
     {
         name: 'chatbotFlow',
         inputSchema: ChatHistorySchema,
@@ -59,9 +60,8 @@ const chatFlow = ai.defineFlow(
     },
     async (history) => {
         try {
-            const llmResponse = await chatPrompt({
-                history: history.messages,
-            });
+            // Pass the array of messages directly to the prompt.
+            const llmResponse = await chatPrompt(history.messages);
             const textResponse = llmResponse.text;
             
             if (textResponse) {
@@ -84,5 +84,5 @@ const chatFlow = ai.defineFlow(
 
 
 export async function chat(input: ChatHistory): Promise<ChatOutput> {
-  return chatFlow(input);
+  return chatbotFlow(input);
 }
