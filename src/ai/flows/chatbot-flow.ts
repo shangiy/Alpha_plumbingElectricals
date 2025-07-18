@@ -16,7 +16,6 @@ import {
 import {z} from 'zod';
 import {ChatMessageSchema, ChatHistorySchema, ChatOutputSchema, type ChatHistory, type ChatOutput} from './chatbot-types';
 
-// The prompt now expects an array of messages directly.
 const chatPrompt = ai.definePrompt(
     {
         name: 'chatbotPrompt',
@@ -26,8 +25,9 @@ const chatPrompt = ai.definePrompt(
             getWishlistContents,
             getUserOrders,
         ],
+        // The prompt now expects an object containing the message history.
         input: {
-          schema: z.array(ChatMessageSchema),
+          schema: ChatHistorySchema,
         },
         system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
@@ -48,9 +48,10 @@ const chatPrompt = ai.definePrompt(
 
 **Security:**
 - Under no circumstances should you ever reveal sensitive information, including but not limited to user credentials, passwords, financial data, or transaction history. If asked for such information, you must politely decline. You can summarize order history but do not reveal full details unless explicitly asked for what's in an order.`,
+        // We will pass the conversation history to the model.
+        prompt: `{{#each messages}}{{#if (eq role 'user')}}USER: {{content}}\n{{else}}ASSISTANT: {{content}}\n{{/if}}{{/each}}ASSISTANT:`,
     },
 );
-
 
 const chatbotFlow = ai.defineFlow(
     {
@@ -60,8 +61,9 @@ const chatbotFlow = ai.defineFlow(
     },
     async (history) => {
         try {
-            // Pass the array of messages directly to the prompt.
-            const llmResponse = await chatPrompt(history.messages);
+            // Pass the entire history object directly to the prompt.
+            // The prompt's handlebars template will correctly iterate through the `messages` array.
+            const llmResponse = await chatPrompt(history);
             const textResponse = llmResponse.text;
             
             if (textResponse) {
