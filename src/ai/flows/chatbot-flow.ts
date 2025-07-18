@@ -14,7 +14,7 @@ import {
   getWishlistContents,
 } from '@/ai/tools/user-data';
 import {z} from 'zod';
-import {ChatInputSchema, ChatOutputSchema, type ChatInput, type ChatOutput} from './chatbot-types';
+import {ChatHistorySchema, ChatOutputSchema, type ChatHistory, type ChatOutput} from './chatbot-types';
 
 const chatPrompt = ai.definePrompt(
     {
@@ -26,10 +26,7 @@ const chatPrompt = ai.definePrompt(
             getUserOrders,
         ],
         input: {
-          schema: z.object({
-            history: z.array(z.any()).optional(),
-            prompt: z.string(),
-          }),
+          schema: ChatHistorySchema,
         },
         system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
@@ -57,14 +54,13 @@ const chatPrompt = ai.definePrompt(
 const chatFlow = ai.defineFlow(
     {
         name: 'chatbotFlow',
-        inputSchema: ChatInputSchema,
+        inputSchema: ChatHistorySchema,
         outputSchema: ChatOutputSchema,
     },
-    async (input) => {
+    async (history) => {
         try {
             const llmResponse = await chatPrompt({
-                prompt: input.message,
-                history: [], // For now, we are not preserving history between calls
+                history: history.messages,
             });
             const textResponse = llmResponse.text;
             
@@ -87,6 +83,6 @@ const chatFlow = ai.defineFlow(
 );
 
 
-export async function chat(input: ChatInput): Promise<ChatOutput> {
+export async function chat(input: ChatHistory): Promise<ChatOutput> {
   return chatFlow(input);
 }

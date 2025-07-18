@@ -9,12 +9,7 @@ import { LoaderCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '../ui/scroll-area';
 import { chat } from '@/ai/flows/chatbot-flow';
-import type { ChatInput } from '@/ai/flows/chatbot-types';
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
+import type { ChatHistory, ChatMessage } from '@/ai/flows/chatbot-types';
 
 interface ChatbotProps {
     isOpen: boolean;
@@ -22,7 +17,7 @@ interface ChatbotProps {
 }
 
 export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +27,7 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
     if (isOpen && messages.length === 0) {
       setMessages([
         {
-          role: 'assistant',
+          role: 'model',
           content: "Welcome to Alpha Electricals & Plumbing. How can I help you today?",
         },
       ]);
@@ -52,21 +47,22 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
     e.preventDefault();
     if (input.trim() === '' || loading) return;
 
-    const userMessage: Message = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
+    const userMessage: ChatMessage = { role: 'user', content: input };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     
-    const chatInput: ChatInput = { message: input };
+    const chatInput: ChatHistory = { messages: newMessages };
     setInput('');
     setLoading(true);
 
     try {
       const response = await chat(chatInput);
-      const assistantMessage: Message = { role: 'assistant', content: response.response };
+      const assistantMessage: ChatMessage = { role: 'model', content: response.response };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Chatbot error:', error);
-      const errorMessage: Message = {
-        role: 'assistant',
+      const errorMessage: ChatMessage = {
+        role: 'model',
         content: "Sorry, I've encountered an unexpected error. Please try again later.",
       };
       setMessages(prev => [...prev, errorMessage]);
