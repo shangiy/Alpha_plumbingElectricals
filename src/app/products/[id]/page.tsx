@@ -48,6 +48,14 @@ export default function ProductDetailPage() {
     }).format(price);
   };
 
+  const priceDisplay = product.unit && product.unit !== 'item' 
+    ? `${formatPrice(product.price)} / ${product.unit}`
+    : formatPrice(product.price);
+    
+  const wholesaleInfo = product.wholesale 
+    ? `Also available as a ${product.wholesale.quantity}${product.wholesale.unit} for ${formatPrice(product.wholesale.price)}.` 
+    : '';
+
   return (
     <div className="bg-secondary">
       <div className="container mx-auto px-4 py-12">
@@ -87,8 +95,11 @@ export default function ProductDetailPage() {
               <Rating rating={product.rating} size={20} />
               <span className="text-sm text-muted-foreground">{product.reviews} reviews</span>
             </div>
-            <p className="text-3xl font-bold font-headline text-primary">{formatPrice(product.price)}</p>
+            <p className="text-3xl font-bold font-headline text-primary">{priceDisplay}</p>
             <p className="text-base text-muted-foreground">{product.longDescription}</p>
+            {wholesaleInfo && (
+              <p className="text-sm text-muted-foreground italic">{wholesaleInfo}</p>
+            )}
             
             <Card>
                 <CardContent className="p-4">

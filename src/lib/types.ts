@@ -1,9 +1,18 @@
+
+export interface WholesalePrice {
+  quantity: number;
+  price: number;
+  unit: string;
+}
+
 export interface Product {
   id: string;
   name: string;
   description: string;
   longDescription: string;
   price: number;
+  unit?: string; // e.g., 'meter', 'item', 'roll'
+  wholesale?: WholesalePrice;
   images: string[];
   category: string;
   rating: number;
@@ -18,7 +27,7 @@ export interface Product {
 }
 
 export interface Category {
-  id: string;
+  id:string;
   name: string;
 }
 

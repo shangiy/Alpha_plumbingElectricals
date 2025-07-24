@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -24,6 +25,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       currency: 'KES',
     }).format(price);
   };
+  
+  const priceDisplay = product.unit && product.unit !== 'item' 
+    ? `${formatPrice(product.price)} / ${product.unit}`
+    : formatPrice(product.price);
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,7 +73,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={16}/>
       </CardContent>
        <CardFooter className="flex-col items-stretch gap-2 p-4 pt-0">
-        <p className="text-lg font-bold text-foreground text-center mb-2">{formatPrice(product.price)}</p>
+        <p className="text-lg font-bold text-foreground text-center mb-2">{priceDisplay}</p>
         <div className="flex w-full gap-2">
             <Button size="sm" variant="outline" className="flex-1" asChild>
                 <Link href={`/products/${product.id}`}>View More</Link>
