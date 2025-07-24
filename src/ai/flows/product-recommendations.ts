@@ -22,7 +22,7 @@ const ProductRecommendationsOutputSchema = z.object({
         name: z.string().describe('The name of the product.'),
         description: z.string().describe('A brief description of the product.'),
         imageUrl: z.string().describe('A URL to an image of the product.'),
-        price: z.number().describe('The price of the product.'),
+        price: z.number().describe('The price of the product in Kenyan Shillings (KES).'),
       })
     )
     .describe('A list of recommended products.'),
@@ -39,7 +39,7 @@ const prompt = ai.definePrompt({
   output: {schema: ProductRecommendationsOutputSchema},
   prompt: `You are an e-commerce product recommendation expert.
   Based on the user's search query, provide a list of recommended products.
-  Return a JSON array of products with name, description, imageUrl, and price.
+  Return a JSON array of products with name, description, imageUrl, and price in Kenyan Shillings (KES).
   For the imageUrl, you must always use the value 'https://placehold.co/400x400.png'.
 
   Search Query: {{{searchQuery}}}
