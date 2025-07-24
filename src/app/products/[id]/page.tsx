@@ -11,6 +11,7 @@ import BuyNowButton from '@/components/products/ContactSellerForm';
 import { ShieldCheck } from 'lucide-react';
 import AddToCartButton from '@/components/products/AddToCartButton';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 export default function ProductDetailPage() {
   const params = useParams();
