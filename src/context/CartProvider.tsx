@@ -1,3 +1,4 @@
+
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
@@ -10,7 +11,7 @@ export interface CartItem extends Product {
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Product, showToast?: boolean) => void;
+  addToCart: (product: Product, showToast?: boolean, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   increaseQuantity: (productId: string) => void;
   decreaseQuantity: (productId: string) => void;
@@ -33,22 +34,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
 
-  const addToCart = (product: Product, showToast = true) => {
+  const addToCart = (product: Product, showToast = true, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
         );
       } else {
-        return [...prevItems, { ...product, quantity: 1 }];
+        return [...prevItems, { ...product, quantity: quantity }];
       }
     });
     
     if (showToast) {
         toast({
             title: "Added to cart!",
-            description: `${product.name} has been added to your cart.`,
+            description: `${product.name} (${quantity} ${product.unit || 'item'}(s)) has been added to your cart.`,
         });
     }
   };

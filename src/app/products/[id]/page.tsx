@@ -12,6 +12,8 @@ import { ShieldCheck } from 'lucide-react';
 import AddToCartButton from '@/components/products/AddToCartButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import QuantitySelector from '@/components/products/QuantitySelector';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -20,6 +22,7 @@ export default function ProductDetailPage() {
   const router = useRouter();
   
   const product = getProductById(productId);
+  const [quantity, setQuantity] = useState(1);
 
   if (loading) {
     return <ProductDetailSkeleton />;
@@ -47,6 +50,8 @@ export default function ProductDetailPage() {
       currency: 'KES',
     }).format(price);
   };
+
+  const isMeasurable = product.unit && product.unit !== 'item' && product.unit !== 'roll' && product.unit !== 'pack' && product.unit !== 'bundle' && product.unit !== 'sheet' && product.unit !== 'sq. meter';
 
   const priceDisplay = product.unit && product.unit !== 'item' 
     ? `${formatPrice(product.price)} / ${product.unit}`
@@ -100,6 +105,10 @@ export default function ProductDetailPage() {
             {wholesaleInfo && (
               <p className="text-sm text-muted-foreground italic">{wholesaleInfo}</p>
             )}
+
+            {isMeasurable && (
+              <QuantitySelector unit={product.unit!} onQuantityChange={setQuantity} />
+            )}
             
             <Card>
                 <CardContent className="p-4">
@@ -114,8 +123,8 @@ export default function ProductDetailPage() {
             </Card>
 
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <AddToCartButton product={product} />
-                <BuyNowButton product={product} />
+                <AddToCartButton product={product} quantity={quantity}/>
+                <BuyNowButton product={product} quantity={quantity} />
             </div>
           </div>
         </div>
