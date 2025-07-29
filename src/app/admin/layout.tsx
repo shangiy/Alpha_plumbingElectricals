@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, LogOut, Settings, LifeBuoy, Users, Receipt, Package } from 'lucide-react';
+import { LayoutDashboard, LogOut, Settings, LifeBuoy, Users, Receipt, Package, BarChart } from 'lucide-react';
 import AuthGuard from '@/components/auth/AuthGuard';
 import { useAuth } from '@/context/AuthProvider';
 
@@ -51,6 +51,14 @@ export default function AdminLayout({
                     <Link href="/admin/products">
                       <Package />
                       <span>Products</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Analytics">
+                    <Link href="/admin/analytics">
+                      <BarChart />
+                      <span>Analytics</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
