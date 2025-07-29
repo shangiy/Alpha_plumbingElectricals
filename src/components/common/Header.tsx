@@ -53,25 +53,25 @@ export default function Header() {
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
-    if (!isHomePage) {
-      setIsHeaderOpaque(true);
-      setShowSearchInHeader(true);
-      return;
-    }
+    // This logic must run on the client after hydration to avoid mismatches.
+    const updateHeaderStyles = () => {
+      const isHomepagePath = window.location.pathname === '/';
+      const scrollY = window.scrollY;
+      setIsHeaderOpaque(!isHomepagePath || scrollY > 50);
+      setShowSearchInHeader(!isHomepagePath || scrollY > 300);
+    };
+
+    // Initial check on mount
+    updateHeaderStyles();
+
+    // Add scroll listener
+    window.addEventListener('scroll', updateHeaderStyles, { passive: true });
     
-    const handleScroll = () => {
-        const scrollY = window.scrollY;
-        setIsHeaderOpaque(scrollY > 50);
-        setShowSearchInHeader(scrollY > 300);
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
+    // Cleanup listener on component unmount
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', updateHeaderStyles);
     };
-  }, [isHomePage]);
+  }, [pathname]); // Rerun effect if the page path changes
   
   const navLinks = [
     { name: 'Contact Us', href: '/contact' },
