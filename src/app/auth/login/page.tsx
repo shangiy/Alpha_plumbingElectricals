@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -21,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { getUserByEmail } from '@/lib/data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const loginSchema = z.object({
@@ -81,6 +82,7 @@ export default function LoginPage() {
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
     const [socialLoading, setSocialLoading] = useState<null | 'google' | 'facebook'>(null);
+    const [isMounted, setIsMounted] = useState(false);
     
     // The active tab is now determined by the URL search parameter on every render.
     const activeTab = searchParams.get('tab') || 'login';
@@ -94,6 +96,10 @@ export default function LoginPage() {
         resolver: zodResolver(signUpSchema),
         defaultValues: { name: "", username: "", email: "", password: "", confirmPassword: "", recaptcha: false },
     });
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
     
     // This function will be used by onValueChange to update the URL without a full page reload.
     const handleTabChange = (tab: string) => {
@@ -149,6 +155,10 @@ export default function LoginPage() {
         } finally {
             setSocialLoading(null);
         }
+    }
+
+    if (!isMounted) {
+        return null;
     }
 
   return (
