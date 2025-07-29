@@ -17,6 +17,7 @@ import Chatbot from '@/components/common/Chatbot';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Bot, MessageSquare } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -38,6 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const pathname = usePathname();
+  const isAdminRoute = pathname.startsWith('/admin');
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -52,30 +55,34 @@ export default function RootLayout({
           <ProductProvider>
             <CartProvider>
               <div className="relative flex min-h-screen flex-col">
-                <Header />
+                {!isAdminRoute && <Header />}
                 <main className="flex-1">{children}</main>
-                <Footer />
+                {!isAdminRoute && <Footer />}
               </div>
               
-              {/* Chatbot and its trigger */}
-              <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
-              
-              <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-                {!isChatbotOpen && (
-                  <Button 
-                    onClick={() => setIsChatbotOpen(true)}
-                    className="h-auto rounded-full bg-[#007bff] px-4 py-2 text-base font-semibold text-white shadow-lg hover:bg-[#0056b3] animate-in fade-in zoom-in-95"
-                    aria-label="Toggle Chatbot"
-                  >
-                    <MessageSquare className="mr-2 h-5 w-5" />
-                    Alpha AI
-                  </Button>
-                )}
-                <ScrollToTopButton />
-              </div>
+              {!isAdminRoute && (
+                <>
+                  {/* Chatbot and its trigger */}
+                  <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
+                  
+                  <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
+                    {!isChatbotOpen && (
+                      <Button 
+                        onClick={() => setIsChatbotOpen(true)}
+                        className="h-auto rounded-full bg-[#007bff] px-4 py-2 text-base font-semibold text-white shadow-lg hover:bg-[#0056b3] animate-in fade-in zoom-in-95"
+                        aria-label="Toggle Chatbot"
+                      >
+                        <MessageSquare className="mr-2 h-5 w-5" />
+                        Alpha AI
+                      </Button>
+                    )}
+                    <ScrollToTopButton />
+                  </div>
 
-              {/* Other floating buttons */}
-              <WhatsAppButton />
+                  {/* Other floating buttons */}
+                  <WhatsAppButton />
+                </>
+              )}
               <Toaster />
             </CartProvider>
           </ProductProvider>

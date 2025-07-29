@@ -15,9 +15,10 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, LogOut, Settings, LifeBuoy, Users, Receipt, Package, BarChart } from 'lucide-react';
+import { LayoutDashboard, LogOut, Settings, LifeBuoy, Users, Receipt, Package, BarChart, Home } from 'lucide-react';
 import AuthGuard from '@/components/auth/AuthGuard';
 import { useAuth } from '@/context/AuthProvider';
+import Footer from '@/components/common/Footer';
 
 export default function AdminLayout({
   children,
@@ -28,93 +29,98 @@ export default function AdminLayout({
 
   return (
     <AuthGuard allowedRoles={['admin', 'staff']}>
-      <SidebarProvider>
-          <Sidebar>
-            <SidebarHeader>
-               <Link href="/" className="flex items-center gap-2">
-                  <Image src="/logo Alpha.png" alt="Logo" width={40} height={40}/>
-                  <span className="text-lg font-semibold">Admin Panel</span>
-              </Link>
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Dashboard">
-                    <Link href="/admin">
-                      <LayoutDashboard />
-                      <span>Dashboard</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Products">
-                    <Link href="/admin/products">
-                      <Package />
-                      <span>Products</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Analytics">
-                    <Link href="/admin/analytics">
-                      <BarChart />
-                      <span>Analytics</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                {user?.role === 'admin' && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip="Users">
-                      <Link href="/admin/users">
-                        <Users />
-                        <span>Users</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Transactions">
-                    <Link href="/admin/transactions">
-                      <Receipt />
-                      <span>Transactions</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarContent>
-            <SidebarFooter>
-               <SidebarMenu>
-                  <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip="Support">
-                          <Link href="#">
-                              <LifeBuoy />
-                              <span>Support</span>
-                          </Link>
+      <div className="flex flex-col min-h-screen">
+        <div className="flex flex-1">
+          <SidebarProvider>
+              <Sidebar>
+                <SidebarHeader>
+                  <Link href="/admin" className="flex items-center gap-2">
+                      <Image src="/logo Alpha.png" alt="Logo" width={40} height={40}/>
+                      <span className="text-lg font-semibold">Admin Panel</span>
+                  </Link>
+                </SidebarHeader>
+                <SidebarContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip="Dashboard">
+                        <Link href="/admin">
+                          <LayoutDashboard />
+                          <span>Dashboard</span>
+                        </Link>
                       </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip="Settings">
-                          <Link href="#">
-                              <Settings />
-                              <span>Settings</span>
-                          </Link>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip="Products">
+                        <Link href="/admin/products">
+                          <Package />
+                          <span>Products</span>
+                        </Link>
                       </SidebarMenuButton>
-                  </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarFooter>
-          </Sidebar>
-          <SidebarInset>
-              <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-6 sticky top-24 bg-background z-10">
-                  <SidebarTrigger className="md:hidden" />
-                  <div className="flex-1">
-                      {/* You can add breadcrumbs or page titles here */}
-                  </div>
-              </header>
-              <main className="flex-1 p-4 md:p-6">
-                  {children}
-              </main>
-          </SidebarInset>
-      </SidebarProvider>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip="Analytics">
+                        <Link href="/admin/analytics">
+                          <BarChart />
+                          <span>Analytics</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    {user?.role === 'admin' && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip="Users">
+                          <Link href="/admin/users">
+                            <Users />
+                            <span>Users</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip="Transactions">
+                        <Link href="/admin/transactions">
+                          <Receipt />
+                          <span>Transactions</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarContent>
+                <SidebarFooter>
+                  <SidebarMenu>
+                      <SidebarMenuItem>
+                          <SidebarMenuButton asChild tooltip="Go to Homepage">
+                              <Link href="/">
+                                  <Home />
+                                  <span>Homepage</span>
+                              </Link>
+                          </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                          <SidebarMenuButton asChild tooltip="Settings">
+                              <Link href="#">
+                                  <Settings />
+                                  <span>Settings</span>
+                              </Link>
+                          </SidebarMenuButton>
+                      </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarFooter>
+              </Sidebar>
+              <SidebarInset>
+                  <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-6 sticky top-0 bg-background z-10">
+                      <SidebarTrigger className="md:hidden" />
+                      <div className="flex-1">
+                          {/* You can add breadcrumbs or page titles here */}
+                      </div>
+                  </header>
+                  <main className="flex-1 p-4 md:p-6">
+                      {children}
+                  </main>
+              </SidebarInset>
+          </SidebarProvider>
+        </div>
+        <Footer />
+      </div>
     </AuthGuard>
   );
 }
