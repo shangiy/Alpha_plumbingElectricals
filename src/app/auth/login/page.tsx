@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -23,7 +22,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { getUserByEmail } from '@/lib/data';
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
@@ -76,11 +75,12 @@ const PasswordInput = ({ field, ...props }: any) => {
 };
 
 export default function LoginPage() {
-    const { login, signUp } = useAuth();
+    const { login, signUp, signInWithGoogle, signInWithFacebook } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
+    const [socialLoading, setSocialLoading] = useState<null | 'google' | 'facebook'>(null);
     
     // The active tab is now determined by the URL search parameter on every render.
     const activeTab = searchParams.get('tab') || 'login';
@@ -128,6 +128,26 @@ export default function LoginPage() {
                 title: "Sign-Up Failed",
                 description: error.message || "An error occurred. Please try again.",
             });
+        }
+    }
+
+    const handleSocialSignIn = async (provider: 'google' | 'facebook') => {
+        setSocialLoading(provider);
+        try {
+            const signInMethod = provider === 'google' ? signInWithGoogle : signInWithFacebook;
+            const user = await signInMethod();
+            if (user) {
+                toast({ title: "Login Successful!", description: `Welcome, ${user.name}!` });
+                router.push(redirectUrl);
+            }
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: "Social Login Failed",
+                description: error.message || "Could not sign in. Please try again.",
+            });
+        } finally {
+            setSocialLoading(null);
         }
     }
 
@@ -193,8 +213,14 @@ export default function LoginPage() {
                                 </div>
                                 
                                 <div className="grid grid-cols-2 gap-4">
-                                     <Button variant="outline" type="button" asChild className="cursor-pointer"><a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer"><GoogleIcon/>Google</a></Button>
-                                     <Button variant="outline" type="button" asChild className="text-[#1877F2] hover:text-[#1877F2] cursor-pointer"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FacebookIcon/>Facebook</a></Button>
+                                     <Button variant="outline" type="button" onClick={() => handleSocialSignIn('google')} disabled={!!socialLoading}>
+                                        {socialLoading === 'google' ? <Loader2 className="animate-spin" /> : <GoogleIcon/>}
+                                        Google
+                                     </Button>
+                                     <Button variant="outline" type="button" onClick={() => handleSocialSignIn('facebook')} disabled={!!socialLoading} className="text-[#1877F2] hover:text-[#1877F2]">
+                                        {socialLoading === 'facebook' ? <Loader2 className="animate-spin" /> : <FacebookIcon/>}
+                                        Facebook
+                                     </Button>
                                 </div>
 
                                 <p className="text-center text-sm text-muted-foreground">
@@ -318,8 +344,14 @@ export default function LoginPage() {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Button variant="outline" type="button" asChild className="cursor-pointer"><a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer"><GoogleIcon/>Google</a></Button>
-                                    <Button variant="outline" type="button" asChild className="text-[#1877F2] hover:text-[#1877F2] cursor-pointer"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FacebookIcon/>Facebook</a></Button>
+                                     <Button variant="outline" type="button" onClick={() => handleSocialSignIn('google')} disabled={!!socialLoading}>
+                                        {socialLoading === 'google' ? <Loader2 className="animate-spin" /> : <GoogleIcon/>}
+                                        Google
+                                     </Button>
+                                     <Button variant="outline" type="button" onClick={() => handleSocialSignIn('facebook')} disabled={!!socialLoading} className="text-[#1877F2] hover:text-[#1877F2]">
+                                        {socialLoading === 'facebook' ? <Loader2 className="animate-spin" /> : <FacebookIcon/>}
+                                        Facebook
+                                     </Button>
                                 </div>
 
                                  <p className="text-center text-sm text-muted-foreground">

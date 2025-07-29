@@ -3,6 +3,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { signUpUser, getUserByEmail } from '@/lib/data';
 import type { MockUser } from '@/lib/types';
+import { auth } from '@/lib/firebase';
+import { GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User as FirebaseUser } from 'firebase/auth';
+
 
 export interface User {
   id: string;
@@ -23,6 +26,8 @@ interface AuthContextType {
   user: User | null;
   login: (userData: Omit<User, 'id'>) => void;
   signUp: (signUpData: SignUpData) => Promise<User>;
+  signInWithGoogle: () => Promise<User | null>;
+  signInWithFacebook: () => Promise<User | null>;
   updateUser: (updatedData: Partial<User>) => void;
   logout: () => void;
   loading: boolean;
@@ -59,6 +64,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const handleSocialSignIn = async (firebaseUser: FirebaseUser): Promise<User> => {
+    if (!firebaseUser.email) {
+        throw new Error('Social account must have an email address.');
+    }
+    
+    let appUser = await getUserByEmail(firebaseUser.email);
+
+    if (!appUser) {
+        // If user doesn't exist, create a new one
+        const newUser: SignUpData = {
+            name: firebaseUser.displayName || 'Social User',
+            username: firebaseUser.email.split('@')[0], // Create a username from email
+            email: firebaseUser.email,
+        };
+        appUser = await signUpUser(newUser);
+    }
+    
+    login(appUser);
+    return appUser;
+  };
+
+  const signInWithGoogle = async (): Promise<User | null> => {
+      const provider = new GoogleAuthProvider();
+      try {
+          const result = await signInWithPopup(auth, provider);
+          return await handleSocialSignIn(result.user);
+      } catch (error: any) {
+          console.error("Google sign-in error", error);
+          if (error.code === 'auth/popup-closed-by-user') {
+              return null;
+          }
+          throw new Error(error.message);
+      }
+  }
+
+  const signInWithFacebook = async (): Promise<User | null> => {
+      const provider = new FacebookAuthProvider();
+      try {
+          const result = await signInWithPopup(auth, provider);
+          return await handleSocialSignIn(result.user);
+      } catch (error: any) {
+          console.error("Facebook sign-in error", error);
+           if (error.code === 'auth/popup-closed-by-user') {
+              return null;
+          }
+          throw new Error(error.message);
+      }
+  }
+
   const signUp = async (signUpData: SignUpData): Promise<User> => {
     const newUser = await signUpUser(signUpData);
     login(newUser);
@@ -80,6 +134,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     login,
     signUp,
+    signInWithGoogle,
+    signInWithFacebook,
     updateUser,
     logout,
     loading,
