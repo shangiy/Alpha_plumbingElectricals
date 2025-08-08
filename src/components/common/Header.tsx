@@ -201,7 +201,7 @@ export default function Header() {
                              {(user.role === 'admin' || user.role === 'staff') && (
                                 <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
                             )}
-                            <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/track-order">Track My Order</Link></DropdownMenuItem>
                             <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
@@ -252,7 +252,7 @@ export default function Header() {
                                 {(user.role === 'admin' || user.role === 'staff') && (
                                     <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
                                 )}
-                                <DropdownMenuItem asChild><Link href="#">My Orders</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/track-order">Track My Order</Link></DropdownMenuItem>
                                 <DropdownMenuItem asChild><Link href="/wishlist">My Wishlist</Link></DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
@@ -314,7 +314,7 @@ export default function Header() {
                                     {(user.role === 'admin' || user.role === 'staff') && (
                                         <SheetClose asChild><Link href="/admin" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Admin Dashboard</Link></SheetClose>
                                     )}
-                                    <SheetClose asChild><Link href="#" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">My Orders</Link></SheetClose>
+                                    <SheetClose asChild><Link href="/track-order" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Track My Order</Link></SheetClose>
                                     <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">My Wishlist</Link></SheetClose>
                                     </>
                                 )}
