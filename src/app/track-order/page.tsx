@@ -7,11 +7,17 @@ import { Home, Package, Truck, CheckCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import AuthGuard from '@/components/auth/AuthGuard';
+import { useCart } from '@/context/CartProvider';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 function TrackOrderContent() {
     const router = useRouter();
+    const { cartItems } = useCart();
 
-    const orderDetails = {
+    const productToTrack = cartItems.length > 0 ? cartItems[0] : null;
+
+    const defaultOrderDetails = {
         id: 'ALPHA-12345',
         productName: 'Kentank 2000L',
         status: 'In Transit',
@@ -19,6 +25,17 @@ function TrackOrderContent() {
         currentLocation: 'Nakuru-Eldoret Highway',
         deliveryAddress: '123 Alpha St, Eldoret',
     };
+    
+    const [deliveryLocation, setDeliveryLocation] = useState(defaultOrderDetails.deliveryAddress);
+
+    const orderDetails = productToTrack ? {
+        id: `ALPHA-${productToTrack.id.slice(-5).toUpperCase()}`,
+        productName: productToTrack.name,
+        status: 'In Transit',
+        estimatedDelivery: '3:45 PM Today',
+        currentLocation: 'Nakuru-Eldoret Highway',
+        deliveryAddress: deliveryLocation,
+    } : defaultOrderDetails;
 
     const progress = [
         { status: 'Order Confirmed', icon: <Package />, completed: true },
@@ -48,7 +65,15 @@ function TrackOrderContent() {
                             <CardContent className="space-y-4">
                                 <div>
                                     <p className="font-semibold">{orderDetails.productName}</p>
-                                    <p className="text-sm text-muted-foreground">{orderDetails.deliveryAddress}</p>
+                                    <div className="space-y-2 mt-2">
+                                      <label htmlFor="deliveryLocation" className="text-sm font-medium text-muted-foreground">Delivery Location</label>
+                                      <Input 
+                                        id="deliveryLocation"
+                                        value={deliveryLocation}
+                                        onChange={(e) => setDeliveryLocation(e.target.value)}
+                                        placeholder="Enter your delivery address"
+                                      />
+                                    </div>
                                 </div>
                                 <Separator />
                                 <div className="space-y-2">
@@ -61,7 +86,7 @@ function TrackOrderContent() {
                                         <p className="font-semibold">{orderDetails.estimatedDelivery}</p>
                                     </div>
                                      <div className="flex justify-between">
-                                        <p className="text-muted-foreground">Current Location</p>
+                                        <p className="text-muted-foreground">Driver Location</p>
                                         <p className="font-semibold">{orderDetails.currentLocation}</p>
                                     </div>
                                 </div>
