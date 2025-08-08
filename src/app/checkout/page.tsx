@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -48,12 +49,13 @@ function CheckoutContent() {
     function onSubmit(data: CheckoutFormValues) {
         toast({
             title: "Order Placed!",
-            description: "Thank you for your purchase. We will be in touch shortly.",
+            description: "Thank you for your purchase. You can now track your delivery.",
         });
         console.log('Checkout Data:', data);
         console.log('Cart Items:', cartItems);
-        clearCart();
-        router.push('/');
+        // We don't clear the cart here anymore, so the tracking page can see the items.
+        // The cart can be cleared after payment confirmation.
+        router.push('/track-order');
     }
 
     const formatPrice = (price: number) => {
