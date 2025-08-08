@@ -61,7 +61,7 @@ export default function PaystackButton({ amount, email, phone, onSuccess, onClos
     setIsPaying(true);
 
     const handler = window.PaystackPop.setup({
-      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_test_a0d8c07548171a7428399e2b1e779836e5948957',
+      key: 'pk_live_504e9f8c8aebfa975ff87ba801235867f91f39f9',
       email: email,
       phone: phone,
       amount: Math.round(amount * 100), // Amount in Kobo
