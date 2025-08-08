@@ -32,7 +32,7 @@ function TrackOrderContent() {
             <div className="container mx-auto px-4 py-12">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-8">
-                        <h1 className="text-4xl font-bold font-headline text-primary">Track Your Order</h1>
+                        <h1 className="text-4xl font-bold font-headline text-primary">TRACKING MY ORDER</h1>
                         <p className="text-lg text-muted-foreground mt-2">
                            Follow your package from our warehouse to your doorstep.
                         </p>
