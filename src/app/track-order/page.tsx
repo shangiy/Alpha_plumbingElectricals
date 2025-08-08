@@ -11,11 +11,16 @@ import { useCart } from '@/context/CartProvider';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { sendOrderConfirmationEmail } from '@/ai/flows/send-order-confirmation-email';
+import { Loader2 } from 'lucide-react';
+
 
 function TrackOrderContent() {
     const router = useRouter();
     const { cartItems, cartTotal, clearCart } = useCart();
     const { toast } = useToast();
+    const [isPaid, setIsPaid] = useState(false);
+    const [isPaying, setIsPaying] = useState(false);
 
     // The order now reflects the items in the cart from checkout.
     const productToTrack = cartItems.length > 0 ? cartItems[0] : null;
@@ -35,26 +40,49 @@ function TrackOrderContent() {
     const orderDetails = productToTrack ? {
         id: `ALPHA-${productToTrack.id.slice(-5).toUpperCase()}`,
         productName: `${productToTrack.name}${cartItems.length > 1 ? ` and ${cartItems.length - 1} other item(s)` : ''}`,
-        status: 'In Transit',
-        estimatedDelivery: '3:45 PM Today',
-        currentLocation: 'Nakuru-Eldoret Highway',
+        status: isPaid ? 'In Transit' : 'Awaiting Payment',
+        estimatedDelivery: isPaid ? '3:45 PM Today' : 'Pending',
+        currentLocation: isPaid ? 'Nakuru-Eldoret Highway' : 'Warehouse',
         deliveryAddress: deliveryLocation,
     } : defaultOrderDetails;
 
     const progress = [
         { status: 'Order Confirmed', icon: <Package />, completed: true },
-        { status: 'Dispatched', icon: <Truck />, completed: true },
-        { status: 'In Transit', icon: <Truck />, completed: true },
+        { status: 'Dispatched', icon: <Truck />, completed: isPaid },
+        { status: 'In Transit', icon: <Truck />, completed: isPaid },
         { status: 'Delivered', icon: <Home />, completed: false },
     ];
     
-    const handlePayment = () => {
-        toast({
-            title: "Payment Successful!",
-            description: "Your order is confirmed and will be delivered shortly.",
-        });
-        clearCart();
-        router.push('/');
+    const handlePayment = async () => {
+        if (!productToTrack) return;
+        setIsPaying(true);
+
+        try {
+            // Call the server action to send the email
+            await sendOrderConfirmationEmail({
+                orderId: orderDetails.id,
+                productName: orderDetails.productName,
+                totalAmount: cartTotal,
+                deliveryAddress: deliveryLocation,
+                customerEmail: "customer@example.com" // In a real app, get this from user auth
+            });
+
+            setIsPaid(true);
+            toast({
+                title: "Payment Successful!",
+                description: "Your order is confirmed and will be delivered shortly.",
+            });
+            clearCart();
+        } catch(error) {
+             console.error("Payment/Email failed:", error);
+             toast({
+                variant: "destructive",
+                title: "Payment Failed",
+                description: "Could not process payment or send confirmation email.",
+            });
+        } finally {
+            setIsPaying(false);
+        }
     };
 
     return (
@@ -85,7 +113,7 @@ function TrackOrderContent() {
                                         value={deliveryLocation}
                                         onChange={(e) => setDeliveryLocation(e.target.value)}
                                         placeholder="Enter your delivery address"
-                                        disabled={!productToTrack}
+                                        disabled={!productToTrack || isPaid}
                                       />
                                     </div>
                                 </div>
@@ -109,10 +137,10 @@ function TrackOrderContent() {
                                     <h4 className="font-semibold">Progress</h4>
                                     <div className="flex justify-between items-center relative">
                                         <div className="absolute left-0 top-1/2 w-full h-0.5 bg-border -translate-y-1/2 -z-10"></div>
-                                        <div className="absolute left-0 top-1/2 w-2/3 h-0.5 bg-primary -translate-y-1/2 -z-10"></div>
+                                        <div className={`absolute left-0 top-1/2 h-0.5 bg-primary -translate-y-1/2 -z-10 transition-all duration-500 ${isPaid ? 'w-2/3' : 'w-0'}`}></div>
                                         {progress.map((step, index) => (
                                             <div key={index} className="flex flex-col items-center z-0">
-                                                <div className={`flex items-center justify-center h-8 w-8 rounded-full border-2 ${step.completed ? 'bg-primary border-primary text-primary-foreground' : 'bg-background border-border'}`}>
+                                                <div className={`flex items-center justify-center h-8 w-8 rounded-full border-2 transition-colors ${step.completed ? 'bg-primary border-primary text-primary-foreground' : 'bg-background border-border'}`}>
                                                     {step.completed ? <CheckCircle className="h-5 w-5" /> : step.icon}
                                                 </div>
                                                 <p className="text-xs mt-2 text-center">{step.status}</p>
@@ -134,10 +162,19 @@ function TrackOrderContent() {
                                     referrerPolicy="no-referrer-when-downgrade"
                                 ></iframe>
                             </div>
-                            {productToTrack && (
-                                <Button size="lg" className="w-full" onClick={handlePayment}>
-                                    <Wallet className="mr-2 h-5 w-5" /> Make Payment Now
+                            {productToTrack && !isPaid && (
+                                <Button size="lg" className="w-full" onClick={handlePayment} disabled={isPaying}>
+                                    {isPaying ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Wallet className="mr-2 h-5 w-5" />}
+                                    Make Payment Now
                                 </Button>
+                            )}
+                            {isPaid && (
+                                <Card className="text-center p-4 bg-green-100 border-green-300">
+                                    <CardTitle className="text-green-800 flex items-center justify-center gap-2">
+                                        <CheckCircle /> Payment Confirmed!
+                                    </CardTitle>
+                                    <CardDescription className="text-green-700 mt-1">Your delivery is on its way.</CardDescription>
+                                </Card>
                             )}
                         </div>
                     </div>
