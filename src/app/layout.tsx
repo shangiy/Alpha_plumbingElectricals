@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Bot, MessageSquare } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import Script from 'next/script';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -87,6 +88,7 @@ export default function RootLayout({
             </CartProvider>
           </ProductProvider>
         </AuthProvider>
+        <Script src="https://js.paystack.co/v1/inline.js" />
       </body>
     </html>
   );

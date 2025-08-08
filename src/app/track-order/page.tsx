@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { sendOrderConfirmationEmail } from '@/ai/flows/send-order-confirmation-email';
 import { Loader2 } from 'lucide-react';
+import PaystackButton from '@/components/common/PaystackButton';
 
 
 function TrackOrderContent() {
@@ -20,8 +21,7 @@ function TrackOrderContent() {
     const { cartItems, cartTotal, clearCart } = useCart();
     const { toast } = useToast();
     const [isPaid, setIsPaid] = useState(false);
-    const [isPaying, setIsPaying] = useState(false);
-
+    
     // The order now reflects the items in the cart from checkout.
     const productToTrack = cartItems.length > 0 ? cartItems[0] : null;
 
@@ -53,9 +53,8 @@ function TrackOrderContent() {
         { status: 'Delivered', icon: <Home />, completed: false },
     ];
     
-    const handlePayment = async () => {
+    const handlePaymentSuccess = async () => {
         if (!productToTrack) return;
-        setIsPaying(true);
 
         try {
             // Call the server action to send the email
@@ -80,8 +79,6 @@ function TrackOrderContent() {
                 title: "Payment Failed",
                 description: "Could not process payment or send confirmation email.",
             });
-        } finally {
-            setIsPaying(false);
         }
     };
 
@@ -163,10 +160,12 @@ function TrackOrderContent() {
                                 ></iframe>
                             </div>
                             {productToTrack && !isPaid && (
-                                <Button size="lg" className="w-full" onClick={handlePayment} disabled={isPaying}>
-                                    {isPaying ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Wallet className="mr-2 h-5 w-5" />}
-                                    Make Payment Now
-                                </Button>
+                                <PaystackButton 
+                                    amount={cartTotal}
+                                    onSuccess={handlePaymentSuccess}
+                                    email="patrickshangstone22@gmail.com"
+                                    phone="+254727607824"
+                                />
                             )}
                             {isPaid && (
                                 <Card className="text-center p-4 bg-green-100 border-green-300">
