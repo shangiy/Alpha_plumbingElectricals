@@ -86,7 +86,7 @@ function TrackOrderContent() {
                                         <p className="font-semibold">{orderDetails.estimatedDelivery}</p>
                                     </div>
                                      <div className="flex justify-between">
-                                        <p className="text-muted-foreground">Driver Location</p>
+                                        <p className="text-muted-foreground">Delivery Location</p>
                                         <p className="font-semibold">{orderDetails.currentLocation}</p>
                                     </div>
                                 </div>
