@@ -246,7 +246,7 @@ function CheckoutContent() {
                                 <p>{formatPrice(cartTotal)}</p>
                             </div>
                             <div className="flex justify-between">
-                                <p className="text-muted-foreground">Shipping</p>
+                                <p className="text-muted-foreground">Delivery charge</p>
                                 <p>{formatPrice(shippingCost)}</p>
                             </div>
                         </div>
