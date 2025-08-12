@@ -39,32 +39,30 @@ export function useProducts() {
 }
 
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // Immediately seed if necessary
+    // Immediately seed if necessary, but don't block.
     seedProducts();
 
-    // Set up the real-time listener
     const productsCollection = collection(db, "products");
+    
+    // Set up the real-time listener
     const unsubscribe = onSnapshot(productsCollection, 
         (snapshot) => {
             if (!snapshot.empty) {
                 const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
                 setProducts(productList);
             } else {
-                // If firestore is empty after trying to fetch, use local data
-                console.log("Firestore is empty, using local fallback data.");
-                setProducts(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
+                console.log("Firestore is empty, continuing with local fallback data.");
             }
             setLoading(false);
         }, 
         (error) => {
-            console.error("Firestore snapshot error. Falling back to local data.", error);
-            // On error, explicitly load local data
-            setProducts(initialProductsData.map((p, index) => ({...p, id: `local-${index}`})));
+            console.error("Firestore snapshot error. Using local fallback data.", error);
+            // Local data is already set, so we just stop loading.
             setLoading(false);
         }
     );
