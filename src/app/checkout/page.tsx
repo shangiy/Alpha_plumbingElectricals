@@ -157,7 +157,7 @@ function CheckoutContent() {
                                     name="address"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Specific Shipping Address</FormLabel>
+                                            <FormLabel>Type your delivery location address</FormLabel>
                                             <FormControl>
                                                 <Input placeholder="e.g., House No. 123, Some Street, Near Landmark" {...field} />
                                             </FormControl>
