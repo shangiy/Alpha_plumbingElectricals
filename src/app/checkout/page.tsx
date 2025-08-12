@@ -100,54 +100,26 @@ function CheckoutContent() {
     return (
         <div className="container mx-auto px-4 py-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Shipping Details & Map */}
-                <div className="space-y-8">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-2xl">Shipping Details</CardTitle>
-                            <CardDescription>
-                                Please provide your shipping information.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <FormField
-                                            control={form.control}
-                                            name="name"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Full Name</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="John Doe" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name="phone"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Phone Number</FormLabel>
-                                                    <FormControl>
-                                                        <Input type="tel" placeholder="+254 712 345 678" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
+                {/* Shipping Details */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-2xl">Shipping Details</CardTitle>
+                        <CardDescription>
+                            Please provide your shipping information.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormField
                                         control={form.control}
-                                        name="email"
+                                        name="name"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Email Address</FormLabel>
+                                                <FormLabel>Full Name</FormLabel>
                                                 <FormControl>
-                                                    <Input type="email" placeholder="john.doe@example.com" {...field} />
+                                                    <Input placeholder="John Doe" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -155,82 +127,99 @@ function CheckoutContent() {
                                     />
                                     <FormField
                                         control={form.control}
-                                        name="address"
+                                        name="phone"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Type your delivery location address</FormLabel>
+                                                <FormLabel>Phone Number</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="e.g., House No. 123, Some Street, Near Landmark" {...field} />
+                                                    <Input type="tel" placeholder="+254 712 345 678" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                    <FormField
-                                        control={form.control}
-                                        name="location"
-                                        render={({ field }) => (
-                                            <FormItem className="space-y-3">
-                                            <FormLabel>Select Delivery Location</FormLabel>
+                                </div>
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email Address</FormLabel>
                                             <FormControl>
-                                                <RadioGroup
-                                                    onValueChange={field.onChange}
-                                                    defaultValue={field.value}
-                                                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                                                >
-                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                        <FormControl>
-                                                            <RadioGroupItem value="in_town" />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal w-full">
-                                                            Within Eldoret Town <span className="text-primary font-medium">(Free)</span>
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                        <FormControl>
-                                                            <RadioGroupItem value="10_km" />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal w-full">
-                                                            0-10km from town <span className="text-muted-foreground">({formatPrice(250)})</span>
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                        <FormControl>
-                                                            <RadioGroupItem value="20_km" />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal w-full">
-                                                            10-20km from town <span className="text-muted-foreground">({formatPrice(500)})</span>
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                        <FormControl>
-                                                            <RadioGroupItem value="30_km" />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal w-full">
-                                                            20-30km from town <span className="text-muted-foreground">({formatPrice(750)})</span>
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                </RadioGroup>
+                                                <Input type="email" placeholder="john.doe@example.com" {...field} />
                                             </FormControl>
                                             <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button type="submit" size="lg" className="w-full">Place Order</Button>
-                                </form>
-                            </Form>
-                        </CardContent>
-                    </Card>
-                     <div className="aspect-video overflow-hidden rounded-lg border shadow-lg">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63835.94689477038!2d35.2449557497826!3d0.5191235129665624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x178101ae37f9f539%3A0x66249514f7336a87!2sEldoret!5e0!3m2!1sen!2ske!4v1626876935312!5m2!1sen!2ske"
-                            className="w-full h-full"
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                        ></iframe>
-                    </div>
-                </div>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="address"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Type your delivery location address</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="e.g., House No. 123, Some Street, Near Landmark" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="location"
+                                    render={({ field }) => (
+                                        <FormItem className="space-y-3">
+                                        <FormLabel>Select Delivery Location</FormLabel>
+                                        <FormControl>
+                                            <RadioGroup
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                            >
+                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="in_town" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal w-full">
+                                                        Within Eldoret Town <span className="text-primary font-medium">(Free)</span>
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="10_km" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal w-full">
+                                                        0-10km from town <span className="text-muted-foreground">({formatPrice(250)})</span>
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="20_km" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal w-full">
+                                                        10-20km from town <span className="text-muted-foreground">({formatPrice(500)})</span>
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="30_km" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal w-full">
+                                                        20-30km from town <span className="text-muted-foreground">({formatPrice(750)})</span>
+                                                    </FormLabel>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button type="submit" size="lg" className="w-full">Place Order</Button>
+                            </form>
+                        </Form>
+                    </CardContent>
+                </Card>
 
                 {/* Order Summary */}
                 <Card className="bg-secondary sticky top-24 h-fit">
