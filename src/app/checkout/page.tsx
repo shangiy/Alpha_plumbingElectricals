@@ -22,6 +22,7 @@ import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import AuthGuard from '@/components/auth/AuthGuard';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useEffect } from 'react';
 
 const checkoutFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -29,7 +30,7 @@ const checkoutFormSchema = z.object({
   phone: z.string().min(10, 'Please enter a valid phone number.'),
   address: z.string().min(10, 'Please enter a full address.'),
   location: z.enum(['in_town', '10_km', '20_km', '30_km', 'over_30_km'], {
-      required_error: "You need to select a delivery location."
+      required_error: "You must select a delivery location to proceed."
   }),
 });
 
@@ -40,12 +41,12 @@ const shippingOptions = {
     '10_km': 250,
     '20_km': 500,
     '30_km': 750,
-    'over_30_km': 1000, // Or some other logic
+    'over_30_km': 1000,
 };
 
 function CheckoutContent() {
     const { toast } = useToast();
-    const { cartItems, cartTotal } = useCart();
+    const { cartItems, cartTotal, setShippingCost, shippingCost, orderTotal } = useCart();
     const router = useRouter();
 
     const form = useForm<CheckoutFormValues>({
@@ -63,10 +64,16 @@ function CheckoutContent() {
         name: 'location'
     });
 
+    useEffect(() => {
+        const newShippingCost = selectedLocation ? shippingOptions[selectedLocation] : 0;
+        setShippingCost(newShippingCost);
+    }, [selectedLocation, setShippingCost]);
+
+
     function onSubmit(data: CheckoutFormValues) {
         toast({
-            title: "Order Placed!",
-            description: "Thank you for your purchase. You can now track your delivery.",
+            title: "Order Details Confirmed",
+            description: "Please proceed to make your payment.",
         });
         console.log('Checkout Data:', data);
         console.log('Cart Items:', cartItems);
@@ -79,9 +86,6 @@ function CheckoutContent() {
           currency: 'KES',
         }).format(price);
     };
-
-    const shippingCost = selectedLocation ? shippingOptions[selectedLocation] : 0;
-    const totalCost = cartTotal + shippingCost;
 
     if (cartItems.length === 0) {
         return (
@@ -253,7 +257,7 @@ function CheckoutContent() {
                         <Separator className="my-6"/>
                         <div className="flex justify-between font-bold text-lg">
                             <p>Total</p>
-                            <p>{formatPrice(totalCost)}</p>
+                            <p>{formatPrice(orderTotal)}</p>
                         </div>
                     </CardContent>
                 </Card>

@@ -18,11 +18,10 @@ import PaystackButton from '@/components/common/PaystackButton';
 
 function TrackOrderContent() {
     const router = useRouter();
-    const { cartItems, cartTotal, clearCart } = useCart();
+    const { cartItems, orderTotal, clearCart } = useCart();
     const { toast } = useToast();
     const [isPaid, setIsPaid] = useState(false);
     
-    // The order now reflects the items in the cart from checkout.
     const productToTrack = cartItems.length > 0 ? cartItems[0] : null;
 
     const defaultOrderDetails = {
@@ -34,7 +33,6 @@ function TrackOrderContent() {
         deliveryAddress: 'Please complete checkout first',
     };
     
-    // State for the editable delivery address
     const [deliveryLocation, setDeliveryLocation] = useState('123 Alpha St, Eldoret');
 
     const orderDetails = productToTrack ? {
@@ -57,13 +55,12 @@ function TrackOrderContent() {
         if (!productToTrack) return;
 
         try {
-            // Call the server action to send the email
             await sendOrderConfirmationEmail({
                 orderId: orderDetails.id,
                 productName: orderDetails.productName,
-                totalAmount: cartTotal,
+                totalAmount: orderTotal,
                 deliveryAddress: deliveryLocation,
-                customerEmail: "customer@example.com" // In a real app, get this from user auth
+                customerEmail: "customer@example.com"
             });
 
             setIsPaid(true);
@@ -94,7 +91,6 @@ function TrackOrderContent() {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Left Column: Order Details */}
                         <Card className="lg:col-span-1 h-fit">
                             <CardHeader>
                                 <CardTitle>Delivery Details</CardTitle>
@@ -148,7 +144,6 @@ function TrackOrderContent() {
                             </CardContent>
                         </Card>
 
-                        {/* Right Column: Map */}
                         <div className="lg:col-span-2">
                             <div className="aspect-video overflow-hidden rounded-lg border shadow-lg mb-6">
                             <iframe
@@ -161,7 +156,7 @@ function TrackOrderContent() {
                             </div>
                             {productToTrack && !isPaid && (
                                 <PaystackButton 
-                                    amount={cartTotal}
+                                    amount={orderTotal}
                                     onSuccess={handlePaymentSuccess}
                                     email="patrickshangstone22@gmail.com"
                                     phone="+254727607824"
