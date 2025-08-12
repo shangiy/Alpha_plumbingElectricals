@@ -61,7 +61,7 @@ export default function PaystackButton({ amount, email, phone, onSuccess, onClos
     setIsPaying(true);
 
     const handler = window.PaystackPop.setup({
-      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_live_504e9f8c8aebfa975ff87ba801235867f91f39f9',
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_test_163014ec364903a72c78b8e3fea9db7e080333ce',
       email: email,
       phone: phone,
       amount: Math.round(amount * 100), // Amount in Kobo/cents
@@ -97,7 +97,7 @@ export default function PaystackButton({ amount, email, phone, onSuccess, onClos
   };
 
   return (
-    <Button size="lg" className="w-full" onClick={payWithPaystack} disabled={isPaying}>
+    <Button size="lg" className="w-full" onClick={payWithPaystack} disabled={isPaying || amount <= 0}>
       {isPaying ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Wallet className="mr-2 h-5 w-5" />}
       Make Payment Now
     </Button>
