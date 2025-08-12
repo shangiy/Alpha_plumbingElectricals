@@ -28,11 +28,19 @@ const checkoutFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   email: z.string().email('Please enter a valid email address.'),
   phone: z.string().min(10, 'Please enter a valid phone number.'),
-  address: z.string().min(10, 'Please enter a full address.'),
-  location: z.enum(['in_town', '10_km', '20_km', '30_km', 'over_30_km'], {
-      required_error: "You must select a delivery location to proceed."
-  }),
+  address: z.string().optional(),
+  location: z.enum(['in_town', '10_km', '20_km', '30_km', 'over_30_km']).optional(),
+}).refine(data => {
+    // If a delivery location is selected, the address must be provided.
+    if (data.location && !data.address) {
+        return false;
+    }
+    return true;
+}, {
+    message: 'Delivery address is required when a delivery location is selected.',
+    path: ['address'],
 });
+
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
 
@@ -103,9 +111,9 @@ function CheckoutContent() {
                 {/* Shipping Details */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-2xl">Shipping Details</CardTitle>
+                        <CardTitle className="text-2xl">Contact Information</CardTitle>
                         <CardDescription>
-                            Please provide your shipping information.
+                            Please provide your contact and optional delivery information.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -152,69 +160,77 @@ function CheckoutContent() {
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name="address"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Type your delivery location address</FormLabel>
+                                
+                                <Separator />
+
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-medium">Delivery (Optional)</h3>
+                                     <FormField
+                                        control={form.control}
+                                        name="address"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Type your delivery location address</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="e.g., House No. 123, Some Street, Near Landmark" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="location"
+                                        render={({ field }) => (
+                                            <FormItem className="space-y-3">
+                                            <FormLabel>Select Delivery Location</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="e.g., House No. 123, Some Street, Near Landmark" {...field} />
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}
+                                                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                                >
+                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                        <FormControl>
+                                                            <RadioGroupItem value="in_town" />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal w-full">
+                                                            Within Eldoret Town <span className="text-primary font-medium">(Free)</span>
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                        <FormControl>
+                                                            <RadioGroupItem value="10_km" />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal w-full">
+                                                            0-10km from town <span className="text-muted-foreground">({formatPrice(250)})</span>
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                        <FormControl>
+                                                            <RadioGroupItem value="20_km" />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal w-full">
+                                                            10-20km from town <span className="text-muted-foreground">({formatPrice(500)})</span>
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
+                                                        <FormControl>
+                                                            <RadioGroupItem value="30_km" />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal w-full">
+                                                            20-30km from town <span className="text-muted-foreground">({formatPrice(750)})</span>
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                </RadioGroup>
                                             </FormControl>
                                             <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="location"
-                                    render={({ field }) => (
-                                        <FormItem className="space-y-3">
-                                        <FormLabel>Select Delivery Location</FormLabel>
-                                        <FormControl>
-                                            <RadioGroup
-                                                onValueChange={field.onChange}
-                                                defaultValue={field.value}
-                                                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                                            >
-                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                    <FormControl>
-                                                        <RadioGroupItem value="in_town" />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal w-full">
-                                                        Within Eldoret Town <span className="text-primary font-medium">(Free)</span>
-                                                    </FormLabel>
-                                                </FormItem>
-                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                    <FormControl>
-                                                        <RadioGroupItem value="10_km" />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal w-full">
-                                                        0-10km from town <span className="text-muted-foreground">({formatPrice(250)})</span>
-                                                    </FormLabel>
-                                                </FormItem>
-                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                    <FormControl>
-                                                        <RadioGroupItem value="20_km" />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal w-full">
-                                                        10-20km from town <span className="text-muted-foreground">({formatPrice(500)})</span>
-                                                    </FormLabel>
-                                                </FormItem>
-                                                <FormItem className="flex items-center space-x-3 space-y-0 p-4 border rounded-md has-[:checked]:border-primary">
-                                                    <FormControl>
-                                                        <RadioGroupItem value="30_km" />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal w-full">
-                                                        20-30km from town <span className="text-muted-foreground">({formatPrice(750)})</span>
-                                                    </FormLabel>
-                                                </FormItem>
-                                            </RadioGroup>
-                                        </FormControl>
-                                        <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+
                                 <Button type="submit" size="lg" className="w-full">Place Order</Button>
                             </form>
                         </Form>
