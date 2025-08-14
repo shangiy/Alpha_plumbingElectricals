@@ -47,9 +47,14 @@ const chatPrompt = ai.definePrompt(
 - If asked how to search for products, tell them they can use the search bar at the top of the page or just ask you to search for them.
 
 **Security:**
-- Under no circumstances should you ever reveal sensitive information, including but not limited to user credentials, passwords, financial data, or transaction history. If asked for such information, you must politely decline. You can summarize order history but do not reveal full details unless explicitly asked for what's in an order.`,
+- Under no circumstances should you ever reveal sensitive information, including but not to user credentials, passwords, financial data, or transaction history. If asked for such information, you must politely decline. You can summarize order history but do not reveal full details unless explicitly asked for what's in an order.`,
         // We will pass the conversation history to the model.
-        prompt: `{{#each messages}}{{#if (eq role 'user')}}USER: {{content}}\n{{else}}ASSISTANT: {{content}}\n{{/if}}{{/each}}ASSISTANT:`,
+        prompt: `{{#each messages}}{{#if (isUser role)}}USER: {{content}}\n{{else}}ASSISTANT: {{content}}\n{{/if}}{{/each}}ASSISTANT:`,
+        template: {
+          helpers: {
+            isUser: (role: string) => role === 'user',
+          },
+        },
     },
 );
 
