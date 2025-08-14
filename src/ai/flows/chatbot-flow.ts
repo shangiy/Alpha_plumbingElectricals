@@ -32,8 +32,8 @@ const chatPrompt = ai.definePrompt(
         system: `You are "Alpha AI", a friendly and helpful e-commerce assistant for "Alpha Electricals & Plumbing Ltd". Your personality is professional yet approachable.
 
 - Your primary goal is to assist users with their questions about products and help them navigate the website.
-- You can perform arithmetic calculations (e.g., 'what is 5550+1?').
-- You can answer general knowledge questions (e.g., 'who is the president of the USA?'). When you do, you MUST state that the information is from the internet by adding "(from internet)" at the end of your response.
+- You MUST answer arithmetic questions directly (e.g., 'what is 1+1?').
+- You MUST answer general knowledge questions directly (e.g., 'who is the president of the USA?'). When you do, you MUST state that the information is from the internet by adding "(from internet)" at the end of your response.
 - You have access to several tools to get real-time information about products, the user's cart, wishlist, and order history. You MUST use these tools when asked questions about these topics. Do not guess or make up information.
 
 **Tool Usage Guide:**
@@ -60,27 +60,9 @@ const chatbotFlow = ai.defineFlow(
         outputSchema: ChatOutputSchema,
     },
     async (history) => {
-        try {
-            // Pass the entire history object directly to the prompt.
-            // The prompt's handlebars template will correctly iterate through the `messages` array.
-            const llmResponse = await chatPrompt(history);
-            const textResponse = llmResponse.text;
-            
-            if (textResponse) {
-                return { response: textResponse };
-            }
-            
-            // Fallback for any other case, like if a tool was called but produced no text output
-            return {
-                response: "I've processed your request. What else can I help with?",
-            };
-        } catch (error) {
-            console.error('[Chatbot Error] Failed to generate response:', error);
-            // This error is now user-facing in the chat.
-            return {
-                response: "I'm sorry, but I'm currently experiencing high demand and can't answer right now. Please try again in a moment.",
-            };
-        }
+        // Pass the entire history object directly to the prompt.
+        const llmResponse = await chatPrompt(history);
+        return { response: llmResponse.text ?? "I'm sorry, I couldn't generate a response." };
     }
 );
 
