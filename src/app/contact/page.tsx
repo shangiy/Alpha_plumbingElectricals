@@ -48,8 +48,8 @@ export default function ContactPage() {
                 <div className="flex flex-col items-center">
                   <Mail className="h-10 w-10 text-primary mb-2" />
                   <h3 className="text-lg font-semibold">Email</h3>
-                  <a href="mailto:Aplhaltd@gmail.com" className="text-muted-foreground hover:text-primary">
-                    Aplhaltd@gmail.com
+                  <a href="mailto:Alphaltd21@gmail.com" className="text-muted-foreground hover:text-primary">
+                    Alphaltd21@gmail.com
                   </a>
                 </div>
                 <div className="flex flex-col items-center">
