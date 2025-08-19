@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import NewsletterForm from './NewsletterForm';
 
 export default function Footer() {
   const socialLinks = [
@@ -74,10 +73,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold font-headline mb-4">Subscribe to our newsletter</h3>
             <p className="text-sm text-muted-foreground mb-4">Get the latest deals and product updates.</p>
-            <form className="flex gap-2">
-              <Input type="email" placeholder="Enter your email" className="bg-background" />
-              <Button type="submit" variant="default">Subscribe</Button>
-            </form>
+            <NewsletterForm />
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">

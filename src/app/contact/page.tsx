@@ -1,9 +1,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Clock, Facebook } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import NewsletterForm from '@/components/common/NewsletterForm';
 
 
 export default function ContactPage() {
@@ -119,10 +118,7 @@ export default function ContactPage() {
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold text-center md:text-left">Subscribe to our Newsletter</h3>
-                  <form className="flex w-full gap-2">
-                      <Input type="email" placeholder="Enter your email" className="bg-background flex-1" />
-                      <Button type="submit">Subscribe</Button>
-                  </form>
+                  <NewsletterForm />
                 </div>
               </div>
             </CardContent>
