@@ -1,76 +1,93 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
-import { Linkedin, Twitter, Mail } from 'lucide-react';
+import { Facebook, Twitter } from 'lucide-react';
 
 const teamMembers = [
-  {
-    name: 'Alex Chen',
-    role: 'Founder & CEO',
-    bio: 'With over 20 years of experience in the industry, Alex leads the company with a vision for innovation and customer satisfaction.',
-    image: 'https://placehold.co/400x400',
-    social: {
-      linkedin: '#',
-      twitter: '#',
-      email: 'mailto:alex.chen@example.com',
+    {
+      name: 'Richard Kinyungu',
+      role: 'Sales Manager',
+      bio: 'Richard leads our sales team, driving business growth and ensuring customer satisfaction with his extensive experience.',
+      image: 'https://placehold.co/400x400',
+      dataAiHint: 'man portrait',
+      socials: [
+        { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
+        { name: 'WhatsApp', href: 'https://wa.me/254117484887', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={20} height={20} /> },
+        { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
+      ]
     },
-    dataAiHint: 'man portrait',
-  },
-  {
-    name: 'Samantha Rodriguez',
-    role: 'Head of Plumbing Solutions',
-    bio: 'Samantha is a master plumber and engineer, ensuring all our plumbing products meet the highest standards of quality and reliability.',
-    image: 'https://placehold.co/400x400',
-    social: {
-      linkedin: '#',
-      twitter: '#',
-      email: 'mailto:samantha.r@example.com',
+    {
+      name: 'Peter Karanja',
+      role: 'Operations Head',
+      bio: 'Peter oversees all operational aspects, ensuring efficiency and excellence in our service delivery from start to finish.',
+      image: 'https://placehold.co/400x400',
+      dataAiHint: 'man professional',
+      socials: [
+        { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
+        { name: 'WhatsApp', href: 'https://wa.me/254727751718', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={20} height={20} /> },
+        { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
+      ]
     },
-    dataAiHint: 'woman portrait',
-  },
-  {
-    name: 'Ben Carter',
-    role: 'Chief Lighting Designer',
-    bio: 'Ben combines artistry with technical expertise to create lighting solutions that are both beautiful and energy-efficient.',
-    image: 'https://placehold.co/400x400',
-    social: {
-      linkedin: '#',
-      twitter: '#',
-      email: 'mailto:ben.carter@example.com',
+    {
+      name: 'Miriam Njeri',
+      role: 'Customer Support +',
+      bio: 'Miriam is the friendly voice of our company, dedicated to providing exceptional support and resolving customer inquiries.',
+      image: 'https://placehold.co/400x400',
+      dataAiHint: 'woman friendly',
+      socials: [
+        { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
+        { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
+        { name: 'WhatsApp', href: 'https://wa.me/254117484887', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={20} height={20} /> },
+      ]
     },
-    dataAiHint: 'man portrait professional',
-  },
-   {
-    name: 'Priya Patel',
-    role: 'Customer Relations Manager',
-    bio: 'Priya is dedicated to providing exceptional service and support, ensuring every customer has a positive experience with us.',
-    image: 'https://placehold.co/400x400',
-    social: {
-      linkedin: '#',
-      twitter: '#',
-      email: 'mailto:priya.patel@example.com',
+    {
+      name: 'Val',
+      role: 'Social Media Manager',
+      bio: 'Val masterfully manages our online presence, engaging with our community across all social platforms.',
+      image: 'https://placehold.co/400x400',
+      dataAiHint: 'woman professional',
+      socials: [
+        { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
+        { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
+        { name: 'WhatsApp', href: 'https://wa.me/254713920922', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={20} height={20} /> },
+      ]
     },
-    dataAiHint: 'woman portrait professional',
-  },
+    {
+      name: 'Shangi',
+      role: 'Website Developer',
+      bio: 'Shangi is the technical wizard behind our website, ensuring a smooth and seamless online experience for our customers.',
+      image: 'https://placehold.co/400x400',
+      dataAiHint: 'man tech',
+      socials: [
+        { name: 'Twitter', href: 'https://www.x.com/@patrickshangst1', icon: <Twitter className="h-5 w-5" /> },
+        { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
+      ]
+    },
 ];
 
 export default function TeamPage() {
   return (
-    <div className="bg-background py-16">
-      <div className="container mx-auto px-4">
+    <section 
+      className="relative py-16 bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: "url('/connect-bg.jpg')" }}
+      data-ai-hint="team background"
+    >
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold font-headline text-primary">Meet Our Team</h1>
-          <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
-            The driving force behind our success. A group of passionate professionals dedicated to excellence.
+          <h1 className="text-4xl font-bold font-headline text-white">Here Is Our Very Able Team</h1>
+          <p className="text-lg text-white/80 mt-2 max-w-2xl mx-auto">
+            Meet the dedicated individuals behind the thriving Alpha Electricals & Plumbing Ltd.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
-            <Card key={member.name} className="text-center overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="aspect-square">
-                 <Image
+            <Card key={member.name} className="text-center overflow-hidden hover:shadow-xl transition-shadow bg-card">
+              <div className="aspect-square bg-muted">
+                <Image
                     src={member.image}
-                    alt={`Photo of ${member.name}`}
+                    alt={`Portrait of ${member.name}`}
                     width={400}
                     height={400}
                     className="w-full h-full object-cover"
@@ -78,27 +95,23 @@ export default function TeamPage() {
                 />
               </div>
               <CardHeader>
-                <CardTitle>{member.name}</CardTitle>
-                <p className="text-primary font-semibold">{member.role}</p>
+                  <CardTitle>{member.name}</CardTitle>
+                  <p className="text-primary font-semibold">{member.role}</p>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">{member.bio}</p>
-                <div className="flex justify-center gap-4">
-                  <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
-                    <Linkedin className="h-5 w-5" />
-                  </a>
-                   <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
-                    <Twitter className="h-5 w-5" />
-                  </a>
-                   <a href={member.social.email} className="text-muted-foreground hover:text-primary">
-                    <Mail className="h-5 w-5" />
-                  </a>
-                </div>
+                  <p className="text-sm text-muted-foreground mb-4">{member.bio}</p>
+                  <div className="flex justify-center items-center gap-4">
+                  {member.socials.map((social) => (
+                    <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
+                      {social.icon}
+                    </a>
+                  ))}
+                  </div>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
