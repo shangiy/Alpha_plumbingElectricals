@@ -8,7 +8,7 @@ const teamMembers = [
       name: 'Richard Kinyungu',
       role: 'Sales Manager',
       bio: 'Richard leads our sales team, driving business growth and ensuring customer satisfaction with his extensive experience.',
-      image: 'https://placehold.co/400x400',
+      image: 'https://placehold.co/400x400.png',
       dataAiHint: 'man portrait',
       socials: [
         { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
@@ -20,7 +20,7 @@ const teamMembers = [
       name: 'Peter Karanja',
       role: 'Operations Head',
       bio: 'Peter oversees all operational aspects, ensuring efficiency and excellence in our service delivery from start to finish.',
-      image: 'https://placehold.co/400x400',
+      image: 'https://placehold.co/400x400.png',
       dataAiHint: 'man professional',
       socials: [
         { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
@@ -32,7 +32,7 @@ const teamMembers = [
       name: 'Miriam Njeri',
       role: 'Customer Support +',
       bio: 'Miriam is the friendly voice of our company, dedicated to providing exceptional support and resolving customer inquiries.',
-      image: 'https://placehold.co/400x400',
+      image: 'https://placehold.co/400x400.png',
       dataAiHint: 'woman friendly',
       socials: [
         { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
@@ -44,7 +44,7 @@ const teamMembers = [
       name: 'Val',
       role: 'Social Media Manager',
       bio: 'Val masterfully manages our online presence, engaging with our community across all social platforms.',
-      image: 'https://placehold.co/400x400',
+      image: 'https://placehold.co/400x400.png',
       dataAiHint: 'woman professional',
       socials: [
         { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
@@ -56,7 +56,7 @@ const teamMembers = [
       name: 'Shangi',
       role: 'Website Developer',
       bio: 'Shangi is the technical wizard behind our website, ensuring a smooth and seamless online experience for our customers.',
-      image: 'https://placehold.co/400x400',
+      image: 'https://placehold.co/400x400.png',
       dataAiHint: 'man tech',
       socials: [
         { name: 'Twitter', href: 'https://www.x.com/@patrickshangst1', icon: <Twitter className="h-5 w-5" /> },
@@ -67,51 +67,57 @@ const teamMembers = [
 
 export default function TeamPage() {
   return (
-    <section 
-      className="relative py-16 bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: "url('/connect-bg.jpg')" }}
-      data-ai-hint="team background"
-    >
-      <div className="absolute inset-0 bg-black/50" />
-      <div className="relative z-10 container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold font-headline text-white">Here Is Our Very Able Team</h1>
-          <p className="text-lg text-white/80 mt-2 max-w-2xl mx-auto">
-            Meet the dedicated individuals behind the thriving Alpha Electricals & Plumbing Ltd.
-          </p>
-        </div>
+    <>
+        <section 
+            className="relative h-[50vh] bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/connect-bg.jpg')" }}
+            data-ai-hint="team background"
+        >
+            <div className="absolute inset-0 bg-black/50" />
+            <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
+                <div className="container px-4">
+                    <h1 className="text-4xl font-bold font-headline md:text-5xl">Here Is Our Very Able Team</h1>
+                    <p className="mt-2 text-lg max-w-2xl mx-auto">
+                        Meet the dedicated individuals behind the thriving Alpha Electricals & Plumbing Ltd.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teamMembers.map((member) => (
-            <Card key={member.name} className="text-center overflow-hidden hover:shadow-xl transition-shadow bg-card">
-              <div className="aspect-square bg-muted">
-                <Image
-                    src={member.image}
-                    alt={`Portrait of ${member.name}`}
-                    width={400}
-                    height={400}
-                    className="w-full h-full object-cover"
-                    data-ai-hint={member.dataAiHint}
-                />
-              </div>
-              <CardHeader>
-                  <CardTitle>{member.name}</CardTitle>
-                  <p className="text-primary font-semibold">{member.role}</p>
-              </CardHeader>
-              <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">{member.bio}</p>
-                  <div className="flex justify-center items-center gap-4">
-                  {member.socials.map((social) => (
-                    <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
-                      {social.icon}
-                    </a>
-                  ))}
-                  </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
+        <section className="bg-secondary py-16">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {teamMembers.map((member) => (
+                    <Card key={member.name} className="text-center overflow-hidden hover:shadow-xl transition-shadow bg-card">
+                    <div className="aspect-square bg-muted">
+                        <Image
+                            src={member.image}
+                            alt={`Portrait of ${member.name}`}
+                            width={400}
+                            height={400}
+                            className="w-full h-full object-cover"
+                            data-ai-hint={member.dataAiHint}
+                        />
+                    </div>
+                    <CardHeader>
+                        <CardTitle>{member.name}</CardTitle>
+                        <p className="text-primary font-semibold">{member.role}</p>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">{member.bio}</p>
+                        <div className="flex justify-center items-center gap-4">
+                        {member.socials.map((social) => (
+                            <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
+                            {social.icon}
+                            </a>
+                        ))}
+                        </div>
+                    </CardContent>
+                    </Card>
+                ))}
+                </div>
+            </div>
+        </section>
+    </>
   );
 }
