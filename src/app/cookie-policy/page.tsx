@@ -17,7 +17,7 @@ export default function CookiePolicyPage() {
               
               <h2>1. Introduction</h2>
               <p>
-                This Cookies Policy explains how Alpha Electricals & Plumbing Ltd (“we,” “us,” or “our”) uses cookies and similar tracking technologies on our website and digital platforms (“Platform”). We are committed to protecting your privacy while providing a secure, reliable, and user-friendly online shopping experience.
+                This Cookies Policy explains how Alpha Electricals & Plumbing Ltd uses cookies and similar tracking technologies on its website and digital platforms. We are committed to protecting your privacy while providing a secure, reliable, and user-friendly online shopping experience.
               </p>
               <p>
                 By continuing to browse or use our Platform, you consent to the use of cookies in accordance with this Policy.
