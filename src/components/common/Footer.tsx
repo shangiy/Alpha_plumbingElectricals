@@ -33,7 +33,7 @@ export default function Footer() {
       links: [
         { name: 'Terms of Service', href: '/terms' },
         { name: 'Privacy Policy', href: '#' },
-        { name: 'Cookie Policy', href: '#' },
+        { name: 'Cookie Policy', href: '/cookie-policy' },
       ],
     },
   ];
