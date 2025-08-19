@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Facebook, Twitter } from 'lucide-react';
@@ -84,8 +86,13 @@ export default function TeamPage() {
             </div>
         </section>
 
-        <section className="bg-secondary py-16">
-            <div className="container mx-auto px-4">
+        <section 
+            className="relative py-16 bg-cover bg-center bg-fixed"
+            style={{ backgroundImage: "url('/elegant_background.jpg')" }}
+            data-ai-hint="elegant abstract background"
+        >
+            <div className="absolute inset-0 bg-black/50" />
+            <div className="relative z-10 container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {teamMembers.map((member) => (
                     <Card key={member.name} className="text-center overflow-hidden hover:shadow-xl transition-shadow bg-card">
