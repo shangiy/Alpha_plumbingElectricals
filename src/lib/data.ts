@@ -1,4 +1,5 @@
 
+
 import type { Product, Category, MockUser, Transaction, CarouselCategory } from './types';
 import { db } from './firebase';
 import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
@@ -112,8 +113,8 @@ export const carouselCategories: CarouselCategory[] = [
 ];
 
 let allUsers: MockUser[] = [
-  { id: 'user-1', name: 'Admin User', username: 'admin', email: 'admin@example.com', password: 'adminpassword', role: 'admin', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-10-26T12:00:00Z', orders: 15, visitDuration: 25 },
-  { id: 'user-2', name: 'Staff User', username: 'staff', email: 'staff@example.com', password: 'staffpassword', role: 'staff', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-10-25T18:45:00Z', orders: 8, visitDuration: 15 },
+  { id: 'user-1', name: 'Admin User', username: 'admin', email: 'admin@example.com', password: 'adminpassword', role: 'admin', avatarUrl: 'https://placehold.co/100x100.png', signedUp: '2023-01-15T10:00:00Z', lastSeen: '2023-10-26T12:00:00Z', orders: 15, visitDuration: 25 },
+  { id: 'user-2', name: 'Staff User', username: 'staff', email: 'staff@example.com', password: 'staffpassword', role: 'staff', avatarUrl: 'https://placehold.co/100x100.png', signedUp: '2023-02-20T11:30:00Z', lastSeen: '2023-10-25T18:45:00Z', orders: 8, visitDuration: 15 },
   { id: 'user-3', name: 'Charlie Brown', username: 'charlieb', email: 'charlie@example.com', password: 'password123', role: 'user', signedUp: '2023-03-10T09:00:00Z', lastSeen: '2023-10-26T09:30:00Z', orders: 3, visitDuration: 10 },
   { id: 'user-4', name: 'Diana Miller', username: 'dianam', email: 'diana@example.com', password: 'password123', role: 'user', signedUp: '2023-04-05T14:00:00Z', lastSeen: '2023-10-26T14:20:00Z', orders: 0, visitDuration: 5 },
   { id: 'user-5', name: 'Ethan Davis', username: 'ethand', email: 'ethan@example.com', password: 'password123', role: 'user', signedUp: '2023-05-22T16:00:00Z', lastSeen: '2023-10-22T10:10:00Z', orders: 20, visitDuration: 45 },
@@ -194,7 +195,7 @@ export async function getUserByEmail(email: string): Promise<MockUser | undefine
   return Promise.resolve(allUsers.find(user => user.email === email));
 }
 
-export async function signUpUser(userData: { name: string; username: string; email: string; password?: string }): Promise<MockUser> {
+export async function signUpUser(userData: { name: string; username: string; email: string; password?: string, avatarUrl?: string }): Promise<MockUser> {
     const existingUser = allUsers.find(u => u.email === userData.email);
     if (existingUser) {
         throw new Error("User with this email already exists.");

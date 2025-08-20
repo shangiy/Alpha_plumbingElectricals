@@ -1,3 +1,4 @@
+
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -13,6 +14,7 @@ export interface User {
   username: string;
   email: string;
   role: 'admin' | 'staff' | 'user';
+  avatarUrl?: string;
 }
 
 interface SignUpData {
@@ -20,6 +22,7 @@ interface SignUpData {
     username: string;
     email: string;
     password?: string;
+    avatarUrl?: string;
 }
 
 interface AuthContextType {
@@ -60,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             username: existingUser.username,
             email: existingUser.email,
             role: existingUser.role,
+            avatarUrl: existingUser.avatarUrl,
         });
     }
   };
@@ -77,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             name: firebaseUser.displayName || 'Social User',
             username: firebaseUser.email.split('@')[0], // Create a username from email
             email: firebaseUser.email,
+            avatarUrl: firebaseUser.photoURL || undefined,
         };
         appUser = await signUpUser(newUser);
     }

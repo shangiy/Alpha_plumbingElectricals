@@ -1,4 +1,5 @@
 
+
 export interface WholesalePrice {
   quantity: number;
   price: number;
@@ -51,6 +52,7 @@ export interface MockUser {
   email: string;
   password?: string;
   role: 'admin' | 'staff' | 'user';
+  avatarUrl?: string;
   signedUp: string;
   lastSeen: string;
   orders: number;
