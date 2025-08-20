@@ -23,7 +23,7 @@ export default function Footer() {
       links: [
         { name: 'Contact Us', href: '/contact' },
         { name: 'FAQ', href: '/faq' },
-        { name: 'Shipping & Returns', href: '#' },
+        { name: 'Shipping & Returns', href: '/returns' },
       ],
     },
     {
