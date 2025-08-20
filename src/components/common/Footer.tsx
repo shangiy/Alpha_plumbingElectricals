@@ -22,7 +22,7 @@ export default function Footer() {
       title: 'Support',
       links: [
         { name: 'Contact Us', href: '/contact' },
-        { name: 'FAQ', href: '/contact' },
+        { name: 'FAQ', href: '/faq' },
         { name: 'Shipping & Returns', href: '#' },
       ],
     },
