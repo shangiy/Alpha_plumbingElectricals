@@ -5,7 +5,7 @@ import NewsletterForm from './NewsletterForm';
 export default function Footer() {
   const socialLinks = [
     { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing' },
-    { name: 'Twitter', href: 'https://www.x.com/@patrickshangst1' },
+    { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb' },
     { name: 'Instagram', href: '#' },
     { name: 'LinkedIn', href: '#' },
   ];
