@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Provides product recommendations based on user search queries.
@@ -40,7 +41,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an e-commerce product recommendation expert.
   Based on the user's search query, provide a list of recommended products.
   Return a JSON array of products with name, description, imageUrl, and price in Kenyan Shillings (KES).
-  For the imageUrl, you must always use the value 'https://placehold.co/400x400.png'.
+  For the imageUrl, you can use an empty string if no suitable image is available.
 
   Search Query: {{{searchQuery}}}
   `, 

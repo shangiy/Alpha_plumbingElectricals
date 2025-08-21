@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from '@/components/ui/badge';
-import { MoreHorizontal, PlusCircle, CheckCircle, XCircle } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, CheckCircle, XCircle, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -76,14 +76,20 @@ export default function AdminProductsPage() {
                         {products.map(product => (
                             <TableRow key={product.id}>
                                 <TableCell className="hidden sm:table-cell">
-                                    <Image
-                                        alt={product.name}
-                                        className="aspect-square rounded-md object-cover"
-                                        height="64"
-                                        src={product.images?.[0] || 'https://placehold.co/64x64.png'}
-                                        width="64"
-                                        data-ai-hint="product image"
-                                    />
+                                    <div className="aspect-square rounded-md bg-muted flex items-center justify-center">
+                                        {product.images?.[0] ? (
+                                            <Image
+                                                alt={product.name}
+                                                className="aspect-square rounded-md object-cover"
+                                                height="64"
+                                                src={product.images[0]}
+                                                width="64"
+                                                data-ai-hint="product image"
+                                            />
+                                        ) : (
+                                            <Package className="h-8 w-8 text-muted-foreground" />
+                                        )}
+                                    </div>
                                 </TableCell>
                                 <TableCell className="font-medium">{product.name}</TableCell>
                                 <TableCell className="hidden md:table-cell">

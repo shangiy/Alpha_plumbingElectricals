@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Package } from 'lucide-react';
 
 interface ProductRecommendationsProps {
   productTitle: string;
@@ -74,15 +76,19 @@ export default function ProductRecommendations({ productTitle }: ProductRecommen
                   <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg">
                     <CardHeader className="p-0">
                       <Link href="#" className="block">
-                        <div className="aspect-square overflow-hidden">
-                          <Image
-                            src={product.imageUrl || 'https://placehold.co/400x400'}
-                            alt={product.name}
-                            width={400}
-                            height={400}
-                            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                            data-ai-hint="recommended product"
-                          />
+                        <div className="aspect-square overflow-hidden bg-muted flex items-center justify-center">
+                          {product.imageUrl ? (
+                            <Image
+                              src={product.imageUrl}
+                              alt={product.name}
+                              width={400}
+                              height={400}
+                              className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                              data-ai-hint="recommended product"
+                            />
+                          ) : (
+                            <Package className="h-16 w-16 text-muted-foreground" />
+                          )}
                         </div>
                       </Link>
                     </CardHeader>

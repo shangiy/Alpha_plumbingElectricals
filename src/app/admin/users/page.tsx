@@ -15,7 +15,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from '@/components/ui/badge';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -90,8 +90,10 @@ export default function AdminUsersPage() {
                                 <TableCell>
                                     <div className="flex items-center gap-3">
                                         <Avatar className="hidden h-9 w-9 sm:flex">
-                                            <AvatarImage src={`https://placehold.co/40x40.png`} alt="Avatar" />
-                                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                                            <AvatarImage src={user.avatarUrl} alt="Avatar" />
+                                            <AvatarFallback>
+                                                {user.name ? user.name.charAt(0) : <User className="h-4 w-4" />}
+                                            </AvatarFallback>
                                         </Avatar>
                                         <div className="font-medium">{user.name}</div>
                                     </div>
