@@ -75,7 +75,8 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Alpha Electricals & Plumbing Ltd. All rights reserved.
+          &copy; 2025 Alpha Electricals & Plumbing Ltd. All rights reserved. 
+          Developed by Patrick Mushangi.
         </div>
       </div>
     </footer>
