@@ -189,7 +189,7 @@ export default function Header() {
                         <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
                             <User className="h-7 w-7" />
-                            <span className="hidden md:inline">{user ? user.username : 'Sign In'}</span>
+                            <span className="hidden md:inline">{user ? user.username : 'Log in'}</span>
                         </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -208,7 +208,7 @@ export default function Header() {
                             </>
                         ) : (
                             <>
-                            <DropdownMenuItem asChild><Link href="/auth/login?tab=login">Sign In</Link></DropdownMenuItem>
+                            <DropdownMenuItem asChild><Link href="/auth/login?tab=login">Log in</Link></DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild><Link href="/auth/login?tab=signup">Create Account</Link></DropdownMenuItem>
                             </>
@@ -259,7 +259,7 @@ export default function Header() {
                             </>
                             ) : (
                             <>
-                                <DropdownMenuItem asChild><Link href="/auth/login?tab=login">Sign In</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/auth/login?tab=login">Log in</Link></DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild><Link href="/auth/login?tab=signup">Create Account</Link></DropdownMenuItem>
                             </>
@@ -326,7 +326,7 @@ export default function Header() {
                             ) : (
                                 <div className="space-y-2">
                                 <SheetClose asChild>
-                                <Link href="/auth/login?tab=login" className={cn(buttonVariants({ variant: "default" }), "w-full")}>Sign In</Link>
+                                <Link href="/auth/login?tab=login" className={cn(buttonVariants({ variant: "default" }), "w-full")}>Log in</Link>
                                 </SheetClose>
                                 <SheetClose asChild>
                                 <Link href="/auth/login?tab=signup" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>Create Account</Link>
@@ -349,3 +349,5 @@ export default function Header() {
     </header>
   );
 }
+
+    

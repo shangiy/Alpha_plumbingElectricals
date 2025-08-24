@@ -205,7 +205,7 @@ export default function LoginPage() {
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>Sign In</Button>
+                                <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>Log In</Button>
                                 
                                 <div className="text-sm">
                                     <Link href="#" className="font-medium text-primary hover:underline">
@@ -383,3 +383,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
