@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import NewsletterForm from './NewsletterForm';
+import { User } from 'lucide-react';
 
 export default function Footer() {
   const socialLinks = [
@@ -75,8 +76,11 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          &copy; 2025 Alpha Electricals & Plumbing Ltd. All rights reserved. 
-          Developed by Patrick Mushangi.
+          <div>&copy; 2025 Alpha Electricals & Plumbing Ltd. All rights reserved.</div>
+          <div className="flex items-center justify-center gap-1 mt-1">
+             Developed by Patrick Mushangi.
+             <User className="h-4 w-4" />
+          </div>
         </div>
       </div>
     </footer>
