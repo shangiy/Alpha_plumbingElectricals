@@ -21,6 +21,7 @@ import { useAuth } from '@/context/AuthProvider';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function AdminLayout({
   children,
@@ -31,16 +32,16 @@ export default function AdminLayout({
 
   return (
     <AuthGuard allowedRoles={['admin', 'staff']}>
-      <div className="flex flex-1">
+      <div className="flex h-screen w-full bg-background">
         <SidebarProvider>
-            <Sidebar>
+            <Sidebar className="flex flex-col h-full">
               <SidebarHeader>
                 <Link href="/admin" className="flex items-center gap-2">
                     <Image src="/logo Alpha.png" alt="Logo" width={40} height={40}/>
                     <span className="text-lg font-semibold">Admin Panel</span>
                 </Link>
               </SidebarHeader>
-              <SidebarContent>
+              <SidebarContent className="flex-1 overflow-y-auto">
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Dashboard">
@@ -113,8 +114,8 @@ export default function AdminLayout({
                 </SidebarMenu>
               </SidebarFooter>
             </Sidebar>
-            <SidebarInset>
-                <header className="flex h-16 items-center justify-between gap-4 border-b bg-background px-6 sticky top-0 z-10">
+            <div className="flex flex-1 flex-col overflow-hidden">
+                <header className="flex h-16 items-center justify-between gap-4 border-b bg-background px-6 sticky top-0 z-10 shrink-0">
                     <div className="flex items-center gap-4">
                         <SidebarTrigger className="md:hidden" />
                         <h1 className="text-lg font-semibold">Alpha Electricals - Admin</h1>
@@ -138,10 +139,12 @@ export default function AdminLayout({
                          </DropdownMenu>
                     )}
                 </header>
-                <main className="flex-1 p-4 md:p-6 bg-muted/40">
-                    {children}
+                <main className="flex-1 overflow-y-auto bg-muted/40">
+                    <div className="p-4 md:p-6">
+                        {children}
+                    </div>
                 </main>
-            </SidebarInset>
+            </div>
         </SidebarProvider>
       </div>
     </AuthGuard>
