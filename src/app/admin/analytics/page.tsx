@@ -43,7 +43,7 @@ export default function AnalyticsPage() {
                 <div className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Insights & Notes</CardTitle>
+                            <CardTitle>Insights and Reports</CardTitle>
                         </CardHeader>
                         <CardContent className="text-sm text-muted-foreground space-y-3">
                             <p><strong className="text-foreground">Revenue Growth:</strong> There's a consistent upward trend in revenue, with a significant spike in June. This may correlate with a recent marketing campaign.</p>
