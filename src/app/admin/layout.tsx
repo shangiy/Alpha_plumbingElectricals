@@ -20,6 +20,7 @@ import { useAuth } from '@/context/AuthProvider';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import Footer from '@/components/common/Footer';
 
 export default function AdminLayout({
   children,
@@ -141,6 +142,7 @@ export default function AdminLayout({
                   <div className="p-4 md:p-6">
                       {children}
                   </div>
+                  <Footer />
               </main>
           </div>
         </div>
