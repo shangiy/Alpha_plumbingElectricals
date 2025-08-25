@@ -129,6 +129,11 @@ let allTransactions: Transaction[] = [
 ];
 
 export const availableAvatars: { url: string; alt: string }[] = [
+  { url: '/profile-images/richard-kinyungu.jpg', alt: 'Richard Kinyungu' },
+  { url: '/profile-images/peter-karanja.jpg', alt: 'Peter Karanja' },
+  { url: '/profile-images/miriam-njeri.jpg', alt: 'Miriam Njeri' },
+  { url: '/profile-images/val.jpg', alt: 'Val' },
+  { url: '/profile-images/shangi.jpg', alt: 'Shangi' },
   { url: '/profile-images/avatar1.png', alt: 'Avatar 1' },
   { url: '/profile-images/avatar2.png', alt: 'Avatar 2' },
   { url: '/profile-images/avatar3.png', alt: 'Avatar 3' },
@@ -137,10 +142,6 @@ export const availableAvatars: { url: string; alt: string }[] = [
   { url: '/profile-images/avatar6.png', alt: 'Avatar 6' },
   { url: '/profile-images/avatar7.png', alt: 'Avatar 7' },
   { url: '/profile-images/avatar8.png', alt: 'Avatar 8' },
-  { url: 'https://placehold.co/100x100.png?text=A9', alt: 'Avatar 9' },
-  { url: 'https://placehold.co/100x100.png?text=A10', alt: 'Avatar 10' },
-  { url: 'https://placehold.co/100x100.png?text=A11', alt: 'Avatar 11' },
-  { url: 'https://placehold.co/100x100.png?text=A12', alt: 'Avatar 12' },
 ];
 
 
