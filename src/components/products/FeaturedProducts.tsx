@@ -5,7 +5,7 @@ import type { Product } from '@/lib/types';
 import ProductCard from './ProductCard';
 
 const staticFeaturedProducts: Product[] = [
-  { id: 'static-1', name: 'Ample Light', price: 2500, images: ['/ample Light.png'], description: 'A beautiful and bright ample light.', longDescription: '', category: 'lighting', rating: 4.5, reviews: 10, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
+  { id: 'static-1', name: 'Ample Light', price: 2500, images: ['/ample-light-product.jpg'], description: 'A beautiful and bright ample light.', longDescription: '', category: 'lighting', rating: 4.5, reviews: 10, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { id: 'static-2', name: 'Oval Toilet', price: 7500, images: ['/oval toilet.jpg'], description: 'A modern and efficient oval toilet.', longDescription: '', category: 'plumbing', rating: 4.8, reviews: 25, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { id: 'static-3', name: 'Whole complete sink and cabinet', price: 7000, images: ['/Whole complete sink and cabinet.jpg'], description: 'A complete sink and cabinet set.', longDescription: '', category: 'plumbing', rating: 4.7, reviews: 18, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
   { id: 'static-4', name: 'Solar Heater non-pressurelized', price: 12000, images: ['/solar heater.png'], description: 'An energy-efficient solar water heater.', longDescription: '', category: 'plumbing', rating: 4.9, reviews: 32, seller: { name: 'Alpha Electricals', id: 'seller-alpha' } },
