@@ -114,30 +114,6 @@ export default function AdminLayout({
             </SidebarFooter>
           </Sidebar>
           <div className="flex flex-1 flex-col overflow-hidden">
-              <header className="flex h-16 shrink-0 items-center justify-between gap-4 border-b bg-background px-6 sticky top-0 z-10">
-                  <div className="flex items-center gap-4">
-                      <SidebarTrigger className="md:hidden" />
-                      <h1 className="text-lg font-semibold">Alpha Electricals - Admin</h1>
-                  </div>
-                  {user && (
-                       <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                                  <Avatar className="h-9 w-9">
-                                      <AvatarImage src={user.avatarUrl} alt={user.name} />
-                                      <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
-                                  </Avatar>
-                              </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
-                              <DropdownMenuSeparator/>
-                              <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
-                              <DropdownMenuItem onClick={logout}>Log Out</DropdownMenuItem>
-                          </DropdownMenuContent>
-                       </DropdownMenu>
-                  )}
-              </header>
               <main className="flex-1 overflow-y-auto bg-muted/40">
                   <div className="p-4 md:p-6">
                       {children}
