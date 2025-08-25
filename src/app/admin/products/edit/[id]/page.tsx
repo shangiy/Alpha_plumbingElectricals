@@ -1,15 +1,13 @@
 
 'use client';
 
-import { useParams } from 'next/navigation';
 import ProductForm from '@/components/admin/ProductForm';
 import { useProducts } from '@/context/ProductProvider';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function EditProductPage() {
-    const params = useParams();
-    const productId = params.id as string;
+export default function EditProductPage({ params }: { params: { id: string } }) {
+    const productId = params.id;
     const { getProductById, loading } = useProducts();
     const product = getProductById(productId);
 
