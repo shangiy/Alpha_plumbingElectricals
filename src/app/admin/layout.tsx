@@ -10,7 +10,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarFooter,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -87,8 +86,8 @@ export default function AdminLayout({
                 </SidebarMenuItem>
               </SidebarMenu>
               
-              <div className="mt-auto">
-                <Separator className="my-2 bg-sidebar-border/50" />
+              <div className="p-3">
+                <Separator className="mb-3 bg-sidebar-border/50" />
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild tooltip="Go to Homepage">
