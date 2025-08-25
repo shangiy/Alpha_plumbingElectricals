@@ -137,6 +137,10 @@ export const availableAvatars: { url: string; alt: string }[] = [
   { url: '/profile-images/avatar6.png', alt: 'Avatar 6' },
   { url: '/profile-images/avatar7.png', alt: 'Avatar 7' },
   { url: '/profile-images/avatar8.png', alt: 'Avatar 8' },
+  { url: 'https://placehold.co/100x100.png?text=A9', alt: 'Avatar 9' },
+  { url: 'https://placehold.co/100x100.png?text=A10', alt: 'Avatar 10' },
+  { url: 'https://placehold.co/100x100.png?text=A11', alt: 'Avatar 11' },
+  { url: 'https://placehold.co/100x100.png?text=A12', alt: 'Avatar 12' },
 ];
 
 
