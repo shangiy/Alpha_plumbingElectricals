@@ -15,17 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import QuantitySelector from '@/components/products/QuantitySelector';
 
-export default function ProductDetailPage() {
-  const params = useParams();
-  const productId = Array.isArray(params.id) ? params.id[0] : params.id;
-  
-  if (!productId) {
-    return notFound();
-  }
-  
-  return <ProductContent productId={productId} />;
-}
-
+// Note: The page component now directly takes the productId as a prop.
 function ProductContent({ productId }: { productId: string }) {
   const { getProductById, loading } = useProducts();
   const router = useRouter();
@@ -147,6 +137,16 @@ function ProductContent({ productId }: { productId: string }) {
   );
 }
 
+// The exported page component now extracts the id and passes it to the content component.
+export default function ProductDetailPage({ params }: { params: { id: string }}) {
+  const productId = params.id;
+  
+  if (!productId) {
+    return notFound();
+  }
+  
+  return <ProductContent productId={productId} />;
+}
 
 function ProductDetailSkeleton() {
   return (
