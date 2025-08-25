@@ -2,10 +2,9 @@
 "use client"
 
 import * as React from "react"
-import { Pie, PieChart, Sector } from "recharts"
+import { Pie, PieChart, Sector, Tooltip } from "recharts"
 import {
   ChartContainer,
-  ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
