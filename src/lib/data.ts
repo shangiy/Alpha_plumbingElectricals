@@ -128,6 +128,17 @@ let allTransactions: Transaction[] = [
   { id: 'txn-5', customerName: 'Admin User', email: 'admin@example.com', amount: 8000, date: '2023-09-15T18:00:00Z', status: 'Completed', productName: 'Rainwater Harvesting Tank' },
 ];
 
+export const availableAvatars: { url: string; alt: string }[] = [
+  { url: '/profile-images/avatar1.png', alt: 'Avatar 1' },
+  { url: '/profile-images/avatar2.png', alt: 'Avatar 2' },
+  { url: '/profile-images/avatar3.png', alt: 'Avatar 3' },
+  { url: '/profile-images/avatar4.png', alt: 'Avatar 4' },
+  { url: '/profile-images/avatar5.png', alt: 'Avatar 5' },
+  { url: '/profile-images/avatar6.png', alt: 'Avatar 6' },
+  { url: '/profile-images/avatar7.png', alt: 'Avatar 7' },
+  { url: '/profile-images/avatar8.png', alt: 'Avatar 8' },
+];
+
 
 let hasSeeded = false;
 
