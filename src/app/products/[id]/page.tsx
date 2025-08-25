@@ -17,7 +17,16 @@ import QuantitySelector from '@/components/products/QuantitySelector';
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const productId = params.id as string;
+  const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+  
+  if (!productId) {
+    return notFound();
+  }
+  
+  return <ProductContent productId={productId} />;
+}
+
+function ProductContent({ productId }: { productId: string }) {
   const { getProductById, loading } = useProducts();
   const router = useRouter();
   
