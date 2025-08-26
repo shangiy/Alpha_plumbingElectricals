@@ -69,6 +69,13 @@ export default function Footer() {
               <p className="text-sm text-muted-foreground mb-4">Get the latest deals and product updates.</p>
               <NewsletterForm />
             </div>
+             <div>
+              <h3 className="font-semibold font-headline mb-4">Open Hours</h3>
+              <div className="text-sm text-muted-foreground">
+                  <p>Open Days: Mon - Sat</p>
+                  <p>Hours: 8:00 AM - 6:00 PM</p>
+              </div>
+            </div>
             <div>
               <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
                <div className="flex gap-4">
