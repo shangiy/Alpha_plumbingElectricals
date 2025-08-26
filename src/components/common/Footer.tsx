@@ -48,13 +48,6 @@ export default function Footer() {
               <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
-            <div className="flex gap-4">
-              {socialLinks.map((social) => (
-                <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
-                  {social.icon}
-                </Link>
-              ))}
-            </div>
           </div>
           {footerLinks.map((section) => (
             <div key={section.title}>
@@ -70,10 +63,22 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-          <div>
-            <h3 className="font-semibold font-headline mb-4">Subscribe to our newsletter</h3>
-            <p className="text-sm text-muted-foreground mb-4">Get the latest deals and product updates.</p>
-            <NewsletterForm />
+          <div className="space-y-8">
+            <div>
+              <h3 className="font-semibold font-headline mb-4">Subscribe to our newsletter</h3>
+              <p className="text-sm text-muted-foreground mb-4">Get the latest deals and product updates.</p>
+              <NewsletterForm />
+            </div>
+            <div>
+              <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
+               <div className="flex gap-4">
+                {socialLinks.map((social) => (
+                  <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
+                    {social.icon}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
