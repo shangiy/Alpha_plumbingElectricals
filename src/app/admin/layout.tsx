@@ -5,7 +5,6 @@ import {
   SidebarProvider,
   Sidebar,
   SidebarHeader,
-  SidebarTrigger,
   SidebarContent,
   SidebarMenu,
   SidebarMenuItem,
@@ -16,11 +15,7 @@ import Image from 'next/image';
 import { LayoutDashboard, LogOut, Settings, Users, Receipt, Package, BarChart, Home } from 'lucide-react';
 import AuthGuard from '@/components/auth/AuthGuard';
 import { useAuth } from '@/context/AuthProvider';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import Footer from '@/components/common/Footer';
-import { Separator } from '@/components/ui/separator';
 
 export default function AdminLayout({
   children,
@@ -87,7 +82,6 @@ export default function AdminLayout({
               </SidebarMenu>
               
               <div className="p-3">
-                <Separator className="mb-3 bg-sidebar-border/50" />
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild tooltip="Go to Homepage">
