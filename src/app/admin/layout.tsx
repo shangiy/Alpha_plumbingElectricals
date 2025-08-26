@@ -27,8 +27,8 @@ export default function AdminLayout({
   return (
     <AuthGuard allowedRoles={['admin', 'staff']}>
       <SidebarProvider>
-        <div className="flex h-screen w-full bg-background">
-          <Sidebar className="flex flex-col h-full">
+        <div className="flex h-full w-full bg-background">
+          <Sidebar className="flex flex-col">
             <SidebarHeader>
               <Link href="/admin" className="flex items-center gap-2">
                   <Image src="/logo Alpha.png" alt="Logo" width={40} height={40}/>
@@ -79,6 +79,8 @@ export default function AdminLayout({
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
+              </SidebarMenu>
+              <SidebarMenu>
                  <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Go to Homepage">
                         <Link href="/">
