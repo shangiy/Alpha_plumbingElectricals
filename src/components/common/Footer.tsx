@@ -48,6 +48,16 @@ export default function Footer() {
               <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
+            <div className="mt-4">
+              <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
+               <div className="flex gap-4">
+                {socialLinks.map((social) => (
+                  <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
+                    {social.icon}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
           {footerLinks.map((section) => (
             <div key={section.title}>
@@ -61,15 +71,6 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-              {section.title === 'Support' && (
-                <div className="mt-8">
-                  <h3 className="font-semibold font-headline mb-4">Open Hours</h3>
-                  <div className="text-sm text-muted-foreground">
-                      <p>Open Days: Mon - Sat</p>
-                      <p>Hours: 8:00 AM - 6:00 PM</p>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
           <div className="space-y-8">
@@ -79,13 +80,10 @@ export default function Footer() {
               <NewsletterForm />
             </div>
             <div>
-              <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
-               <div className="flex gap-4">
-                {socialLinks.map((social) => (
-                  <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
-                    {social.icon}
-                  </Link>
-                ))}
+              <h3 className="font-semibold font-headline mb-4">Open Hours</h3>
+              <div className="text-sm text-muted-foreground">
+                  <p>Open Days: Mon - Sat</p>
+                  <p>Hours: 8:00 AM - 6:00 PM</p>
               </div>
             </div>
           </div>
