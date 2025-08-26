@@ -81,7 +81,7 @@ export default function AdminLayout({
                 </SidebarMenuItem>
               </SidebarMenu>
               
-              <div className="mt-auto p-3">
+              <div className="p-3">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild tooltip="Go to Homepage">
