@@ -5,9 +5,10 @@ import ProductForm from '@/components/admin/ProductForm';
 import { useProducts } from '@/context/ProductProvider';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { notFound } from 'next/navigation';
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
-    const productId = params.id;
+
+function EditProductContent({ productId }: { productId: string }) {
     const { getProductById, loading } = useProducts();
     const product = getProductById(productId);
 
@@ -28,7 +29,11 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }
 
     if (!product) {
-        return <p>Product not found.</p>;
+        // Wait for loading to finish before concluding not found
+        if (!loading) {
+            return <p>Product not found.</p>;
+        }
+        return null;
     }
 
     return (
@@ -40,4 +45,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             <ProductForm product={product} />
         </Card>
     );
+}
+
+
+export default function EditProductPage({ params }: { params: { id: string } }) {
+    const productId = params.id;
+    if (!productId) {
+        return notFound();
+    }
+    return <EditProductContent productId={productId} />;
 }

@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import QuantitySelector from '@/components/products/QuantitySelector';
 
-// Note: The page component now directly takes the productId as a prop.
 function ProductContent({ productId }: { productId: string }) {
   const { getProductById, loading } = useProducts();
   const router = useRouter();
@@ -28,10 +27,7 @@ function ProductContent({ productId }: { productId: string }) {
   }
 
   if (!product) {
-    // Wait for loading to finish before concluding not found
     if (!loading) {
-        // Redirect to a 404 page or show a not found component
-        // For now, we'll just show a message. In a real app, you'd use notFound() from next/navigation
         return (
              <div className="container mx-auto px-4 py-12 text-center">
                 <h1 className="text-2xl font-bold">Product not found</h1>
@@ -64,7 +60,6 @@ function ProductContent({ productId }: { productId: string }) {
     <div className="bg-secondary">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          {/* Product Images */}
           <div>
              <div className="aspect-square overflow-hidden rounded-lg border bg-card shadow-sm">
                 <Image
@@ -92,7 +87,6 @@ function ProductContent({ productId }: { productId: string }) {
             </div>
           </div>
 
-          {/* Product Details */}
           <div className="flex flex-col gap-6">
             <h1 className="text-3xl font-bold font-headline lg:text-4xl">{product.name}</h1>
             <div className="flex items-center gap-4">
@@ -137,7 +131,6 @@ function ProductContent({ productId }: { productId: string }) {
   );
 }
 
-// The exported page component now extracts the id and passes it to the content component.
 export default function ProductDetailPage({ params }: { params: { id: string }}) {
   const productId = params.id;
   
@@ -153,7 +146,6 @@ function ProductDetailSkeleton() {
     <div className="bg-secondary">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          {/* Image Skeleton */}
           <div>
             <Skeleton className="aspect-square w-full rounded-lg" />
             <div className="mt-4 grid grid-cols-4 gap-4">
@@ -163,7 +155,6 @@ function ProductDetailSkeleton() {
               <Skeleton className="aspect-square w-full rounded-lg" />
             </div>
           </div>
-          {/* Details Skeleton */}
           <div className="flex flex-col gap-6">
             <Skeleton className="h-10 w-3/4" />
             <Skeleton className="h-6 w-1/4" />
