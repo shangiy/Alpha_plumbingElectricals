@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import NewsletterForm from './NewsletterForm';
-import { User } from 'lucide-react';
+import { User, Facebook, Instagram, Youtube } from 'lucide-react';
 
 export default function Footer() {
   const socialLinks = [
-    { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing' },
-    { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb' },
-    { name: 'Instagram', href: '#' },
-    { name: 'LinkedIn', href: '#' },
+    { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
+    { name: 'Instagram', href: '#', icon: <Instagram className="h-5 w-5" /> },
+    { name: 'Youtube', href: '#', icon: <Youtube className="h-5 w-5" /> },
+    { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
+    { name: 'WhatsApp', href: 'https://wa.me/254117484887', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={20} height={20} /> },
   ];
 
   const footerLinks = [
@@ -49,8 +50,8 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
-                <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-[#8a0b0d]">
-                  {social.name}
+                <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
+                  {social.icon}
                 </Link>
               ))}
             </div>
@@ -61,7 +62,7 @@ export default function Footer() {
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link href={link.href} className="text-sm text-muted-foreground hover:text-[#8a0b0d]">
+                    <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary">
                       {link.name}
                     </Link>
                   </li>
