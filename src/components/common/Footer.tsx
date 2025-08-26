@@ -48,22 +48,46 @@ export default function Footer() {
               <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
-            <div className="mt-4">
-              <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
-               <div className="flex gap-4">
-                {socialLinks.map((social) => (
-                  <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
-                    {social.icon}
+          </div>
+          
+          <div>
+            <h3 className="font-semibold font-headline mb-4">Company</h3>
+            <ul className="space-y-2">
+              {footerLinks.find(s => s.title === 'Company')?.links.map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary">
+                    {link.name}
                   </Link>
-                ))}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold font-headline mb-4">Support</h3>
+            <ul className="space-y-2">
+              {footerLinks.find(s => s.title === 'Support')?.links.map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+             <div className="mt-8">
+              <h3 className="font-semibold font-headline mb-4">Open Hours</h3>
+              <div className="text-sm text-muted-foreground">
+                  <p>Open Days: Mon - Sat</p>
+                  <p>Hours: 8:00 AM - 6:00 PM</p>
               </div>
             </div>
           </div>
-          {footerLinks.map((section) => (
-            <div key={section.title}>
-              <h3 className="font-semibold font-headline mb-4">{section.title}</h3>
+          
+          <div className="space-y-8">
+            <div>
+              <h3 className="font-semibold font-headline mb-4">Legal</h3>
               <ul className="space-y-2">
-                {section.links.map((link) => (
+                {footerLinks.find(s => s.title === 'Legal')?.links.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary">
                       {link.name}
@@ -72,18 +96,19 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-          ))}
-          <div className="space-y-8">
             <div>
               <h3 className="font-semibold font-headline mb-4">Subscribe to our newsletter</h3>
               <p className="text-sm text-muted-foreground mb-4">Get the latest deals and product updates.</p>
               <NewsletterForm />
             </div>
             <div>
-              <h3 className="font-semibold font-headline mb-4">Open Hours</h3>
-              <div className="text-sm text-muted-foreground">
-                  <p>Open Days: Mon - Sat</p>
-                  <p>Hours: 8:00 AM - 6:00 PM</p>
+              <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
+               <div className="flex gap-4">
+                {socialLinks.map((social) => (
+                  <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
+                    {social.icon}
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
