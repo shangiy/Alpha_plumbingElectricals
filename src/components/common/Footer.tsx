@@ -48,6 +48,10 @@ export default function Footer() {
               <span className="text-xl font-bold font-headline text-primary">Alpha Electricals & Plumbing Ltd</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your partner for electrical and plumbing supplies.</p>
+            <div className="mt-4">
+              <h3 className="font-semibold font-headline mb-2">Subscribe to our newsletter</h3>
+              <NewsletterForm />
+            </div>
           </div>
           
           <div>
@@ -95,11 +99,6 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold font-headline mb-4">Subscribe to our newsletter</h3>
-              <p className="text-sm text-muted-foreground mb-4">Get the latest deals and product updates.</p>
-              <NewsletterForm />
             </div>
             <div>
               <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
