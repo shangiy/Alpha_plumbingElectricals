@@ -5,11 +5,11 @@ import { User, Facebook, Instagram, Youtube } from 'lucide-react';
 
 export default function Footer() {
   const socialLinks = [
-    { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-5 w-5" /> },
-    { name: 'Instagram', href: '#', icon: <Instagram className="h-5 w-5" /> },
-    { name: 'Youtube', href: '#', icon: <Youtube className="h-5 w-5" /> },
-    { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={20} height={20} /> },
-    { name: 'WhatsApp', href: 'https://wa.me/254117484887', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={20} height={20} /> },
+    { name: 'Facebook', href: 'https://www.facebook.com/Alphaelectricalsandplumbing', icon: <Facebook className="h-6 w-6" />, color: "text-blue-600" },
+    { name: 'Instagram', href: '#', icon: <Instagram className="h-6 w-6" />, color: "text-pink-600" },
+    { name: 'Youtube', href: '#', icon: <Youtube className="h-6 w-6" />, color: "text-red-600" },
+    { name: 'TikTok', href: 'https://www.tiktok.com/@AlphaElectricalsandplumb', icon: <Image src="/tiktok-V1.png" alt="TikTok" width={24} height={24} />, color: "" },
+    { name: 'WhatsApp', href: 'https://wa.me/254117484887', icon: <Image src="/whatsapp--v1.png" alt="WhatsApp" width={24} height={24} />, color: "text-green-500" },
   ];
 
   const footerLinks = [
@@ -65,11 +65,16 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-             <div className="mt-8">
+            <div className="mt-8">
               <h3 className="font-semibold font-headline mb-4">Follow Us</h3>
-               <div className="flex gap-4">
+              <div className="flex gap-3">
                 {socialLinks.map((social) => (
-                  <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-primary transition-colors">
+                  <Link 
+                    key={social.name} 
+                    href={social.href} 
+                    className={`p-2 rounded-full bg-background/50 hover:bg-background transition-colors ${social.color}`}
+                    aria-label={social.name}
+                  >
                     {social.icon}
                   </Link>
                 ))}
