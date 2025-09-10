@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -32,6 +33,7 @@ export default function AdminTransactionsPage() {
         return new Intl.NumberFormat('en-KE', {
           style: 'currency',
           currency: 'KES',
+          currencyDisplay: 'code',
         }).format(amount);
     }
 

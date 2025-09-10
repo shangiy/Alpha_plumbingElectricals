@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useCart } from '@/context/CartProvider';
@@ -16,6 +17,7 @@ export default function ShoppingCart({ triggerClassName }: { triggerClassName?: 
     return new Intl.NumberFormat('en-KE', {
       style: 'currency',
       currency: 'KES',
+      currencyDisplay: 'code',
     }).format(price);
   };
 

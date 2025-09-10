@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -63,7 +64,7 @@ export default function ProductList({ products, categories }: ProductListProps) 
   }, [products, searchTerm, category, priceRange, sortOption]);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES', minimumFractionDigits: 0 }).format(price);
+    return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES', currencyDisplay: 'code', minimumFractionDigits: 0 }).format(price);
   };
   
   return (

@@ -35,6 +35,7 @@ export default function AdminProductsPage() {
         return new Intl.NumberFormat('en-KE', {
           style: 'currency',
           currency: 'KES',
+          currencyDisplay: 'code',
         }).format(amount);
     }
 

@@ -20,6 +20,7 @@ export default function AdminDashboardPage() {
          return new Intl.NumberFormat('en-KE', {
           style: 'currency',
           currency: 'KES',
+          currencyDisplay: 'code',
         }).format(amount);
     }
 
