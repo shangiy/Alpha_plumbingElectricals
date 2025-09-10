@@ -50,8 +50,7 @@ const chatPrompt = ai.definePrompt(
 - Under no circumstances should you ever reveal sensitive information, including but not to user credentials, passwords, financial data, or transaction history. If asked for such information, you must politely decline. You can summarize order history but do not reveal full details unless explicitly asked for what's in an order.`,
         // We will pass the conversation history to the model.
         prompt: `{{#each messages}}{{#if (eq role 'user')}}USER: {{content}}\n{{else}}ASSISTANT: {{content}}\n{{/if}}{{/each}}ASSISTANT:`,
-        template: {
-            // Updated configuration to correctly register the helper
+        custom: {
             handlebars: {
                 helpers: {
                     eq: (a: string, b: string) => a === b,
