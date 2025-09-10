@@ -51,9 +51,12 @@ const chatPrompt = ai.definePrompt(
         // We will pass the conversation history to the model.
         prompt: `{{#each messages}}{{#if (eq role 'user')}}USER: {{content}}\n{{else}}ASSISTANT: {{content}}\n{{/if}}{{/each}}ASSISTANT:`,
         template: {
-          helpers: {
-            eq: (a: string, b: string) => a === b,
-          },
+            // Updated configuration to correctly register the helper
+            handlebars: {
+                helpers: {
+                    eq: (a: string, b: string) => a === b,
+                },
+            },
         },
     },
 );
