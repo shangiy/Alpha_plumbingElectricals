@@ -35,7 +35,7 @@ export default function AdminLayout({
                   <span className="text-lg font-semibold">Admin Panel</span>
               </Link>
             </SidebarHeader>
-            <SidebarContent className="flex-grow p-0">
+            <SidebarContent>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild tooltip="Dashboard">
