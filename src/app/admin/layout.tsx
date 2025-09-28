@@ -27,7 +27,7 @@ export default function AdminLayout({
   return (
     <AuthGuard allowedRoles={['admin', 'staff']}>
       <SidebarProvider>
-        <div className="flex h-full w-full bg-background">
+        <div className="flex h-screen w-full bg-background">
           <Sidebar className="flex flex-col">
             <SidebarHeader>
               <Link href="/admin" className="flex items-center gap-2">
