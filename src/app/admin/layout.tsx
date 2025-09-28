@@ -16,6 +16,7 @@ import { LayoutDashboard, LogOut, Settings, Users, Receipt, Package, BarChart, H
 import AuthGuard from '@/components/auth/AuthGuard';
 import { useAuth } from '@/context/AuthProvider';
 import Footer from '@/components/common/Footer';
+import { Separator } from '@/components/ui/separator';
 
 export default function AdminLayout({
   children,
