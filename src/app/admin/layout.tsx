@@ -16,7 +16,6 @@ import { LayoutDashboard, LogOut, Settings, Users, Receipt, Package, BarChart, H
 import AuthGuard from '@/components/auth/AuthGuard';
 import { useAuth } from '@/context/AuthProvider';
 import Footer from '@/components/common/Footer';
-import { Separator } from '@/components/ui/separator';
 
 export default function AdminLayout({
   children,
@@ -80,9 +79,7 @@ export default function AdminLayout({
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              </SidebarMenu>
-              <SidebarMenu>
-                 <SidebarMenuItem>
+                <SidebarMenuItem>
                     <SidebarMenuButton asChild tooltip="Go to Homepage">
                         <Link href="/">
                             <Home />
