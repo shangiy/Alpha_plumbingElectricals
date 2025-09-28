@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarFooter,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -35,8 +36,8 @@ export default function AdminLayout({
                   <span className="text-lg font-semibold">Admin Panel</span>
               </Link>
             </SidebarHeader>
-            <SidebarContent className="flex flex-col flex-1 p-0">
-              <SidebarMenu className="flex-1">
+            <SidebarContent className="flex-grow p-0">
+              <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild tooltip="Dashboard">
                     <Link href="/admin">
@@ -87,22 +88,26 @@ export default function AdminLayout({
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip="Settings">
-                        <Link href="#">
-                            <Settings />
-                            <span>Settings</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <SidebarMenuButton onClick={logout} tooltip="Log Out">
-                        <LogOut />
-                        <span>Log Out</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip="Settings">
+                            <Link href="#">
+                                <Settings />
+                                <span>Settings</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton onClick={logout} tooltip="Log Out">
+                            <LogOut />
+                            <span>Log Out</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
           </Sidebar>
           <div className="flex flex-1 flex-col overflow-hidden">
               <main className="flex-1 overflow-y-auto bg-muted/40">
