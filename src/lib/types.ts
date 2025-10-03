@@ -12,6 +12,7 @@ export interface Product {
   description: string;
   longDescription: string;
   price: number;
+  oldPrice?: number; // Add oldPrice for sales
   unit?: string; // e.g., 'meter', 'item', 'roll'
   wholesale?: WholesalePrice;
   images: string[];

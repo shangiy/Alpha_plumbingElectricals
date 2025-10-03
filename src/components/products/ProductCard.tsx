@@ -10,6 +10,7 @@ import { useCart } from '@/context/CartProvider';
 import { Heart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Rating } from '@/components/ui/rating';
+import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -24,13 +25,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       style: 'currency',
       currency: 'KES',
       currencyDisplay: 'code',
+      minimumFractionDigits: 2,
     }).format(price);
   };
   
-  const priceDisplay = product.unit && product.unit !== 'item' 
-    ? `${formatPrice(product.price)} / ${product.unit}`
-    : formatPrice(product.price);
-
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     toast({
@@ -73,9 +71,26 @@ export default function ProductCard({ product }: ProductCardProps) {
         <p className="mb-2 text-sm text-muted-foreground h-10 overflow-hidden">{product.description}</p>
         <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={16}/>
       </CardContent>
-       <CardFooter className="flex-col items-stretch gap-2 p-4 pt-0">
-        <p className="text-lg font-bold text-foreground text-center mb-2">{priceDisplay}</p>
-        <div className="flex w-full gap-2">
+       <CardFooter className="flex-col items-start gap-2 p-4 pt-0">
+         <div className="flex items-baseline gap-2">
+            <p className={cn(
+              "text-lg font-bold text-foreground",
+              product.oldPrice && "text-destructive"
+            )}>
+              {formatPrice(product.price)}
+              {product.unit && product.unit !== 'item' && ` / ${product.unit}`}
+            </p>
+            {product.oldPrice && (
+                <p className="text-sm font-medium text-muted-foreground line-through">
+                    {formatPrice(product.oldPrice)}
+                </p>
+            )}
+         </div>
+          {product.barcode && (
+            <p className="text-xs text-muted-foreground">COD. {product.barcode}</p>
+          )}
+
+        <div className="flex w-full gap-2 mt-2">
             <Button size="sm" variant="outline" className="flex-1" asChild>
                 <Link href={`/products/${product.id}`}>View More</Link>
             </Button>
