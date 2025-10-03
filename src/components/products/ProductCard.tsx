@@ -73,10 +73,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </CardContent>
        <CardFooter className="flex-col items-start gap-2 p-4 pt-0">
          <div className="flex items-baseline gap-2">
-            <p className={cn(
-              "text-lg font-bold text-foreground",
-              product.oldPrice && "text-destructive"
-            )}>
+            <p className="text-lg font-bold text-foreground">
               {formatPrice(product.price)}
               {product.unit && product.unit !== 'item' && ` / ${product.unit}`}
             </p>
@@ -86,10 +83,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </p>
             )}
          </div>
-          {product.barcode && (
-            <p className="text-xs text-muted-foreground">COD. {product.barcode}</p>
-          )}
-
+          
         <div className="flex w-full gap-2 mt-2">
             <Button size="sm" variant="outline" className="flex-1" asChild>
                 <Link href={`/products/${product.id}`}>View More</Link>
