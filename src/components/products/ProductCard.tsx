@@ -11,6 +11,7 @@ import { Heart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Rating } from '@/components/ui/rating';
 import { cn } from '@/lib/utils';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 interface ProductCardProps {
   product: Product;
@@ -40,22 +41,47 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
       <CardHeader className="p-0 relative">
-        <Link href={`/products/${product.id}`} className="block">
-          <div className="aspect-square overflow-hidden">
-            <Image
-              src={product.images[0]}
-              alt={product.name}
-              width={400}
-              height={400}
-              className="h-full w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-              data-ai-hint={`${product.category} product`}
-            />
-          </div>
-        </Link>
+        {product.images.length > 1 ? (
+            <Carousel className="w-full">
+              <CarouselContent>
+                {product.images.map((img, index) => (
+                  <CarouselItem key={index}>
+                    <Link href={`/products/${product.id}`} className="block">
+                      <div className="aspect-square overflow-hidden">
+                        <Image
+                          src={img}
+                          alt={`${product.name} image ${index + 1}`}
+                          width={400}
+                          height={400}
+                          className="h-full w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                          data-ai-hint={`${product.category} product`}
+                        />
+                      </div>
+                    </Link>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-6 w-6" />
+              <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-6 w-6" />
+            </Carousel>
+        ) : (
+            <Link href={`/products/${product.id}`} className="block">
+                <div className="aspect-square overflow-hidden">
+                    <Image
+                    src={product.images[0]}
+                    alt={product.name}
+                    width={400}
+                    height={400}
+                    className="h-full w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                    data-ai-hint={`${product.category} product`}
+                    />
+                </div>
+            </Link>
+        )}
         <Button
             size="icon"
             variant="ghost"
-            className="absolute top-2 right-2 h-8 w-8 rounded-full bg-card/70 hover:bg-card text-destructive"
+            className="absolute top-2 right-2 h-8 w-8 rounded-full bg-card/70 hover:bg-card text-destructive z-20"
             onClick={handleWishlistClick}
             aria-label="Add to wishlist"
         >
