@@ -1,8 +1,9 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getProductRecommendations, ProductRecommendationsOutput } from '@/ai/flows/product-recommendations';
+import { useEffect, useState, useMemo } from 'react';
+import { useProducts } from '@/context/ProductProvider';
+import type { Product } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
@@ -12,28 +13,24 @@ import { Package } from 'lucide-react';
 
 interface ProductRecommendationsProps {
   productTitle: string;
+  productId?: string;
+  category?: string;
 }
 
-export default function ProductRecommendations({ productTitle }: ProductRecommendationsProps) {
-  const [recommendations, setRecommendations] = useState<ProductRecommendationsOutput['products'] | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function ProductRecommendations({ productTitle, productId, category }: ProductRecommendationsProps) {
+  const { products, loading: productsLoading } = useProducts();
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchRecommendations() {
-      try {
-        setLoading(true);
-        const result = await getProductRecommendations({ searchQuery: productTitle });
-        setRecommendations(result.products);
-      } catch (err) {
-        setError('Failed to load recommendations.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+  const recommendations = useMemo(() => {
+    if (!category || products.length === 0) {
+      return [];
     }
-    fetchRecommendations();
-  }, [productTitle]);
+    return products
+      .filter(p => p.category === category && p.id !== productId)
+      .slice(0, 8); // Limit to 8 recommendations
+  }, [products, category, productId]);
+  
+  const loading = productsLoading;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-KE', {
@@ -65,22 +62,22 @@ export default function ProductRecommendations({ productTitle }: ProductRecommen
       <Carousel
         opts={{
           align: "start",
-          loop: true,
+          loop: recommendations.length > 4, // Only loop if there are more items than fit on screen
         }}
         className="w-full"
       >
         <CarouselContent>
           {loading ? renderSkeletons() : 
-            recommendations?.map((product, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
-                <div className="p-1">
-                  <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg">
+            recommendations.length > 0 ? recommendations.map((product, index) => (
+              <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/4">
+                <div className="p-1 h-full">
+                  <Card className="h-full flex flex-col overflow-hidden transition-shadow hover:shadow-lg">
                     <CardHeader className="p-0">
-                      <Link href="#" className="block">
+                      <Link href={`/products/${product.id}`} className="block">
                         <div className="aspect-square overflow-hidden bg-muted flex items-center justify-center">
-                          {product.imageUrl ? (
+                          {product.images?.[0] ? (
                             <Image
-                              src={product.imageUrl}
+                              src={product.images[0]}
                               alt={product.name}
                               width={400}
                               height={400}
@@ -93,8 +90,8 @@ export default function ProductRecommendations({ productTitle }: ProductRecommen
                         </div>
                       </Link>
                     </CardHeader>
-                    <CardContent className="p-4">
-                      <Link href="#">
+                    <CardContent className="p-4 flex-grow">
+                      <Link href={`/products/${product.id}`}>
                         <p className="mb-2 font-semibold leading-tight hover:text-primary">{product.name}</p>
                       </Link>
                       <p className="text-lg font-bold">{formatPrice(product.price)}</p>
@@ -103,6 +100,7 @@ export default function ProductRecommendations({ productTitle }: ProductRecommen
                 </div>
               </CarouselItem>
             ))
+          : <p className="text-muted-foreground px-1">No other products in this category.</p>
           }
         </CarouselContent>
         <CarouselPrevious className="hidden sm:flex" />

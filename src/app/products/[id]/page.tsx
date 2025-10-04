@@ -131,7 +131,7 @@ function ProductContent({ productId }: { productId: string }) {
       </div>
       <div className="bg-background py-16">
           <div className="container mx-auto px-4">
-             <ProductRecommendations productTitle={product.name} />
+             <ProductRecommendations productTitle={product.name} productId={product.id} category={product.category} />
           </div>
       </div>
     </div>
