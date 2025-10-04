@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Rating } from '@/components/ui/rating';
 import ProductRecommendations from '@/components/products/ProductRecommendations';
 import BuyNowButton from '@/components/products/ContactSellerForm';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Tags } from 'lucide-react';
 import AddToCartButton from '@/components/products/AddToCartButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -90,6 +90,12 @@ function ProductContent({ productId }: { productId: string }) {
 
           <div className="flex flex-col gap-6">
             <h1 className="text-3xl font-bold font-headline lg:text-4xl">{product.name}</h1>
+            {product.barcode && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Tags className="h-4 w-4" />
+                    <span>COD. {product.barcode}</span>
+                </div>
+            )}
             <div className="flex items-center gap-4">
               <Rating rating={product.rating} size={20} />
               <span className="text-sm text-muted-foreground">{product.reviews} reviews</span>
