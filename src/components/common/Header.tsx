@@ -155,7 +155,7 @@ export default function Header() {
                                     <Link href="#" className={cn(
                                         "flex items-center gap-1 px-3 py-2 whitespace-nowrap rounded-[5px]",
                                         navAndIconClasses,
-                                        isHeaderOpaque ? "bg-background" : "bg-transparent text-white hover:text-white"
+                                        "bg-background hover:text-accent-foreground"
                                     )}>
                                         Products
                                         <ChevronDown className="h-4 w-4" />
