@@ -158,17 +158,19 @@ export default function Header() {
                     <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="relative">
                       <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
                         <DropdownMenuTrigger asChild>
-                          {isHeaderOpaque ? (
-                             <div className="p-0.5 rounded-md bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x">
-                               <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 whitespace-nowrap rounded-[5px] bg-background", navAndIconClasses, "hover:text-accent-foreground")}>
-                                  <ProductsButtonContent />
-                               </Link>
-                             </div>
-                          ) : (
-                              <Link href="#" className={cn("flex items-center gap-1 px-3 py-2 whitespace-nowrap", navAndIconClasses)}>
-                                  <ProductsButtonContent />
-                              </Link>
-                          )}
+                          <div className={cn(
+                            "p-0.5 rounded-md",
+                            isHeaderOpaque ? "bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x" : ""
+                          )}>
+                             <Link href="#" className={cn(
+                                "flex items-center gap-1 px-3 py-2 whitespace-nowrap",
+                                navAndIconClasses,
+                                isHeaderOpaque ? "bg-background rounded-[5px]" : "bg-transparent",
+                                "hover:text-accent-foreground"
+                              )}>
+                                <ProductsButtonContent />
+                             </Link>
+                           </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" className="w-56 bg-background" onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave}>
                             {productCategories.map((category) => (
@@ -363,5 +365,3 @@ export default function Header() {
     </header>
   );
 }
-
-    
