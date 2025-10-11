@@ -87,7 +87,7 @@ const ImpactStat = ({ icon, target, label }: { icon: React.ReactNode, target: nu
 
 export default function ImpactSection() {
   const impactStats = [
-    { icon: <span className="text-4xl">🌍</span>, target: 22500, label: "Daily Average Reach" },
+    { icon: <span className="text-4xl">🌍</span>, target: 35200, label: "Daily Average Reach" },
     { icon: <Users className="h-10 w-10 text-green-400" />, target: 42324, label: "Subscribers" },
     { icon: <Smile className="h-10 w-10 text-green-400" />, target: 28255, label: "Benefitted Customers" },
     { icon: <Award className="h-10 w-10 text-green-400" />, target: "Coming Soon", label: "Awards" },
