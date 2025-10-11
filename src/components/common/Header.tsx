@@ -149,20 +149,19 @@ export default function Header() {
             <div className="flex items-center justify-end">
                 <nav className='flex items-center'>
                     <div onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave} className="flex items-center">
-                         <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
+                        <div className="p-0.5 rounded-md bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x">
+                            <DropdownMenu open={isProductsMenuOpen} onOpenChange={setProductsMenuOpen}>
                             <DropdownMenuTrigger asChild>
-                                <div className="p-0.5 rounded-md bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x">
-                                    <Link href="#" className={cn(
-                                        "flex items-center gap-1 px-3 py-2 whitespace-nowrap rounded-[5px]",
-                                        navAndIconClasses,
-                                        "bg-background hover:text-accent-foreground"
-                                    )}>
-                                        Products
-                                        <ChevronDown className="h-4 w-4" />
-                                    </Link>
-                                </div>
+                                <Link href="#" className={cn(
+                                    "flex items-center gap-1 px-3 py-2 whitespace-nowrap rounded-[5px]",
+                                    navAndIconClasses,
+                                    "bg-transparent hover:text-accent-foreground"
+                                )}>
+                                    Products
+                                    <ChevronDown className="h-4 w-4" />
+                                </Link>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-56" onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave}>
+                            <DropdownMenuContent align="start" className="w-56 bg-background" onMouseEnter={handleProductsMenuEnter} onMouseLeave={handleProductsMenuLeave}>
                                 {productCategories.map((category) => (
                                     <DropdownMenuItem key={category.name} asChild>
                                     <Link href={category.href} className="flex items-center gap-3 py-2">
@@ -177,7 +176,8 @@ export default function Header() {
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
-                        </DropdownMenu>
+                            </DropdownMenu>
+                        </div>
                     </div>
                     {navLinks.map((link) => (
                         <Link
