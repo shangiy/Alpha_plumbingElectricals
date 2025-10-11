@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import HeroSearch from './HeroSearch';
@@ -20,7 +21,7 @@ export default function Hero() {
         priority
       />
       <div className="absolute inset-0 bg-black/60 -z-10" />
-      <div className="container mx-auto px-4 text-left mt-8">
+      <div className="container mx-auto px-4 text-left mt-24">
         <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 max-w-3xl">
           Welcome to Alpha Electricals & Plumbing Ltd
         </h1>
