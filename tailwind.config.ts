@@ -131,6 +131,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'gradient-x': 'gradient-x 15s ease infinite',
+        'scroll': 'scroll 60s linear infinite'
       },
     },
   },
