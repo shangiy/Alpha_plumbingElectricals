@@ -15,7 +15,12 @@ export default function TopBanner() {
   const duplicatedOffers = [...offerTexts, ...offerTexts];
 
   return (
-    <div className="bg-[#2b235f] text-white py-2 px-4 text-xs md:text-sm">
+    <div className={cn(
+      "text-white py-2 px-4 text-xs md:text-sm",
+      "bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500",
+      "animate-gradient-x bg-[400%_400%]"
+      )}
+    >
       <div className="container mx-auto flex justify-between items-center h-6 overflow-hidden">
         <div className="hidden md:flex items-center gap-2">
             <Clock className="h-4 w-4" />
