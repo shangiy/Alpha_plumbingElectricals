@@ -11,7 +11,7 @@ export default function Hero() {
     { name: 'Solar Heaters', href: '/plumbing' },
   ];
   return (
-    <section className="relative h-[60vh] md:h-[70vh] w-full flex items-center justify-start text-white -mt-24">
+    <section className="relative h-[70vh] md:h-[85vh] w-full flex items-center justify-start text-white -mt-24">
       <Image
         src="/background.jpg"
         alt="Hero background image"
