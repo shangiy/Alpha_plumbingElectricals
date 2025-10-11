@@ -26,8 +26,8 @@ export default function TopBanner() {
             <span>Mon - Sat: 8:00 AM – 6:00 PM</span>
         </div>
 
-        <div className="flex-1 font-bold text-center w-full inline-flex flex-nowrap overflow-hidden">
-            <ul className="flex items-center justify-center md:justify-start [&_li]:mx-8 [&_svg]:max-w-none animate-scroll">
+        <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
+            <ul className="flex-1 font-bold text-center flex items-center justify-center md:justify-start [&_li]:mx-8 [&_svg]:max-w-none animate-scroll">
                 {duplicatedOffers.map((text, index) => (
                     <li key={index} className="whitespace-nowrap text-sm md:text-base">
                         {text}
