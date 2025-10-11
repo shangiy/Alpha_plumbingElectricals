@@ -16,12 +16,11 @@ export default function TopBanner() {
   return (
     <div className={cn(
       "text-white py-2 px-4 text-xs md:text-sm",
-      "bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500",
-      "animate-gradient-x bg-[400%_400%]"
+      "bg-red-700" // Changed to matte red
       )}
     >
       <div className="container mx-auto flex justify-between items-center h-6 overflow-hidden">
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
             <Clock className="h-4 w-4" />
             <span>Mon - Sat: 8:00 AM – 6:00 PM</span>
         </div>
@@ -36,7 +35,7 @@ export default function TopBanner() {
             </ul>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 justify-end">
+        <div className="hidden md:flex items-center gap-2 justify-end flex-shrink-0">
             <Mail className="h-4 w-4" />
             <a href="mailto:Alphaltd21@gmail.com" className="hover:underline">
                 Alphaltd21@gmail.com
@@ -46,4 +45,3 @@ export default function TopBanner() {
     </div>
   );
 }
-
