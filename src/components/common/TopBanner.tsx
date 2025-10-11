@@ -6,9 +6,8 @@ import { cn } from '@/lib/utils';
 
 export default function TopBanner() {
   const offerTexts = [
-    "OFFERS! OFFERS!",
-    "Mazingira Day OFFERS!",
-    "Feel welcomed to shop with us",
+    "OFFERS! OFFERS! Mazingira Day OFFERS!",
+    "Feel welcomed to shop with us @ best prices",
   ];
 
   // Duplicate the array to ensure seamless looping
