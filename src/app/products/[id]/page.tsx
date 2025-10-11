@@ -138,8 +138,7 @@ function ProductContent({ productId }: { productId: string }) {
   );
 }
 
-export default function ProductDetailPage() {
-  const params = useParams();
+export default function ProductDetailPage({ params }: { params: { id: string } }) {
   const productId = params.id as string;
   
   if (!productId) {
