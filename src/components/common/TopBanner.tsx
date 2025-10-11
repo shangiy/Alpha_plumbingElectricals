@@ -16,7 +16,7 @@ export default function TopBanner() {
   return (
     <div className={cn(
       "text-white py-2 px-4 text-xs md:text-sm",
-      "bg-red-700" // Changed to matte red
+      "bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x"
       )}
     >
       <div className="container mx-auto flex justify-between items-center h-6 overflow-hidden">
