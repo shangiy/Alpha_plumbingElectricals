@@ -3,6 +3,7 @@
 
 import { Mail, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function TopBanner() {
   const offerTexts = [
@@ -19,7 +20,7 @@ export default function TopBanner() {
       "bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x"
       )}
     >
-      <div className="container mx-auto flex justify-between items-center h-6 overflow-hidden">
+      <div className="container mx-auto flex justify-between items-center h-6">
         <div className="hidden md:flex items-center gap-2 flex-shrink-0">
             <Clock className="h-4 w-4" />
             <span>Mon - Sat: 8:00 AM – 6:00 PM</span>
@@ -36,9 +37,9 @@ export default function TopBanner() {
         </div>
 
         <div className="hidden md:flex items-center gap-2 justify-end flex-shrink-0">
-            <Mail className="h-4 w-4" />
-            <a href="mailto:Alphaltd21@gmail.com" className="hover:underline">
-                Alphaltd21@gmail.com
+            <Image src="/tiktok-V1.png" alt="TikTok" width={16} height={16} />
+            <a href="https://www.tiktok.com/@AlphaElectricalsandplumb" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                Follow us on TikTok
             </a>
         </div>
       </div>
