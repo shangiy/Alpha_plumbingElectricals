@@ -9,27 +9,43 @@ interface AnimatedPlaceholderProps {
 }
 
 export function AnimatedPlaceholder({ placeholders, className }: AnimatedPlaceholderProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentPlaceholder, setCurrentPlaceholder] = useState('');
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
-    }, 3000); // change every 3 seconds
-    return () => clearInterval(interval);
-  }, [placeholders.length]);
+    const fullText = placeholders[placeholderIndex];
+    let timeout: NodeJS.Timeout;
+
+    if (isDeleting) {
+      if (currentPlaceholder.length > 0) {
+        timeout = setTimeout(() => {
+          setCurrentPlaceholder(prev => prev.slice(0, -1));
+        }, 100); // Speed of deleting
+      } else {
+        setIsDeleting(false);
+        setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
+      }
+    } else {
+      if (currentPlaceholder.length < fullText.length) {
+        timeout = setTimeout(() => {
+          setCurrentPlaceholder(prev => fullText.slice(0, prev.length + 1));
+        }, 150); // Speed of typing
+      } else {
+        // Wait before starting to delete
+        timeout = setTimeout(() => {
+          setIsDeleting(true);
+        }, 2000);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [currentPlaceholder, isDeleting, placeholderIndex, placeholders]);
 
   return (
-    <div className={cn("pointer-events-none relative h-6 overflow-y-hidden text-base text-gray-500", className)}>
-      <div
-        className="transition-transform duration-500 ease-in-out h-full"
-        style={{ transform: `translateY(-${currentIndex * 100}%)` }}
-      >
-        {placeholders.map((text) => (
-          <div key={text} className="flex h-6 items-center">
-            <span>{text}</span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <span className={cn("relative text-base text-muted-foreground", className)}>
+      {currentPlaceholder}
+      <span className="animate-pulse">|</span>
+    </span>
   );
 }
