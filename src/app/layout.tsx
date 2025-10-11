@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Bot, MessageSquare } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
+import TopBanner from '@/components/common/TopBanner';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -56,6 +57,7 @@ export default function RootLayout({
           <ProductProvider>
             <CartProvider>
               <div className="relative flex flex-col min-h-screen">
+                <TopBanner />
                 <Header />
                 <main className="flex-1 flex flex-col">{children}</main>
                 {!isAdminRoute && <Footer />}
