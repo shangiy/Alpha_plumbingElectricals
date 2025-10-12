@@ -15,7 +15,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import QuantitySelector from '@/components/products/QuantitySelector';
-import ProductReviews from '@/components/products/ProductReviews';
 
 function ProductContent({ productId }: { productId: string }) {
   const { getProductById, loading } = useProducts();
@@ -134,7 +133,6 @@ function ProductContent({ productId }: { productId: string }) {
 
       <div className="bg-background py-16">
         <div className="container mx-auto px-4 space-y-16">
-          <ProductReviews product={product} />
           <ProductRecommendations productTitle={product.name} productId={product.id} category={product.category} />
         </div>
       </div>
