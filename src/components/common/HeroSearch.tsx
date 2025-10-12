@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Camera, Video, AlertCircle } from 'lucide-react';
+import { Search, Camera, Video, AlertCircle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +19,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AnimatedPlaceholder } from './AnimatedPlaceholder';
 import { cn } from '@/lib/utils';
+import { uploadImage } from '@/lib/storage';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function HeroSearch() {
   const [query, setQuery] = useState('');
@@ -27,6 +31,7 @@ export default function HeroSearch() {
   const [isCameraDialogOpen, setIsCameraDialogOpen] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -37,7 +42,7 @@ export default function HeroSearch() {
       stream.getTracks().forEach(track => track.stop());
       setStream(null);
     }
-    setHasCameraPermission(null); // Reset permission state to show loading
+    setHasCameraPermission(null);
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
       setStream(mediaStream);
@@ -56,8 +61,9 @@ export default function HeroSearch() {
     }
   };
 
-  const handleCapture = () => {
+  const handleCapture = async () => {
     if (videoRef.current && canvasRef.current) {
+      setIsProcessing(true);
       const video = videoRef.current;
       const canvas = canvasRef.current;
       canvas.width = video.videoWidth;
@@ -65,14 +71,31 @@ export default function HeroSearch() {
       const context = canvas.getContext('2d');
       context?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
       
-      const imageDataUrl = canvas.toDataURL('image/png');
-      console.log('Captured Image Data URL:', imageDataUrl);
+      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
       
-      toast({
-        title: 'Image Captured!',
-        description: 'Visual search is not yet implemented.',
-      });
-      setIsCameraDialogOpen(false); // Close dialog after capture
+      try {
+        const downloadURL = await uploadImage(imageDataUrl);
+        await addDoc(collection(db, "userSelfies"), {
+            imageUrl: downloadURL,
+            createdAt: serverTimestamp()
+        });
+
+        toast({
+            title: 'Image Uploaded!',
+            description: 'Your image has been saved and will be reviewed by an admin.',
+        });
+
+      } catch (error) {
+        console.error("Error during image capture and upload:", error);
+        toast({
+            variant: "destructive",
+            title: "Upload Failed",
+            description: "Could not save the image. Please try again.",
+        });
+      } finally {
+        setIsProcessing(false);
+        setIsCameraDialogOpen(false);
+      }
     }
   };
 
@@ -129,15 +152,16 @@ export default function HeroSearch() {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]">
               <DialogHeader>
-                <DialogTitle>Search by Image</DialogTitle>
+                <DialogTitle>Visual Search</DialogTitle>
               </DialogHeader>
               <div className="flex flex-col items-center justify-center gap-4">
                 <div className="w-full bg-black rounded-md overflow-hidden relative">
                   <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay playsInline muted />
                   <canvas ref={canvasRef} className="hidden" />
-                  {hasCameraPermission === null && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white">
-                      <p>Requesting camera access...</p>
+                  {(hasCameraPermission === null || isProcessing) && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white gap-2">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <p>{isProcessing ? 'Processing image...' : 'Requesting camera access...'}</p>
                     </div>
                   )}
                 </div>
@@ -154,10 +178,11 @@ export default function HeroSearch() {
               </div>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button type="button" variant="secondary">Cancel</Button>
+                  <Button type="button" variant="secondary" disabled={isProcessing}>Cancel</Button>
                 </DialogClose>
-                <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
-                  <Video className="mr-2 h-4 w-4" /> Capture
+                <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission || isProcessing}>
+                  {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Video className="mr-2 h-4 w-4" />}
+                  {isProcessing ? 'Uploading...' : 'Capture'}
                 </Button>
               </DialogFooter>
             </DialogContent>

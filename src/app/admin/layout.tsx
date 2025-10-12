@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, LogOut, Settings, Users, Receipt, Package, BarChart, Home } from 'lucide-react';
+import { LayoutDashboard, LogOut, Settings, Users, Receipt, Package, BarChart, Home, Camera } from 'lucide-react';
 import AuthGuard from '@/components/auth/AuthGuard';
 import { useAuth } from '@/context/AuthProvider';
 import Footer from '@/components/common/Footer';
@@ -50,6 +50,14 @@ export default function AdminLayout({
                     <Link href="/admin/products">
                       <Package />
                       <span>Products</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Selfies">
+                    <Link href="/admin/selfies">
+                      <Camera />
+                      <span>Selfies</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
