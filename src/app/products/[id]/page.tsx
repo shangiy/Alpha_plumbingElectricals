@@ -138,14 +138,12 @@ function ProductContent({ productId }: { productId: string }) {
   );
 }
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const productId = params.id as string;
-  
-  if (!productId) {
+export default function ProductDetailPage({ params: { id } }: { params: { id: string } }) {
+  if (!id) {
     return notFound();
   }
   
-  return <ProductContent productId={productId} />;
+  return <ProductContent productId={id} />;
 }
 
 function ProductDetailSkeleton() {
