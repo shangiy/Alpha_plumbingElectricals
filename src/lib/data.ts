@@ -1,5 +1,6 @@
 
 
+
 import type { Product, Category, MockUser, Transaction, CarouselCategory } from './types';
 import { db } from './firebase';
 import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
@@ -10,7 +11,24 @@ export const allProductsData: Omit<Product, 'id'>[] = [
   { name: 'Artistic Lights', price: 3300, images: ['/exquisite chandelier.jpg'], description: 'Unique and stylish artistic lights.', longDescription: 'A collection of unique and stylish artistic lights to make a statement in any room.', category: 'lighting-electrical', rating: 4.6, reviews: 15, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, isFeatured: true, unit: 'item' },
   { name: 'Electric Cable', price: 30, images: ['/Electric cable per roll.jpg'], unit: 'meter', wholesale: { quantity: 100, price: 3000, unit: 'roll' }, description: 'High-quality electric wiring cable.', longDescription: 'High-quality and durable electric wiring cable, available per meter or in a 100m roll for wholesale pricing.', category: 'lighting-electrical', rating: 4.9, reviews: 50, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, colors: ['Black', 'Red', 'Blue', 'Green'], isFeatured: true },
   { name: 'WarmLight wall bracket', price: 1900, images: ['/WarmLight wall bracket.jpg'], description: 'An elegant warm light wall bracket.', longDescription: 'An elegant warm light wall bracket that provides a cozy and inviting ambiance.', category: 'lighting-electrical', rating: 4.5, reviews: 22, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, colors: ['Silver'], isFeatured: true, unit: 'item' },
-  { name: 'Kentank 2000L', price: 15000, images: ['/kentank 2000l.png'], description: 'A best-selling 2000L Kentank, renowned for its superior durability. This tank is crafted from high-quality, food-grade material, ensuring your water remains safe and clean.', longDescription: 'Our most popular 2000L Kentank is the perfect solution for reliable domestic water storage. Manufactured from UV-stabilized, food-grade polyethylene, it prevents algae growth and withstands harsh weather conditions, guaranteeing a long-lasting supply of safe water for your family.', category: 'tanks', rating: 4.7, reviews: 45, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, colors: ['Black', 'Green'], unit: 'item' },
+  { 
+    name: 'Kentank 2000L', 
+    price: 15000, 
+    images: ['/kentank 2000l.png'], 
+    description: 'A best-selling 2000L Kentank, renowned for its superior durability. This tank is crafted from high-quality, food-grade material, ensuring your water remains safe and clean.', 
+    longDescription: 'Our most popular 2000L Kentank is the perfect solution for reliable domestic water storage. Manufactured from UV-stabilized, food-grade polyethylene, it prevents algae growth and withstands harsh weather conditions, guaranteeing a long-lasting supply of safe water for your family.', 
+    category: 'tanks', 
+    rating: 4.7, 
+    reviews: 45,
+    reviewsList: [
+        { id: 'rev-1', author: 'Jane D.', rating: 5, comment: 'Excellent quality tank. Very sturdy and the delivery was fast. Highly recommend!', date: '2023-10-15', avatarUrl: '/profile-images/avatar1.png' },
+        { id: 'rev-2', author: 'John K.', rating: 4, comment: 'Good tank for the price. The size is perfect for my family. Installation was straightforward.', date: '2023-09-22', avatarUrl: '/profile-images/avatar2.png' },
+        { id: 'rev-3', author: 'Mary A.', rating: 5, comment: 'I am very happy with this purchase. Alpha Electricals provided great customer service.', date: '2023-09-18', avatarUrl: '/profile-images/avatar3.png' },
+    ],
+    seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, 
+    colors: ['Black', 'Green'], 
+    unit: 'item' 
+  },
   { name: 'Kentank 3000L', price: 10000, images: ['/kentanks 3000L.png'], description: 'A large 3000L Kentank for ample water storage. Ideal for both residential and commercial use, providing a dependable water supply.', longDescription: 'Secure your water supply with the large 3000L Kentank, perfect for bigger households or commercial properties. Its robust, UV-stabilized construction ensures longevity and protects your water from the elements, providing peace of mind.', category: 'tanks', rating: 4.8, reviews: 30, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, colors: ['Black', 'Green'], unit: 'item' },
   { name: 'Water Tank', price: 6500, images: ['/cuboidTank.PNG'], description: 'A modern, space-saving cuboid water tank. Its unique shape is perfect for maximizing storage in tight spaces.', longDescription: 'This cuboid water tank is the ultimate solution for urban living or areas where space is a premium. Its clever design allows for easy installation in corners or narrow spaces without compromising on capacity, making it both practical and stylish.', category: 'tanks', rating: 4.5, reviews: 20, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, colors: ['White'], unit: 'item' },
   { name: 'Septic Tank', price: 20000, images: ['/septic Tank.png'], description: 'A highly reliable and robust septic tank for efficient wastewater management. Built with high-strength materials to ensure long-term performance.', longDescription: 'Invest in a worry-free wastewater solution with our reliable and robust septic tank. Engineered for maximum efficiency and durability, it provides an environmentally safe and long-lasting system for your property.', category: 'tanks', rating: 4.9, reviews: 55, seller: { name: 'Alpha Electricals', id: 'seller-alpha' }, colors: ['Black'], unit: 'item' },

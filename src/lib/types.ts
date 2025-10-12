@@ -1,5 +1,14 @@
 
 
+export interface Review {
+  id: string;
+  author: string;
+  avatarUrl?: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
 export interface WholesalePrice {
   quantity: number;
   price: number;
@@ -19,6 +28,7 @@ export interface Product {
   category: string;
   rating: number;
   reviews: number;
+  reviewsList?: Review[];
   seller: {
     name: string;
     id: string;
