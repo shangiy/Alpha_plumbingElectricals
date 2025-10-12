@@ -5,7 +5,7 @@ import ProductForm from '@/components/admin/ProductForm';
 import { useProducts } from '@/context/ProductProvider';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 
 
 function EditProductContent({ productId }: { productId: string }) {
@@ -48,8 +48,10 @@ function EditProductContent({ productId }: { productId: string }) {
 }
 
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
-    const productId = params.id;
+export default function EditProductPage() {
+    const params = useParams();
+    const productId = params.id as string;
+    
     if (!productId) {
         return notFound();
     }
