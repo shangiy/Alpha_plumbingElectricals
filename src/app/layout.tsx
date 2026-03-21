@@ -20,6 +20,7 @@ import { Bot, MessageSquare } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 import TopBanner from '@/components/common/TopBanner';
+import { Analytics } from '@vercel/analytics/react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -87,6 +88,7 @@ export default function RootLayout({
                 </>
               )}
               <Toaster />
+              <Analytics />
             </CartProvider>
           </ProductProvider>
         </AuthProvider>
