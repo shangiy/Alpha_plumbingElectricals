@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Required for some hosting environments to correctly handle standalone builds
+  output: 'standalone',
 };
 
 export default nextConfig;
