@@ -1,5 +1,25 @@
-# Firebase Studio
+# ALPHA Plumbing n Electrical Ltd
 
-This is a NextJS starter in Firebase Studio.
+This is a NextJS e-commerce application for Alpha Electricals & Plumbing Ltd, built with React, ShadCN UI, Tailwind, and Firebase.
 
-To get started, take a look at src/app/page.tsx.
+## Project Identity & URLs
+
+Your project is identified by its **Firebase Project ID**. By default, your app will be accessible at:
+- `https://alpha-plumbing-electrical.web.app`
+- `https://alpha-plumbing-electrical.firebaseapp.com`
+
+The site name is configured in the `site` property within `firebase.json`.
+
+## Hosting & Deployment
+
+To host this project online:
+
+1. **Install Firebase CLI**: `npm install -g firebase-tools`
+2. **Login**: `firebase login`
+3. **Initialize**: `firebase init hosting` (Choose 'Next.js' when prompted)
+4. **Deploy**: `firebase deploy`
+
+## Features
+- **Visual Search**: Users can capture images via camera to search/upload as "UserSelfies".
+- **Admin Dashboard**: Secure panel for managing products, transactions, and viewing user-captured images.
+- **AI Integration**: Genkit-powered chatbot and product recommendations.
