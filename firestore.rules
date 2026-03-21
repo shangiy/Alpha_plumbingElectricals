@@ -10,10 +10,15 @@ service cloud.firestore {
       allow write: if request.auth != null && (request.auth.token.role == 'admin' || request.auth.token.role == 'staff');
     }
 
-    // This rule allows the application to list all products, which is
-    // necessary for category pages and the search page.
     match /products/{document=**} {
       allow read: if true;
+    }
+
+    // User Selfies: Anyone can create (for visual search), but only admins can read.
+    match /userSelfies/{selfieId} {
+      allow create: if true;
+      allow read: if request.auth != null && (request.auth.token.role == 'admin' || request.auth.token.role == 'staff');
+      allow delete: if request.auth != null && request.auth.token.role == 'admin';
     }
   }
 }
