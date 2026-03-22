@@ -1,4 +1,3 @@
-
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -17,7 +16,7 @@ const firebaseConfig = {
 
 // Safety check: Prevents hard crashes during Next.js build/prerendering phase 
 // if environment variables are not yet provided to the build environment.
-const isConfigAvailable = !!firebaseConfig.apiKey;
+const isConfigAvailable = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
 const app = isConfigAvailable 
   ? (!getApps().length ? initializeApp(firebaseConfig) : getApp())

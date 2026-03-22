@@ -13,18 +13,12 @@ This is a professional Next.js 15 e-commerce application for Alpha Electricals &
 
 ## 🚀 Vercel Deployment Checklist (CRITICAL)
 
-Your build is currently failing because Vercel does not have your Firebase keys. Follow these steps to fix it:
+Your build is failing because Vercel needs these specific keys. Follow these steps:
 
-### Step 1: Get your keys from Firebase
-1.  Go to the [Firebase Console](https://console.firebase.google.com/).
-2.  Select your project: **alpha-plumbing-electrical**.
-3.  Click the **Gear Icon (⚙️)** next to "Project Overview" and select **Project settings**.
-4.  Scroll down to the "Your apps" section. Under "Web apps", you will see your `firebaseConfig` object.
-
-### Step 2: Add keys to Vercel
+### Step 1: Add keys to Vercel
 1.  Open your project on the [Vercel Dashboard](https://vercel.com/dashboard).
 2.  Navigate to **Settings** > **Environment Variables**.
-3.  Add the following keys exactly as named below (copy the values from your Firebase settings):
+3.  Add the following 6 keys exactly as named below (use the values you found in your Firebase console):
     - `NEXT_PUBLIC_FIREBASE_API_KEY`
     - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
     - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
@@ -45,5 +39,5 @@ If GitHub blocks your push:
    git push
    ```
 
-### Build Stuck?
-The "Creating an optimized production build" step usually takes 1-3 minutes. If it crashes with "invalid-api-key", verify your Vercel Environment Variables matches your Firebase Console settings exactly.
+### Firebase "auth/invalid-api-key"
+This means Vercel is trying to build your pages but doesn't have the keys yet. Adding the Environment Variables in Vercel Settings fixes this immediately.
