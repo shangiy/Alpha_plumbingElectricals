@@ -22,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { getUserByEmail } from '@/lib/data';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const loginSchema = z.object({
@@ -75,7 +75,7 @@ const PasswordInput = ({ field, ...props }: any) => {
     );
 };
 
-export default function LoginPage() {
+function LoginFormContent() {
     const { login, signUp, signInWithGoogle, signInWithFacebook } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -84,7 +84,6 @@ export default function LoginPage() {
     const [socialLoading, setSocialLoading] = useState<null | 'google' | 'facebook'>(null);
     const [isMounted, setIsMounted] = useState(false);
     
-    // The active tab is now determined by the URL search parameter on every render.
     const activeTab = searchParams.get('tab') || 'login';
 
     const loginForm = useForm<LoginFormValues>({
@@ -101,7 +100,6 @@ export default function LoginPage() {
         setIsMounted(true);
     }, []);
     
-    // This function will be used by onValueChange to update the URL without a full page reload.
     const handleTabChange = (tab: string) => {
         router.push(`/auth/login?tab=${tab}`, { scroll: false });
     };
@@ -384,4 +382,14 @@ export default function LoginPage() {
   );
 }
 
-    
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="container mx-auto flex min-h-[80vh] items-center justify-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        }>
+            <LoginFormContent />
+        </Suspense>
+    );
+}
