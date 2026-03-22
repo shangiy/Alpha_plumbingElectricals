@@ -25,6 +25,9 @@ import { getUserByEmail } from '@/lib/data';
 import { useState, useEffect, Suspense } from 'react';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
+// Force dynamic rendering to bypass static generation requirements for useSearchParams
+export const dynamic = 'force-dynamic';
+
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
   password: z.string().min(1, 'Password is required.'),

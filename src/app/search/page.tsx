@@ -7,6 +7,9 @@ import { Suspense, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Category } from '@/lib/types';
 
+// Force dynamic rendering to bypass static generation requirements for useSearchParams
+export const dynamic = 'force-dynamic';
+
 function SearchPageContent() {
   const { products, loading: productsLoading } = useProducts();
   const [categories, setCategories] = useState<Category[]>([]);
