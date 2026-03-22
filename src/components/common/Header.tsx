@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -53,7 +52,6 @@ export default function Header() {
   const productsMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
-    // This logic must run on the client after hydration to avoid mismatches.
     const updateHeaderStyles = () => {
       const isHomepagePath = window.location.pathname === '/';
       const scrollY = window.scrollY;
@@ -61,17 +59,13 @@ export default function Header() {
       setShowSearchInHeader(!isHomepagePath || scrollY > 300);
     };
 
-    // Initial check on mount
     updateHeaderStyles();
-
-    // Add scroll listener
     window.addEventListener('scroll', updateHeaderStyles, { passive: true });
     
-    // Cleanup listener on component unmount
     return () => {
       window.removeEventListener('scroll', updateHeaderStyles);
     };
-  }, [pathname]); // Rerun effect if the page path changes
+  }, [pathname]);
   
   const navLinks = [
     { name: 'Contact Us', href: '/contact' },
@@ -132,14 +126,14 @@ export default function Header() {
                 <Image
                     src="/logo Alpha.png"
                     alt="Alpha Electricals & Plumbing Ltd Logo"
-                    width={70}
-                    height={70}
+                    width={90}
+                    height={90}
                     className="h-auto"
                 />
                 <div className={logoTextClasses}>
-                    <span className="font-bold text-[18px] leading-tight">Alpha</span>
+                    <span className="font-bold text-[20px] leading-tight">Alpha</span>
                     <div className="w-full h-px bg-current" />
-                    <span className="text-[11px] leading-tight">Electricals & Plumbing Ltd</span>
+                    <span className="text-[12px] leading-tight">Electricals & Plumbing Ltd</span>
                 </div>
             </Link>
             
@@ -244,9 +238,9 @@ export default function Header() {
                     <Image
                         src="/logo Alpha.png"
                         alt="Alpha Electricals & Plumbing Ltd Logo"
-                        width={70}
-                        height={70}
-                        className="h-auto w-[60px]"
+                        width={80}
+                        height={80}
+                        className="h-auto"
                     />
                 </Link>
 
@@ -294,7 +288,7 @@ export default function Header() {
                                 <SheetTitle>
                                     <SheetClose asChild>
                                         <Link href="/" className="flex items-center gap-2">
-                                            <Image src="/logo Alpha.png" alt="Logo" width={60} height={60}/>
+                                            <Image src="/logo Alpha.png" alt="Logo" width={70} height={70}/>
                                             <div className="flex flex-col text-[#2b235f]">
                                                 <span className="font-bold text-[18px] leading-tight">Alpha</span>
                                                 <div className="w-full h-px bg-[#2b235f]" />
