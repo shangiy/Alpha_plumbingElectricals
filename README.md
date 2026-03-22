@@ -48,6 +48,14 @@ To push your code to a remote repository:
 5. `git remote add origin YOUR_REPO_URL`
 6. `git push -u origin main`
 
+### Troubleshooting: Error GH007 (Private Email)
+If you get an error saying "Your push would publish a private email address", run these commands:
+```bash
+git config --global user.email "your-github-email@example.com"
+git commit --amend --reset-author --no-edit
+git push
+```
+
 ## Key Features
 - **Visual Search**: Users can capture images via camera to search/upload as "UserSelfies".
 - **Admin Dashboard**: Secure panel for managing products, transactions, and viewing user-captured images.
