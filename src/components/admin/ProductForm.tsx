@@ -122,7 +122,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         } finally {
             setIsGenerating(false);
         }
-    }
+    };
 
 
     async function onSubmit(data: z.infer<typeof productFormSchema>) {
