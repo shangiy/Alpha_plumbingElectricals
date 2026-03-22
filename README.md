@@ -49,12 +49,20 @@ To push your code to a remote repository:
 6. `git push -u origin main`
 
 ### Troubleshooting: Error GH007 (Private Email)
-If you get an error saying "Your push would publish a private email address", run these commands:
+If you get an error saying "Your push would publish a private email address", it means your GitHub settings are blocking commits that reveal your email.
+
+**Fix 1: Use GitHub's No-Reply Email**
+1. Find your no-reply email in [GitHub Email Settings](https://github.com/settings/emails) (e.g., `ID+username@users.noreply.github.com`).
+2. Run:
 ```bash
-git config --global user.email "your-github-email@example.com"
+git config --global user.email "YOUR_NOREPLY_EMAIL"
 git commit --amend --reset-author --no-edit
 git push
 ```
+
+**Fix 2: Disable the block**
+1. Go to [GitHub Email Settings](https://github.com/settings/emails).
+2. Uncheck **"Block command line pushes that expose my email"**.
 
 ## Key Features
 - **Visual Search**: Users can capture images via camera to search/upload as "UserSelfies".
