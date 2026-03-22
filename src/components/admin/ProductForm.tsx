@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -34,7 +33,7 @@ import { useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { Loader2 } from 'lucide-react';
-import { generateProductDescription, GenerateProductDescriptionInput } from '@/ai/flows/product-description-generator';
+import { generateProductDescription, type GenerateProductDescriptionInput } from '@/ai/flows/product-description-generator';
 
 
 const productFormSchema = z.object({
@@ -340,6 +339,4 @@ export default function ProductForm({ product }: ProductFormProps) {
             </form>
        </Form>
     );
-
-    
-
+}
