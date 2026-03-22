@@ -20,49 +20,35 @@ This is a professional Next.js 15 e-commerce application for Alpha Electricals &
 - **AI Framework**: [Firebase Genkit](https://firebase.google.com/docs/genkit)
 - **AI Models**: Google Gemini (via Genkit)
 
-## Project Identity & URLs
+## Hosting & Deployment
 
-Your project is identified by its **Firebase Project ID**. By default, your app will be accessible at:
-- `https://alpha-plumbing-electrical.web.app`
-- `https://alpha-plumbing-electrical.firebaseapp.com`
-
-The site name is configured in the `site` property within `firebase.json`.
-
-## Hosting & Deployment (Firebase)
-
-To host this project online:
-
+### Option 1: Firebase Hosting (Recommended)
+To host this project on Firebase:
 1. **Install Firebase CLI**: `npm install -g firebase-tools`
 2. **Login**: `firebase login`
-3. **Initialize Hosting**: `firebase init hosting` (Choose 'Next.js' when prompted)
+3. **Initialize**: `firebase init hosting` (Detects Next.js automatically)
 4. **Deploy**: `firebase deploy`
 
-## Pushing to GitHub/GitLab
+### Option 2: Vercel Deployment
+To host this project on Vercel:
+1. Push your code to GitHub.
+2. Import the repository in the [Vercel Dashboard](https://vercel.com/new).
+3. **Crucial**: Add your Environment Variables (found in `.env`) to the Vercel Project Settings.
+4. Vercel will automatically build and deploy your app.
 
-To push your code to a remote repository:
+## Troubleshooting: Git Push Error (GH007)
+If you get an error saying "Your push would publish a private email address":
 
-1. `git init`
-2. `git add .`
-3. `git commit -m "Initial commit"`
-4. `git branch -M main`
-5. `git remote add origin YOUR_REPO_URL`
-6. `git push -u origin main`
-
-### Troubleshooting: Error GH007 (Private Email)
-If you get an error saying "Your push would publish a private email address", it means your GitHub settings are blocking commits that reveal your email.
-
-**Fix 1: Use GitHub's No-Reply Email**
-1. Find your no-reply email in [GitHub Email Settings](https://github.com/settings/emails) (e.g., `ID+username@users.noreply.github.com`).
-2. Run:
+1. **Find your No-Reply Email**: Go to [GitHub Email Settings](https://github.com/settings/emails) and look for your `@users.noreply.github.com` address.
+2. **Update your local config**:
 ```bash
-git config --global user.email "YOUR_NOREPLY_EMAIL"
+git config --global user.email "YOUR_NOREPLY_EMAIL_HERE"
+```
+3. **Fix the commit and push**:
+```bash
 git commit --amend --reset-author --no-edit
 git push
 ```
-
-**Fix 2: Disable the block**
-1. Go to [GitHub Email Settings](https://github.com/settings/emails).
-2. Uncheck **"Block command line pushes that expose my email"**.
 
 ## Key Features
 - **Visual Search**: Users can capture images via camera to search/upload as "UserSelfies".
