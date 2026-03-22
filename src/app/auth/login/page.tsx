@@ -44,10 +44,8 @@ const signUpSchema = z.object({
   path: ["confirmPassword"],
 });
 
-
 type LoginFormValues = z.infer<typeof loginSchema>;
 type SignUpFormValues = z.infer<typeof signUpSchema>;
-
 
 const GoogleIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"><title>Google</title><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.62 1.62-4.55 1.62-3.87 0-7.02-3.15-7.02-7.02s3.15-7.02 7.02-7.02c2.21 0 3.66.86 4.5 1.69l2.5-2.5C18.16 3.15 15.66 2 12.48 2 6.94 2 2.53 6.4 2.53 12s4.41 10 9.95 10c2.82 0 5.16-1 6.9-2.72 1.83-1.83 2.36-4.49 2.36-6.52 0-.6-.05-1.15-.15-1.7H12.48z"/></svg>
@@ -123,7 +121,7 @@ function LoginFormContent() {
 
     async function onSignUp(data: SignUpFormValues) {
         try {
-            const newUser = await signUp(data);
+            await signUp(data);
             toast({ title: "Account Created!", description: "Welcome! You are now logged in." });
             router.push(redirectUrl);
         } catch (error: any) {

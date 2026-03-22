@@ -7,7 +7,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Category } from '@/lib/types';
 
-export default function SearchPage() {
+function SearchPageContent() {
   const { products, loading: productsLoading } = useProducts();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -23,15 +23,19 @@ export default function SearchPage() {
 
   const isLoading = productsLoading || categoriesLoading;
 
+  if (isLoading) {
+    return <ProductListSkeleton />;
+  }
+
+  return <ProductList products={products} categories={categories} />;
+}
+
+export default function SearchPage() {
   return (
     <div className="bg-secondary">
       <div className="container mx-auto px-4 py-12">
         <Suspense fallback={<ProductListSkeleton />}>
-          {isLoading ? (
-            <ProductListSkeleton />
-          ) : (
-            <ProductList products={products} categories={categories} />
-          )}
+          <SearchPageContent />
         </Suspense>
       </div>
     </div>
