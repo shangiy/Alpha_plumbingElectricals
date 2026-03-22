@@ -19,12 +19,12 @@ const firebaseConfig = {
 const isConfigAvailable = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
 const app = isConfigAvailable 
-  ? (!getApps().length ? initializeApp(firebaseConfig) : getApp())
+  ? (getApps().length === 0 ? initializeApp(firebaseConfig) : getApp())
   : null;
 
 // Export instances or null if config is missing (will be handled by providers)
-const db = isConfigAvailable ? getFirestore(app!) : null as any;
-const auth = isConfigAvailable ? getAuth(app!) : null as any;
-const storage = isConfigAvailable ? getStorage(app!) : null as any;
+const db = app ? getFirestore(app) : null as any;
+const auth = app ? getAuth(app) : null as any;
+const storage = app ? getStorage(app) : null as any;
 
 export { app, db, auth, storage };

@@ -70,11 +70,11 @@
     "typescript": "^5"
   },
   "overrides": {
-    "next": "$next",
-    "react": "$react",
-    "react-dom": "$react-dom",
-    "@types/react": "$@types/react",
-    "@types/react-dom": "$@types/react-dom",
+    "next": "15.2.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
     "genkit": "1.30.1"
   }
 }

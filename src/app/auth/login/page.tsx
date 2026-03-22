@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -83,7 +82,6 @@ function LoginFormContent() {
     const { toast } = useToast();
     const redirectUrl = searchParams.get('redirect') || '/';
     const [socialLoading, setSocialLoading] = useState<null | 'google' | 'facebook'>(null);
-    const [isMounted, setIsMounted] = useState(false);
     
     const activeTab = searchParams.get('tab') || 'login';
 
@@ -96,10 +94,6 @@ function LoginFormContent() {
         resolver: zodResolver(signUpSchema),
         defaultValues: { name: "", username: "", email: "", password: "", confirmPassword: "", recaptcha: false },
     });
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
     
     const handleTabChange = (tab: string) => {
         router.push(`/auth/login?tab=${tab}`, { scroll: false });
@@ -154,10 +148,6 @@ function LoginFormContent() {
         } finally {
             setSocialLoading(null);
         }
-    }
-
-    if (!isMounted) {
-        return null;
     }
 
   return (
