@@ -10,7 +10,7 @@ Your project is identified by its **Firebase Project ID**. By default, your app 
 
 The site name is configured in the `site` property within `firebase.json`.
 
-## Hosting & Deployment
+## Hosting & Deployment (Firebase)
 
 To host this project online:
 
@@ -19,7 +19,19 @@ To host this project online:
 3. **Initialize**: `firebase init hosting` (Choose 'Next.js' when prompted)
 4. **Deploy**: `firebase deploy`
 
+## Pushing to GitHub/GitLab
+
+To push your code to a remote repository:
+
+1. `git init`
+2. `git add .`
+3. `git commit -m "Initial commit"`
+4. `git branch -M main`
+5. `git remote add origin YOUR_REPO_URL`
+6. `git push -u origin main`
+
 ## Features
 - **Visual Search**: Users can capture images via camera to search/upload as "UserSelfies".
 - **Admin Dashboard**: Secure panel for managing products, transactions, and viewing user-captured images.
 - **AI Integration**: Genkit-powered chatbot and product recommendations.
+- **Analytics**: Vercel Analytics integrated for visitor tracking.
