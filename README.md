@@ -34,7 +34,8 @@ To host this project on Vercel:
 1. Push your code to GitHub.
 2. Import the repository in the [Vercel Dashboard](https://vercel.com/new).
 3. **Crucial**: Add your Environment Variables (found in `.env`) to the Vercel Project Settings.
-4. Vercel will automatically build and deploy your app.
+4. Vercel will automatically build and deploy your app. 
+   - *Note*: The build step "Creating an optimized production build" usually takes 1-3 minutes. This is normal.
 
 ## Troubleshooting: Git Push Error (GH007)
 If you get an error saying "Your push would publish a private email address":
