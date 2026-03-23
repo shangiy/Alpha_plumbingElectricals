@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import NewsletterForm from './NewsletterForm';
-import { User, Facebook, Instagram, Youtube } from 'lucide-react';
+import { User, Facebook, Instagram, Youtube, CheckCircle } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function Footer() {
   const socialLinks = [
@@ -115,11 +116,43 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          <div>&copy; 2025 Alpha Electricals & Plumbing Ltd. All rights reserved.</div>
-          <div className="flex items-center justify-center gap-1 mt-1">
-             Developed by Patrick Mushangi.
-             <User className="h-4 w-4" />
+        
+        {/* Footer Bottom Section */}
+        <div className="mt-12 border-t pt-8 text-center text-sm text-[#1a1a1a] font-medium">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-1">
+            <span>&copy; 2026 Alpha Electricals & Plumbing Ltd. </span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a 
+                    href="https://mushangi-s-vision.vercel.app/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="relative group/credit inline-flex items-center gap-1 transition-all hover:text-sky-600"
+                  >
+                    <span>Developed by </span>
+                    <span className="font-bold text-sky-400">Coder+</span>.
+                    
+                    {/* Animated Hover Particles */}
+                    <div className="absolute -top-12 left-0 w-full h-12 pointer-events-none overflow-visible opacity-0 group-hover/credit:opacity-100 transition-opacity">
+                      <span className="absolute animate-float-up-fade left-[5%] text-lg" style={{ animationDelay: '0s' }}>🎈</span>
+                      <span className="absolute animate-float-up-fade left-[25%]" style={{ animationDelay: '0.3s' }}>
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                      </span>
+                      <span className="absolute animate-float-up-fade left-[50%] text-lg" style={{ animationDelay: '0.1s' }}>🎈</span>
+                      <span className="absolute animate-float-up-fade left-[75%]" style={{ animationDelay: '0.5s' }}>
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                      </span>
+                      <span className="absolute animate-float-up-fade left-[95%] text-lg" style={{ animationDelay: '0.2s' }}>🎈</span>
+                    </div>
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Portfolio website of the Coder+ WebDeveloper</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <span>All rights reserved.</span>
           </div>
         </div>
       </div>
