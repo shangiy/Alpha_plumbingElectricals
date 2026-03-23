@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -53,10 +54,12 @@ export default function Header() {
   
   useEffect(() => {
     const updateHeaderStyles = () => {
-      const isHomepagePath = window.location.pathname === '/';
       const scrollY = window.scrollY;
-      setIsHeaderOpaque(!isHomepagePath || scrollY > 50);
-      setShowSearchInHeader(!isHomepagePath || scrollY > 300);
+      const isHomepagePath = window.location.pathname === '/';
+      
+      // Early transition for better mobile experience
+      setIsHeaderOpaque(!isHomepagePath || scrollY > 20);
+      setShowSearchInHeader(!isHomepagePath || scrollY > 150);
     };
 
     updateHeaderStyles();
@@ -73,9 +76,9 @@ export default function Header() {
   ];
   
   const headerClasses = cn(
-    "sticky top-0 z-50 w-full transition-colors duration-300",
+    "sticky top-0 z-50 w-full transition-all duration-300",
     isHeaderOpaque 
-      ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60" 
+      ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" 
       : "bg-transparent border-b border-transparent"
   );
 
@@ -120,28 +123,28 @@ export default function Header() {
     <header className={headerClasses}>
       <div className="container mx-auto px-4">
         {/* Desktop Header */}
-        <div className="hidden h-24 w-full items-center gap-4 lg:flex">
+        <div className={cn("hidden w-full items-center gap-4 lg:flex transition-all duration-300", isHeaderOpaque ? "h-20" : "h-24")}>
             {/* Left: Logo */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3 group">
                 <Image
                     src="/logo Alpha.png"
                     alt="Alpha Electricals & Plumbing Ltd Logo"
-                    width={90}
-                    height={90}
-                    className="h-auto"
+                    width={isHeaderOpaque ? 70 : 90}
+                    height={isHeaderOpaque ? 70 : 90}
+                    className="h-auto transition-all duration-300"
                 />
                 <div className={logoTextClasses}>
-                    <span className="font-bold text-[20px] leading-tight">Alpha</span>
+                    <span className={cn("font-bold transition-all", isHeaderOpaque ? "text-[18px]" : "text-[20px]")}>Alpha</span>
                     <div className="w-full h-px bg-current" />
                     <span className="text-[12px] leading-tight">Electricals & Plumbing Ltd</span>
                 </div>
             </Link>
             
-            {/* Center: Search */}
-            <div className="flex-1 w-full max-w-xl mx-auto">
+            {/* Center: Search (Desktop) */}
+            <div className="flex-1 w-full max-w-xl mx-auto px-4">
                 {showSearchInHeader && (
-                    <div className="animate-in fade-in duration-300">
-                        <HeroSearch />
+                    <div className="animate-in fade-in duration-500 slide-in-from-top-1">
+                        <HeroSearch isCompact={isHeaderOpaque} />
                     </div>
                 )}
             </div>
@@ -199,7 +202,7 @@ export default function Header() {
                         <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className={cn("w-auto px-3 gap-2 rounded-md", navAndIconClasses)}>
                             <User className="h-7 w-7" />
-                            <span className="hidden md:inline">{user ? user.username : 'Log in'}</span>
+                            <span className="hidden xl:inline">{user ? user.username : 'Log in'}</span>
                         </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -231,24 +234,32 @@ export default function Header() {
 
 
         {/* Mobile Header */}
-        <div className="w-full lg:hidden flex flex-col gap-4 py-3">
-            {/* Top Row: Logo & Icons */}
-            <div className="flex w-full items-center justify-between">
-                 <Link href="/" className="flex-shrink-0">
+        <div className="w-full lg:hidden flex flex-col py-2 transition-all duration-300">
+            {/* Top Row: Logo, Compact Search (conditionally), and Icons */}
+            <div className="flex w-full items-center justify-between gap-2">
+                 <Link href="/" className="flex-shrink-0 transition-all duration-300">
                     <Image
                         src="/logo Alpha.png"
                         alt="Alpha Electricals & Plumbing Ltd Logo"
-                        width={80}
-                        height={80}
+                        width={isHeaderOpaque ? 50 : 70}
+                        height={isHeaderOpaque ? 50 : 70}
                         className="h-auto"
                     />
                 </Link>
 
-                <div className="flex items-center">
-                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')} />
+                {/* Compact Search bar appears between logo and icons when scrolled */}
+                <div className={cn(
+                    "flex-1 min-w-0 transition-all duration-500 overflow-hidden",
+                    (showSearchInHeader || !isHomePage) ? "opacity-100 max-h-12" : "opacity-0 max-h-0 pointer-events-none"
+                )}>
+                    <HeroSearch isCompact />
+                </div>
+
+                <div className="flex items-center flex-shrink-0">
+                    <ShoppingCart triggerClassName={cn(navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')} />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')}>
+                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')}>
                                 <User />
                                 <span className="sr-only">Account</span>
                             </Button>
@@ -278,7 +289,7 @@ export default function Header() {
                     </DropdownMenu>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses, '[&_svg]:h-7 [&_svg]:w-7')}>
+                            <Button variant="ghost" size="icon" className={cn("rounded-full", navAndIconClasses, '[&_svg]:h-6 [&_svg]:w-6')}>
                                 <Menu />
                                 <span className="sr-only">Toggle menu</span>
                             </Button>
@@ -316,18 +327,6 @@ export default function Header() {
                                     <Link href={link.href} className="rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">{link.name}</Link>
                                     </SheetClose>
                                 ))}
-                                {user && (
-                                    <>
-                                    <DropdownMenuSeparator />
-                                    <h3 className="px-2 pt-2 text-sm font-semibold text-muted-foreground">My Account</h3>
-                                    <SheetClose asChild><Link href="/profile" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Profile</Link></SheetClose>
-                                    {(user.role === 'admin' || user.role === 'staff') && (
-                                        <SheetClose asChild><Link href="/admin" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Admin Dashboard</Link></SheetClose>
-                                    )}
-                                    <SheetClose asChild><Link href="/track-order" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">Track My Order</Link></SheetClose>
-                                    <SheetClose asChild><Link href="/wishlist" className="flex items-center gap-3 rounded-md px-2 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-[#8a0b0d]">My Wishlist</Link></SheetClose>
-                                    </>
-                                )}
                                 </nav>
                             </ScrollArea>
                             <div className="flex flex-col gap-2 border-t p-4 mt-auto">
@@ -348,9 +347,9 @@ export default function Header() {
                     </Sheet>
                 </div>
             </div>
-             {/* Bottom Row: Search Bar - Always visible */}
-             {showSearchInHeader && (
-                <div className="px-0 animate-in fade-in duration-300">
+             {/* Bottom Row: Search Bar - Only visible at the top of the homepage */}
+             {isHomePage && !showSearchInHeader && (
+                <div className="pt-2 px-0 animate-in fade-in duration-500">
                     <HeroSearch />
                 </div>
             )}

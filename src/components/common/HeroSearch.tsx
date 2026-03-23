@@ -23,7 +23,11 @@ import { uploadImage } from '@/lib/storage';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-export default function HeroSearch() {
+interface HeroSearchProps {
+  isCompact?: boolean;
+}
+
+export default function HeroSearch({ isCompact = false }: HeroSearchProps) {
   const [query, setQuery] = useState('');
   const router = useRouter();
   const { toast } = useToast();
@@ -123,30 +127,39 @@ export default function HeroSearch() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="w-full max-w-2xl">
-        <div className="relative flex items-center w-full p-1 pr-2 space-x-1 bg-white border border-gray-200 rounded-full shadow-md">
+      <form onSubmit={handleSubmit} className={cn("w-full transition-all duration-500", isCompact ? "max-w-full" : "max-w-2xl")}>
+        <div className={cn(
+          "relative flex items-center w-full p-1 space-x-1 bg-white border border-gray-200 rounded-full shadow-md transition-all duration-500",
+          isCompact ? "h-9 pr-1" : "h-13 pr-2"
+        )}>
           
-          <div 
-            className={cn(
-              "absolute left-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none transition-opacity",
-              query ? "opacity-0" : "opacity-100"
-            )}
-          >
-            <span className="text-base text-muted-foreground">Search for&nbsp;</span>
-            <AnimatedPlaceholder placeholders={placeholders} />
-          </div>
+          {!isCompact && (
+            <div 
+              className={cn(
+                "absolute left-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none transition-opacity duration-300",
+                query ? "opacity-0" : "opacity-100"
+              )}
+            >
+              <span className="text-base text-muted-foreground">Search for&nbsp;</span>
+              <AnimatedPlaceholder placeholders={placeholders} />
+            </div>
+          )}
 
           <Input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder=""
-            className="flex-1 pl-4 pr-4 text-base bg-transparent border-none appearance-none h-11 text-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+            placeholder={isCompact ? "Search Alpha..." : ""}
+            className={cn(
+              "flex-1 pl-4 pr-2 text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent border-none appearance-none",
+              isCompact ? "h-7 text-xs sm:text-sm" : "h-11 text-base"
+            )}
           />
+          
           <Dialog open={isCameraDialogOpen} onOpenChange={setIsCameraDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" type="button" className="shrink-0 rounded-full">
-                <Camera className="w-5 h-5 text-gray-500" />
+              <Button variant="ghost" size="icon" type="button" className={cn("shrink-0 rounded-full transition-all", isCompact ? "h-7 w-7" : "h-9 w-9")}>
+                <Camera className={cn("text-gray-500", isCompact ? "w-4 h-4" : "w-5 h-5")} />
                 <span className="sr-only">Search by image</span>
               </Button>
             </DialogTrigger>
@@ -187,9 +200,17 @@ export default function HeroSearch() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button type="submit" size="lg" className="h-11 rounded-full bg-[#28235f] hover:bg-[#28235f]/90 text-white">
-            <Search className="w-5 h-5 mr-0 md:mr-2" />
-            <span className="hidden md:inline">Search</span>
+
+          <Button 
+            type="submit" 
+            size={isCompact ? "sm" : "lg"} 
+            className={cn(
+              "rounded-full bg-[#28235f] hover:bg-[#28235f]/90 text-white transition-all",
+              isCompact ? "h-7 px-3" : "h-11 px-6"
+            )}
+          >
+            <Search className={cn(isCompact ? "w-3.5 h-3.5" : "w-5 h-5", !isCompact && "md:mr-2")} />
+            <span className="hidden md:inline">{isCompact ? "" : "Search"}</span>
           </Button>
         </div>
       </form>
