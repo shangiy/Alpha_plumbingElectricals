@@ -57,9 +57,14 @@ export default function Header() {
       const scrollY = window.scrollY;
       const isHomepagePath = window.location.pathname === '/';
       
-      // Early transition for better mobile experience
+      // Early transition for transparency
       setIsHeaderOpaque(!isHomepagePath || scrollY > 20);
-      setShowSearchInHeader(!isHomepagePath || scrollY > 150);
+      
+      // Threshold for showing the search bar in the header on the homepage.
+      // We want to wait until the Hero search is scrolled out of view.
+      // 350px is a safe bet for most mobile hero sections.
+      const searchThreshold = isHomepagePath ? 350 : 0;
+      setShowSearchInHeader(!isHomepagePath || scrollY > searchThreshold);
     };
 
     updateHeaderStyles();
@@ -68,7 +73,7 @@ export default function Header() {
     return () => {
       window.removeEventListener('scroll', updateHeaderStyles);
     };
-  }, [pathname]);
+  }, [pathname, isHomePage]);
   
   const navLinks = [
     { name: 'Contact Us', href: '/contact' },
@@ -76,14 +81,14 @@ export default function Header() {
   ];
   
   const headerClasses = cn(
-    "sticky top-0 z-50 w-full transition-all duration-300",
+    "sticky top-0 z-50 w-full transition-all duration-500",
     isHeaderOpaque 
       ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" 
       : "bg-transparent border-b border-transparent"
   );
 
   const dynamicColorClasses = cn(
-    "transition-colors",
+    "transition-colors duration-300",
     !isHeaderOpaque && isHomePage ? "text-white" : "text-[#2b235f]"
   );
   
@@ -123,7 +128,7 @@ export default function Header() {
     <header className={headerClasses}>
       <div className="container mx-auto px-4">
         {/* Desktop Header */}
-        <div className={cn("hidden w-full items-center gap-4 lg:flex transition-all duration-300", isHeaderOpaque ? "h-20" : "h-24")}>
+        <div className={cn("hidden w-full items-center gap-4 lg:flex transition-all duration-500", isHeaderOpaque ? "h-20" : "h-24")}>
             {/* Left: Logo */}
             <Link href="/" className="flex flex-shrink-0 items-center gap-3 group">
                 <Image
@@ -131,7 +136,7 @@ export default function Header() {
                     alt="Alpha Electricals & Plumbing Ltd Logo"
                     width={isHeaderOpaque ? 70 : 90}
                     height={isHeaderOpaque ? 70 : 90}
-                    className="h-auto transition-all duration-300"
+                    className="h-auto transition-all duration-500"
                 />
                 <div className={logoTextClasses}>
                     <span className={cn("font-bold transition-all", isHeaderOpaque ? "text-[18px]" : "text-[20px]")}>Alpha</span>
@@ -143,7 +148,7 @@ export default function Header() {
             {/* Center: Search (Desktop) */}
             <div className="flex-1 w-full max-w-xl mx-auto px-4">
                 {showSearchInHeader && (
-                    <div className="animate-in fade-in duration-500 slide-in-from-top-1">
+                    <div className="animate-in fade-in duration-700 slide-in-from-top-2">
                         <HeroSearch isCompact={isHeaderOpaque} />
                     </div>
                 )}
@@ -234,10 +239,10 @@ export default function Header() {
 
 
         {/* Mobile Header */}
-        <div className="w-full lg:hidden flex flex-col py-2 transition-all duration-300">
+        <div className="w-full lg:hidden flex flex-col py-2 transition-all duration-500">
             {/* Top Row: Logo, Compact Search (conditionally), and Icons */}
             <div className="flex w-full items-center justify-between gap-2">
-                 <Link href="/" className="flex-shrink-0 transition-all duration-300">
+                 <Link href="/" className="flex-shrink-0 transition-all duration-500">
                     <Image
                         src="/logo Alpha.png"
                         alt="Alpha Electricals & Plumbing Ltd Logo"
@@ -247,10 +252,10 @@ export default function Header() {
                     />
                 </Link>
 
-                {/* Compact Search bar appears between logo and icons when scrolled */}
+                {/* Compact Search bar transitions into the gap between logo and icons */}
                 <div className={cn(
-                    "flex-1 min-w-0 transition-all duration-500 overflow-hidden",
-                    (showSearchInHeader || !isHomePage) ? "opacity-100 max-h-12" : "opacity-0 max-h-0 pointer-events-none"
+                    "flex-1 min-w-0 transition-all duration-700 ease-in-out overflow-hidden px-1",
+                    showSearchInHeader ? "opacity-100 max-h-12 translate-y-0" : "opacity-0 max-h-0 -translate-y-4 pointer-events-none"
                 )}>
                     <HeroSearch isCompact />
                 </div>
@@ -347,12 +352,6 @@ export default function Header() {
                     </Sheet>
                 </div>
             </div>
-             {/* Bottom Row: Search Bar - Only visible at the top of the homepage */}
-             {isHomePage && !showSearchInHeader && (
-                <div className="pt-2 px-0 animate-in fade-in duration-500">
-                    <HeroSearch />
-                </div>
-            )}
         </div>
       </div>
     </header>
