@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Toaster } from '@/components/ui/toaster';
