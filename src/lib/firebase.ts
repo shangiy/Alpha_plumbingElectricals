@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
@@ -22,8 +22,15 @@ const app = isConfigAvailable
   ? (getApps().length === 0 ? initializeApp(firebaseConfig) : getApp())
   : null;
 
-// Export instances or null if config is missing (will be handled by providers)
-const db = app ? getFirestore(app) : null as any;
+/**
+ * Initialize Firestore with experimentalForceLongPolling.
+ * This is often necessary in cloud-based development environments (like Cloud Workstations or IDX)
+ * where WebSocket connections (Firestore's default) may be blocked or unstable.
+ */
+const db = app ? initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+}) : null as any;
+
 const auth = app ? getAuth(app) : null as any;
 const storage = app ? getStorage(app) : null as any;
 

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
@@ -44,6 +43,13 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    // If Firebase config is not available, we stay with local data
+    if (!db) {
+        console.warn("Firestore 'db' instance is null. Running in local fallback mode.");
+        setLoading(false);
+        return;
+    }
+
     // Immediately seed if necessary, but don't block.
     seedProducts();
 
@@ -62,7 +68,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         }, 
         (error) => {
             console.error("Firestore snapshot error. Using local fallback data.", error);
-            // Local data is already set, so we just stop loading.
+            // Local data is already set, so we just stop loading to show fallback content.
             setLoading(false);
         }
     );
@@ -72,6 +78,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addProduct = useCallback(async (productData: ProductFormData) => {
+    if (!db) throw new Error("Database not initialized.");
     setSubmitting(true);
     try {
         const newProductDocument: Omit<Product, 'id'> = {
@@ -93,6 +100,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateProduct = useCallback(async (productId: string, productData: Partial<ProductFormData>) => {
+    if (!db) throw new Error("Database not initialized.");
     if (productId.startsWith('local-')) {
         console.error("Cannot update a local fallback product.");
         setSubmitting(false);
