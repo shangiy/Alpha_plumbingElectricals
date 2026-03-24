@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -39,7 +38,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
+    <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg rounded-[1.5rem] border-white/20 bg-white/50 backdrop-blur-sm">
       <CardHeader className="p-0 relative">
         {product.images.length > 1 ? (
             <Carousel className="w-full">
@@ -90,12 +89,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
       <CardContent className="flex-grow p-4">
         <Link href={`/products/${product.id}`} className="block">
-          <CardTitle className="mb-2 text-base font-semibold leading-tight hover:text-primary">
+          <CardTitle className="mb-2 text-base font-semibold leading-tight hover:text-primary line-clamp-1">
             {product.name}
           </CardTitle>
         </Link>
-        <p className="mb-2 text-sm text-muted-foreground h-10 overflow-hidden">{product.description}</p>
-        <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={16}/>
+        <p className="mb-2 text-sm text-muted-foreground h-10 overflow-hidden line-clamp-2">{product.description}</p>
+        <Rating rating={product.rating} showReviewCount reviewCount={product.reviews} size={14}/>
       </CardContent>
        <CardFooter className="flex-col items-start gap-2 p-4 pt-0">
          <div className="flex items-baseline gap-2">
@@ -111,10 +110,10 @@ export default function ProductCard({ product }: ProductCardProps) {
          </div>
           
         <div className="flex w-full gap-2 mt-2">
-            <Button size="sm" variant="outline" className="flex-1" asChild>
+            <Button size="sm" variant="outline" className="flex-1 rounded-xl" asChild>
                 <Link href={`/products/${product.id}`}>View More</Link>
             </Button>
-            <Button size="sm" className="flex-1" onClick={() => addToCart(product)}>Add to Cart</Button>
+            <Button size="sm" className="flex-1 rounded-xl shadow-lg shadow-primary/20" onClick={() => addToCart(product)}>Add to Cart</Button>
         </div>
       </CardFooter>
     </Card>
