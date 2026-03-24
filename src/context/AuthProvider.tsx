@@ -1,12 +1,9 @@
-
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { signUpUser, getUserByEmail } from '@/lib/data';
-import type { MockUser } from '@/lib/types';
 import { auth } from '@/lib/firebase';
 import { GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User as FirebaseUser } from 'firebase/auth';
-
 
 export interface User {
   id: string;
@@ -27,7 +24,7 @@ interface SignUpData {
 
 interface AuthContextType {
   user: User | null;
-  login: (userData: Omit<User, 'id'>) => void;
+  login: (userData: Omit<User, 'id'>) => Promise<void>;
   signUp: (signUpData: SignUpData) => Promise<User>;
   signInWithGoogle: () => Promise<User | null>;
   signInWithFacebook: () => Promise<User | null>;
@@ -50,11 +47,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize auth state
   useEffect(() => {
-    setLoading(false);
+    // In a real app, you'd use onAuthStateChanged here
+    // For this prototype, we simulate a small delay to handle hydration
+    const timer = setTimeout(() => {
+        setLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  const login = async (userData: Omit<User, 'id'>) => {
+  const login = useCallback(async (userData: Omit<User, 'id'>) => {
     const existingUser = await getUserByEmail(userData.email);
     if(existingUser) {
         setUser({
@@ -66,9 +69,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             avatarUrl: existingUser.avatarUrl,
         });
     }
-  };
+  }, []);
 
-  const handleSocialSignIn = async (firebaseUser: FirebaseUser): Promise<User> => {
+  const handleSocialSignIn = useCallback(async (firebaseUser: FirebaseUser): Promise<User> => {
     if (!firebaseUser.email) {
         throw new Error('Social account must have an email address.');
     }
@@ -76,64 +79,59 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let appUser = await getUserByEmail(firebaseUser.email);
 
     if (!appUser) {
-        // If user doesn't exist, create a new one
         const newUser: SignUpData = {
             name: firebaseUser.displayName || 'Social User',
-            username: firebaseUser.email.split('@')[0], // Create a username from email
+            username: firebaseUser.email.split('@')[0],
             email: firebaseUser.email,
             avatarUrl: firebaseUser.photoURL || undefined,
         };
         appUser = await signUpUser(newUser);
     }
     
-    login(appUser);
+    await login(appUser);
     return appUser;
-  };
+  }, [login]);
 
-  const signInWithGoogle = async (): Promise<User | null> => {
+  const signInWithGoogle = useCallback(async (): Promise<User | null> => {
       const provider = new GoogleAuthProvider();
       try {
           const result = await signInWithPopup(auth, provider);
           return await handleSocialSignIn(result.user);
       } catch (error: any) {
           console.error("Google sign-in error", error);
-          if (error.code === 'auth/popup-closed-by-user') {
-              return null;
-          }
+          if (error.code === 'auth/popup-closed-by-user') return null;
           throw new Error(error.message);
       }
-  }
+  }, [handleSocialSignIn]);
 
-  const signInWithFacebook = async (): Promise<User | null> => {
+  const signInWithFacebook = useCallback(async (): Promise<User | null> => {
       const provider = new FacebookAuthProvider();
       try {
           const result = await signInWithPopup(auth, provider);
           return await handleSocialSignIn(result.user);
       } catch (error: any) {
           console.error("Facebook sign-in error", error);
-           if (error.code === 'auth/popup-closed-by-user') {
-              return null;
-          }
+          if (error.code === 'auth/popup-closed-by-user') return null;
           throw new Error(error.message);
       }
-  }
+  }, [handleSocialSignIn]);
 
-  const signUp = async (signUpData: SignUpData): Promise<User> => {
+  const signUp = useCallback(async (signUpData: SignUpData): Promise<User> => {
     const newUser = await signUpUser(signUpData);
-    login(newUser);
+    await login(newUser);
     return newUser;
-  };
+  }, [login]);
 
-  const updateUser = (updatedData: Partial<User>) => {
+  const updateUser = useCallback((updatedData: Partial<User>) => {
     setUser(currentUser => {
         if (!currentUser) return null;
         return { ...currentUser, ...updatedData };
     })
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
-  };
+  }, []);
 
   const value = {
     user,

@@ -1,7 +1,7 @@
 'use client';
 import { useAuth } from '@/context/AuthProvider';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, type ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { LoaderCircle, ShieldAlert } from 'lucide-react';
@@ -10,15 +10,20 @@ export default function AuthGuard({ children, allowedRoles }: { children: ReactN
     const { user, loading } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     useEffect(() => {
-        if (!loading && !user) {
-            // Encode the pathname to ensure it's handled correctly as a query parameter
-            router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
+        // Only attempt redirect after initial loading is complete
+        // and if we haven't already started a redirect to avoid loops
+        if (!loading && !user && !isRedirecting) {
+            setIsRedirecting(true);
+            const redirectUrl = `/auth/login?redirect=${encodeURIComponent(pathname)}`;
+            router.push(redirectUrl);
         }
-    }, [user, loading, router, pathname]);
+    }, [user, loading, router, pathname, isRedirecting]);
 
-    if (loading || !user) {
+    // Show loading state while checking auth
+    if (loading || (!user && !isRedirecting)) {
         return (
              <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-[60vh]">
                  <div className="flex items-center gap-2 text-lg text-muted-foreground">
@@ -28,8 +33,18 @@ export default function AuthGuard({ children, allowedRoles }: { children: ReactN
              </div>
         );
     }
+
+    // If we are redirecting, keep showing the loading state to prevent interaction
+    if (isRedirecting && !user) {
+        return (
+            <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-[60vh]">
+                <LoaderCircle className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
     
-    if (allowedRoles && user.role && !allowedRoles.includes(user.role)) {
+    // Role-based access control
+    if (user && allowedRoles && user.role && !allowedRoles.includes(user.role)) {
          return (
              <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-[60vh]">
                  <Card className="w-full max-w-md text-center">
@@ -50,5 +65,6 @@ export default function AuthGuard({ children, allowedRoles }: { children: ReactN
         );
     }
     
+    // If we have a user, render the children
     return <>{children}</>;
 }
