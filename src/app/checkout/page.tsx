@@ -109,7 +109,54 @@ function CheckoutContent() {
     return (
         <div className="container mx-auto px-4 py-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Shipping Details */}
+                {/* Order Summary - Moved to Top/First */}
+                <Card className="bg-secondary sticky top-24 h-fit">
+                    <CardHeader>
+                        <CardTitle className="text-2xl">Order Summary</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {cartItems.map(item => (
+                                <div key={item.id} className="flex justify-between items-center">
+                                    <div className="flex items-center gap-4">
+                                        <div className="relative h-16 w-16 overflow-hidden rounded-xl border bg-background">
+                                            <Image 
+                                                src={item.images[0]} 
+                                                alt={item.name} 
+                                                fill 
+                                                className="object-cover"
+                                                data-ai-hint="product image"
+                                            />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm sm:text-base leading-tight">{item.name}</p>
+                                            <p className="text-xs sm:text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                        </div>
+                                    </div>
+                                    <p className="font-medium text-sm sm:text-base">{formatPrice(item.price * item.quantity)}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <Separator className="my-6"/>
+                        <div className="space-y-2">
+                            <div className="flex justify-between">
+                                <p className="text-muted-foreground">Subtotal</p>
+                                <p>{formatPrice(cartTotal)}</p>
+                            </div>
+                            <div className="flex justify-between">
+                                <p className="text-muted-foreground">Delivery charge</p>
+                                <p>{formatPrice(shippingCost)}</p>
+                            </div>
+                        </div>
+                        <Separator className="my-6"/>
+                        <div className="flex justify-between font-bold text-lg">
+                            <p>Total</p>
+                            <p className="text-primary">{formatPrice(orderTotal)}</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Contact Information - Moved to Second */}
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-2xl">Contact Information</CardTitle>
@@ -235,45 +282,6 @@ function CheckoutContent() {
                                 <Button type="submit" size="lg" className="w-full">Place Order</Button>
                             </form>
                         </Form>
-                    </CardContent>
-                </Card>
-
-                {/* Order Summary */}
-                <Card className="bg-secondary sticky top-24 h-fit">
-                    <CardHeader>
-                        <CardTitle className="text-2xl">Order Summary</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
-                            {cartItems.map(item => (
-                                <div key={item.id} className="flex justify-between items-center">
-                                    <div className="flex items-center gap-4">
-                                        <Image src={item.images[0]} alt={item.name} width={64} height={64} className="rounded-md object-cover"/>
-                                        <div>
-                                            <p className="font-semibold">{item.name}</p>
-                                            <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
-                                        </div>
-                                    </div>
-                                    <p>{formatPrice(item.price * item.quantity)}</p>
-                                </div>
-                            ))}
-                        </div>
-                        <Separator className="my-6"/>
-                        <div className="space-y-2">
-                            <div className="flex justify-between">
-                                <p className="text-muted-foreground">Subtotal</p>
-                                <p>{formatPrice(cartTotal)}</p>
-                            </div>
-                            <div className="flex justify-between">
-                                <p className="text-muted-foreground">Delivery charge</p>
-                                <p>{formatPrice(shippingCost)}</p>
-                            </div>
-                        </div>
-                        <Separator className="my-6"/>
-                        <div className="flex justify-between font-bold text-lg">
-                            <p>Total</p>
-                            <p>{formatPrice(orderTotal)}</p>
-                        </div>
                     </CardContent>
                 </Card>
             </div>
