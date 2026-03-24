@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -61,8 +60,6 @@ export default function Header() {
       setIsHeaderOpaque(!isHomepagePath || scrollY > 20);
       
       // Threshold for showing the search bar in the header on the homepage.
-      // We want to wait until the Hero search is scrolled out of view.
-      // 350px is a safe bet for most mobile hero sections.
       const searchThreshold = isHomepagePath ? 350 : 0;
       setShowSearchInHeader(!isHomepagePath || scrollY > searchThreshold);
     };
@@ -81,9 +78,9 @@ export default function Header() {
   ];
   
   const headerClasses = cn(
-    "sticky top-0 z-50 w-full transition-all duration-500",
+    "sticky top-0 z-50 w-full transition-all duration-500 overflow-hidden",
     isHeaderOpaque 
-      ? "bg-background/95 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" 
+      ? "border-b shadow-sm" 
       : "bg-transparent border-b border-transparent"
   );
 
@@ -126,7 +123,17 @@ export default function Header() {
 
   return (
     <header className={headerClasses}>
-      <div className="container mx-auto px-4">
+      {/* Background Layers for Opaque State */}
+      <div className={cn(
+        "absolute inset-0 -z-20 bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:200%_200%] animate-gradient-x transition-opacity duration-500",
+        isHeaderOpaque ? "opacity-100" : "opacity-0"
+      )} />
+      <div className={cn(
+        "absolute inset-0 -z-10 bg-background/90 backdrop-blur-md transition-opacity duration-500",
+        isHeaderOpaque ? "opacity-100" : "opacity-0"
+      )} />
+
+      <div className="container mx-auto px-4 relative z-10">
         {/* Desktop Header */}
         <div className={cn("hidden w-full items-center gap-4 lg:flex transition-all duration-500", isHeaderOpaque ? "h-20" : "h-24")}>
             {/* Left: Logo */}
@@ -240,7 +247,7 @@ export default function Header() {
 
         {/* Mobile Header */}
         <div className="w-full lg:hidden flex flex-col py-2 transition-all duration-500">
-            {/* Top Row: Logo, Compact Search (conditionally), and Icons */}
+            {/* Top Row: Logo, Compact Search, and Icons */}
             <div className="flex w-full items-center justify-between gap-2">
                  <Link href="/" className="flex-shrink-0 transition-all duration-500">
                     <Image
@@ -252,7 +259,6 @@ export default function Header() {
                     />
                 </Link>
 
-                {/* Compact Search bar transitions into the gap between logo and icons */}
                 <div className={cn(
                     "flex-1 min-w-0 transition-all duration-700 ease-in-out overflow-hidden px-1",
                     showSearchInHeader ? "opacity-100 max-h-12 translate-y-0" : "opacity-0 max-h-0 -translate-y-4 pointer-events-none"
