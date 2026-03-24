@@ -129,7 +129,7 @@ export default function HeroSearch({ isCompact = false }: HeroSearchProps) {
     <>
       <form onSubmit={handleSubmit} className={cn("w-full transition-all duration-700 ease-in-out", isCompact ? "max-w-full" : "max-w-2xl")}>
         <div className={cn(
-          "relative flex items-center w-full p-1 space-x-1 bg-white border border-gray-200 rounded-full shadow-md transition-all duration-700 ease-in-out",
+          "relative flex items-center w-full p-1 space-x-1 bg-white border border-gray-200 rounded-[1.5rem] shadow-md transition-all duration-700 ease-in-out",
           isCompact ? "h-8 sm:h-9 pr-1" : "h-13 pr-2"
         )}>
           
@@ -205,7 +205,7 @@ export default function HeroSearch({ isCompact = false }: HeroSearchProps) {
             type="submit" 
             size={isCompact ? "sm" : "lg"} 
             className={cn(
-              "rounded-full bg-[#28235f] hover:bg-[#28235f]/90 text-white transition-all duration-500",
+              "rounded-xl bg-primary hover:bg-primary/90 text-white transition-all duration-500",
               isCompact ? "h-6 sm:h-7 px-2 sm:px-3" : "h-11 px-6"
             )}
           >
