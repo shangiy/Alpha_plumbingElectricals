@@ -76,12 +76,12 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
   return (
       <div
         className={cn(
-          'fixed bottom-[calc(4rem+1.5rem)] right-6 z-40 w-80 rounded-lg shadow-xl transition-all duration-300 ease-in-out sm:w-96',
+          'fixed bottom-[calc(4rem+1.5rem)] right-6 z-[60] w-80 rounded-lg shadow-xl transition-all duration-300 ease-in-out sm:w-96',
           isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         )}
       >
-        <Card className="flex h-[28rem] flex-col bg-white">
-          <CardHeader className="flex flex-row items-center justify-between p-2 bg-[#007bff] text-white rounded-t-lg">
+        <Card className="flex h-[28rem] max-h-[calc(100vh-10rem)] flex-col bg-white overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between p-2 bg-[#007bff] text-white rounded-t-lg shrink-0">
              <h3 className="font-semibold pl-2">Alpha AI_chatbot</h3>
             <Button variant="ghost" size="icon" className="h-7 w-7 text-white hover:bg-blue-500/80" onClick={() => setIsOpen(false)}>
               <X className="h-5 w-5" />
@@ -115,7 +115,7 @@ export default function Chatbot({ isOpen, setIsOpen }: ChatbotProps) {
             </CardContent>
           </ScrollArea>
 
-          <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2 border-t bg-white rounded-b-lg">
+          <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2 border-t bg-white rounded-b-lg shrink-0">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
