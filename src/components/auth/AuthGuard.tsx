@@ -13,7 +13,8 @@ export default function AuthGuard({ children, allowedRoles }: { children: ReactN
 
     useEffect(() => {
         if (!loading && !user) {
-            router.push(`/auth/login?redirect=${pathname}`);
+            // Encode the pathname to ensure it's handled correctly as a query parameter
+            router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
         }
     }, [user, loading, router, pathname]);
 

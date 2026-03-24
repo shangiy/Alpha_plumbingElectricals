@@ -80,10 +80,12 @@ function LoginFormContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { toast } = useToast();
-    const redirectUrl = searchParams.get('redirect') || '/';
-    const [socialLoading, setSocialLoading] = useState<null | 'google' | 'facebook'>(null);
     
+    // Retrieve redirect URL from search params
+    const redirectUrl = searchParams.get('redirect') || '/';
     const activeTab = searchParams.get('tab') || 'login';
+    
+    const [socialLoading, setSocialLoading] = useState<null | 'google' | 'facebook'>(null);
 
     const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -95,8 +97,15 @@ function LoginFormContent() {
         defaultValues: { name: "", username: "", email: "", password: "", confirmPassword: "", recaptcha: false },
     });
     
+    // Helper to generate URLs that preserve the redirect parameter
+    const getTabLink = (tab: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('tab', tab);
+        return `/auth/login?${params.toString()}`;
+    };
+
     const handleTabChange = (tab: string) => {
-        router.push(`/auth/login?tab=${tab}`, { scroll: false });
+        router.push(getTabLink(tab), { scroll: false });
     };
 
     async function onLogin(data: LoginFormValues) {
@@ -225,7 +234,7 @@ function LoginFormContent() {
                                 <p className="text-center text-sm text-muted-foreground">
                                     Don&apos;t have an account?{' '}
                                     <Link
-                                      href="/auth/login?tab=signup"
+                                      href={getTabLink('signup')}
                                       scroll={false}
                                       className="font-medium text-primary hover:underline"
                                     >
@@ -356,7 +365,7 @@ function LoginFormContent() {
                                  <p className="text-center text-sm text-muted-foreground">
                                     Already have an account?{' '}
                                     <Link
-                                      href="/auth/login?tab=login"
+                                      href={getTabLink('login')}
                                       scroll={false}
                                       className="font-medium text-primary hover:underline"
                                     >
