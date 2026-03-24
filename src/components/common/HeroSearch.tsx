@@ -205,7 +205,7 @@ export default function HeroSearch({ isCompact = false }: HeroSearchProps) {
             type="submit" 
             size={isCompact ? "sm" : "lg"} 
             className={cn(
-              "rounded-xl bg-primary hover:bg-primary/90 text-white transition-all duration-500",
+              "rounded-full bg-[#28235f] hover:bg-[#28235f]/90 text-white transition-all duration-500",
               isCompact ? "h-6 sm:h-7 px-2 sm:px-3" : "h-11 px-6"
             )}
           >
