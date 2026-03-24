@@ -110,7 +110,8 @@ function CheckoutContent() {
         <div className="container mx-auto px-4 py-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Order Summary - Moved to Top/First */}
-                <Card className="bg-secondary sticky top-24 h-fit">
+                {/* Changed sticky to lg:sticky to prevent overlap on mobile */}
+                <Card className="bg-secondary lg:sticky lg:top-24 h-fit">
                     <CardHeader>
                         <CardTitle className="text-2xl">Order Summary</CardTitle>
                     </CardHeader>
