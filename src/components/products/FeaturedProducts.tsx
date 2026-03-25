@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useProducts } from '@/context/ProductProvider';
@@ -86,7 +85,7 @@ export default function FeaturedProducts() {
         </div>
         
         <div className="mt-12 flex justify-center">
-            <Button asChild size="lg" className="w-full sm:w-auto sm:min-w-[300px] bg-[#28235f] hover:bg-[#28235f]/90 rounded-xl text-white font-bold tracking-wide shadow-lg transition-all hover:shadow-xl active:scale-95">
+            <Button asChild size="lg" className="w-full sm:w-auto sm:min-w-[300px] bg-[#28235f] hover:bg-[#28235f]/90 rounded-xl text-white font-bold tracking-wide shadow-lg transition-all hover:shadow-xl hover:scale-105 active:scale-95">
                 <Link href="/search">View all Products</Link>
             </Button>
         </div>
