@@ -29,6 +29,18 @@ Your build is failing because Vercel needs these specific keys. Follow these ste
 
 ## Troubleshooting
 
+### GitHub "Authentication failed" or "Missing credentials"
+If the standard `git push` fails in this environment:
+1. Generate a [Personal Access Token (classic)](https://github.com/settings/tokens) with `repo` scope.
+2. Run this command to include your token in the URL:
+   ```bash
+   git remote set-url origin https://YOUR_USERNAME:YOUR_TOKEN@github.com/shangiy/Alpha_plumbingElectricals.git
+   ```
+3. Push your changes:
+   ```bash
+   git push origin main
+   ```
+
 ### GH007: Private Email Error
 If GitHub blocks your push:
 1. Find your no-reply email in [GitHub Settings](https://github.com/settings/emails).
@@ -36,7 +48,7 @@ If GitHub blocks your push:
    ```bash
    git config --global user.email "your-id+username@users.noreply.github.com"
    git commit --amend --reset-author --no-edit
-   git push
+   git push origin main --force
    ```
 
 ### Firebase "auth/invalid-api-key"
